@@ -34,14 +34,8 @@ gates(istanbul, 9).
 gates(budapest, 6).
 gates(porto, 5).
 
-teamwin(X,Z) :-
-  winner(Y,Z),
-  team(Y,X).
-
-winmorethanone(X) :-
-  winner(X,Y),
-  winner(X,Z),
-  Y \= Z.
+teamwin(X,Z) :- winner(Y,Z), team(Y,X).
+winmorethanone(X) :- winner(X,Y), winner(X,Z), Y \= Z.
 
 % a) winner(X, porto).
 % b) teamwin(X, porto).
