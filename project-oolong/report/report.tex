@@ -24,7 +24,7 @@
 }
 
 \author{\textbf{Grupo xx:}\\
-José Pedro Borges - up000000000 \\
+José Pedro Borges - up201503603 \\
 Miguel Mano Fernandes - up201503538 \\
 \linebreak\linebreak \\
  \\ Faculdade de Engenharia da Universidade do Porto \\ Rua Roberto Frias, s\/n, 4200-465 Porto, Portugal \linebreak\linebreak\linebreak
@@ -90,12 +90,48 @@ São requeridos os seguintes componentes para iniciar um jogo:
 \end{itemize}
 
 A organização das 9 mesas deverá seguir a seguinte estrutura: \newline \newline
+\begin{center}
 \includegraphics[scale=0.5]{board-setup.png}\linebreak\linebreak
+\end{center}
 
-Descrever detalhadamente o jogo, a sua história e, principalmente, as suas regras.
-Devem ser incluidas imagens apropriadas para explicar o funcionamento do jogo.
-Devem ser incluidas as fontes de informação (e.g. URLs em rodapé).
+Como cada uma das 9 mesas tem 9 posições para jogar será mais fácil imaginar uma bússola por cima do tabuleiro em que cada lugar na mesa e cada mesa representam uma direção (N, NE, E, SE, S, (...) e centro). 
 
+\subsection{Regras do Jogo}
+\paragraph{Começar o jogo}
+Quem começa o jogo é o jogador com o chá preto e tem de colocar uma das peç
+as dele na mesa do centro, em qualquer posição. Se os jogadores estiverem envolvidos em múltiplos jogos, quem começa é quem perdeu o último. Cada jogada envolve colocar uma peça, mover o empregado e, possivelmente, ativar uma Ação Especial.
+
+\paragraph{Colocação de peças}
+O lugar em que a peça é colocada indica a mesa em que se vai jogar a seguir. Por exemplo, se o jogador Verde jogar no lugar SE da mesa do centro, o jogador Preto tem de jogar na mesa SE do tabuleiro, na posição que quiser, desde que não esteja já ocupada. Se ele jogar na posição NE, o outro jogador tem de jogar na mesa NE e por aí adiante.
+
+\paragraph{Mover o empregado}
+O empregado é utilizado para ajudar a saber onde vai ser colocada a próxima peça e onde estava anteriormente. As regras de utilização são as seguintes:
+\begin{itemize}
+\item Quando é jogada uma peça, o empregado é movido para a mesa onde vai ser feita a próxima jogada.
+\item Ao colocar o empregado é preciso ter o cuidado de o pôr na peça que represente a mesa onde foi jogado o turno anterior.
+\end{itemize}
+Por exemplo, se o jogador Preto está na mesa do centro e joga na posição W, é preciso colocar o empregado na mesa W e na posição do centro desta.
+
+\subsection{Exemplo de uma sequência de jogadas}
+\includegraphics[scale=0.75]{board-jogadas.png}\linebreak\linebreak
+\begin{enumerate}
+\item Preto joga no espaço NE da mesa do centro e posiciona o Empregado(W) no centro da mesa NE.
+\item Verde joga no espaço S da mesa NE e posiciona o Empregado no espaço NE da mesa S.
+\item Preto joga no espaço NW da mesa S e posiciona o Empregado no espaço S da mesa NW.
+\item Verde joga no espaço NW da mesa NW e posiciona o Empregado por cima da sua peça.
+\item Preto joga no espaço do centro da mesa NW e posiciona o Empregado no espaço NW da mesa do centro.
+\item Verde joga no espaço E da mesa do centro e posiciona o Empregado no espaço centro da mesa E.
+\item Preto joga no espaço N da mesa E e posiciona o Empregado no espaço E da mesa N.
+\item Verde joga no espaço NW da mesa N e posiciona o Empregado no espaço N da mesa NW.
+\item Preto joga no espaço W da mesa NW e posiciona o Empregado no espaço NW da mesa W.
+\item Verde joga no espaço centro da mesa W e irá posicionar o Empregado no espaço W da mesa do centro.
+\end{enumerate}
+
+\subsection{Conquistar uma mesa}
+Quando um jogador tiver 5 peças da sua cor numa mesa, conquista essa mesa. A mesa pode continuar a ser utilizada nas jogadas, mas quando todos os espaços vazios forem preenchidos a mesa será considerada completa e qualquer jogada que levaria um jogador a ir para essa mesa será substituída, fazendo com que o jogador possa escolher um lugar qualquer vazio para colocar a sua peça.
+
+\subsection{Fim do Jogo}
+Quando um jogador conquista 5 das 9 mesas o jogo acaba imediatamente.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Representação do Estado do Jogo}
