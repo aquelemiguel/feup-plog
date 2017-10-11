@@ -7,6 +7,7 @@
 \usepackage{indentfirst}
 \usepackage{graphicx}
 \usepackage{verbatim}
+\usepackage{listings}
 
 
 \begin{document}
@@ -135,6 +136,83 @@ Quando um jogador conquista 5 das 9 mesas o jogo acaba imediatamente.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Representação do Estado do Jogo}
+
+A representação do estado do jogo não se poderá cingir apenas ao armazenamento do tabuleiro, dada a quantidade de fatores exteriores. \newline
+Para tal, achou-se favorável a utilização de duas estruturas de dados extra - um array que faz a correlação entre os marcadores especiais e as mesas e outro que gerencia o jogador que atingiu a maioria em certa mesa. \newline \newline
+
+Posição inicial do jogo
+\begin{lstlisting}
+ [
+  [x, x, x, x, x, x, x, x, x],
+  [x, x, x, x, x, x, x, x, x],
+  [x, x, x, x, x, x, x, x, x],
+  [x, x, x, x, x, x, x, x, x],
+  [x, x, x, x, x, x, x, x, x],
+  [x, x, x, x, x, x, x, x, x],
+  [x, x, x, x, x, x, x, x, x],
+  [x, x, x, x, x, x, x, x, x],
+  [x, x, x, x, x, x, x, x, x]
+ ]
+\end{lstlisting}
+
+\begin{lstlisting}
+ [black_move, green_move, black_waiter, green_waiter, 
+  rotate, swap_unclaimed, swap_claimed]
+\end{lstlisting}
+
+\begin{lstlisting}
+ [x, x, x, x, x, x, x, x, x]
+\end{lstlisting}
+
+Posição intermédia do jogo
+\begin{lstlisting}
+ [
+  [g, x, g, x, b, x, x, x, x],
+  [x, x, x, x, x, x, x, b, x],
+  [x, x, x, b, g, x, x, x, x],
+  [x, g, x, x, x, x, x, x, x],
+  [b, x, b, x, b, b, x, b, x],
+  [x, x, x, x, x, x, x, x, x],
+  [b, x, x, x, g, x, x, x, x],
+  [x, x, x, x, g, x, g, x, x],
+  [x, x, x, x, x, x, x, x, x]
+ ]
+\end{lstlisting}
+
+\begin{lstlisting}
+ [black_move, green_move, black_waiter, green_waiter, 
+  rotate, swap_unclaimed, swap_claimed]
+\end{lstlisting}
+
+\begin{lstlisting}
+ [x, x, x, x, b, x, x, x, x]
+\end{lstlisting}
+
+Posição final do jogo
+\begin{lstlisting}
+ [
+  [g, x, g, x, b, x, x, x, x],
+  [x, x, x, x, x, x, x, b, x],
+  [x, x, x, b, g, x, x, x, x],
+  [x, g, x, x, x, x, x, x, x],
+  [b, x, b, x, b, b, x, b, x],
+  [x, x, x, x, x, x, x, x, x],
+  [b, x, x, x, g, x, x, x, x],
+  [x, x, x, x, g, x, g, x, x],
+  [x, x, x, x, x, x, x, x, x]
+ ]
+\end{lstlisting}
+
+\begin{lstlisting}
+ [black_move, green_move, black_waiter, green_waiter, 
+  rotate, swap_unclaimed, swap_claimed]
+\end{lstlisting}
+
+\begin{lstlisting}
+ [x, x, x, x, b, x, x, x, x]
+\end{lstlisting}
+
+
 
 Descrever a forma de representação do estado do tabuleiro (tipicamente uma lista de listas), com exemplificação em Prolog de posições iniciais do jogo, posições intermédias e finais, acompanhadas de imagens ilustrativas.
 
