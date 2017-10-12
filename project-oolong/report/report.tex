@@ -8,7 +8,7 @@
 \usepackage{graphicx}
 \usepackage{verbatim}
 \usepackage{listings}
-
+\usepackage{float}
 
 \begin{document}
 
@@ -112,6 +112,60 @@ O empregado é utilizado para ajudar a saber onde vai ser colocada a próxima pe
 \item Ao colocar o empregado é preciso ter o cuidado de o pôr na peça que represente a mesa onde foi jogado o turno anterior.
 \end{itemize}
 Por exemplo, se o jogador Preto está na mesa do centro e joga na posição W, é preciso colocar o empregado na mesa W e na posição do centro desta.
+
+\subsection{Marcadores especiais}
+Existem 8 marcadores especiais que são designados aleatoriamente às mesas (Cada mesa só tem um no máximo). Cada marcador tem um efeito diferente e são ativados imediatamente mal o requisito que eles exigem seja feito. Após a ação ter sido feita não poderá voltar a ser usado até ao final do jogo. Se uma ação ativar outra ação noutra mesa, esta também será executada, ou seja, é permitido encadeamento de ações especiais.
+
+
+\begin{minipage}[t]{0.1\textwidth}
+\includegraphics[scale=0.25]{black-move.png}
+\end{minipage}
+\begin{minipage}[t]{0.3\textwidth}
+O jogador preto pode mover uma das suas peças de uma mesa não conquistada para uma outra mesa qualquer não conquistada. \textbf{Requisito:} 3 peças iguais.
+\end{minipage}
+
+\begin{minipage}[t]{0.1\textwidth}
+\includegraphics[scale=0.25]{green-move.png}
+\end{minipage}
+\begin{minipage}[t]{0.3\textwidth}
+O jogador verde pode mover uma das suas peças de uma mesa não conquistada para uma outra mesa qualquer não conquistada. \textbf{Requisito:} 3 peças iguais.
+\end{minipage}
+
+\begin{minipage}[t]{0.1\textwidth}
+\includegraphics[scale=0.25]{black-waiter.png}
+\end{minipage}
+\begin{minipage}[t]{0.3\textwidth}
+O jogador preto pode mover o Empregado do espaço onde está para o mesmo espaço numa mesa diferente. \textbf{Requisito:} 5 peças iguais.
+\end{minipage}
+
+\begin{minipage}[t]{0.1\textwidth}
+\includegraphics[scale=0.25]{green-waiter.png}
+\end{minipage}
+\begin{minipage}[t]{0.3\textwidth}
+O jogador preto pode mover o Empregado do espaço onde está para o mesmo espaço numa mesa diferente. \textbf{Requisito:} 5 peças iguais.
+\end{minipage}
+
+\begin{minipage}[t]{0.1\textwidth}
+\includegraphics[scale=0.25]{rotate.png}
+\end{minipage}
+\begin{minipage}[t]{0.3\textwidth}
+(x2)O jogador que ativa a ação pode rodar a mesa para uma orientação qualquer (O Empregado também roda). \textbf{Requisito:} 4 peças iguais.
+\end{minipage}
+
+\begin{minipage}[t]{0.1\textwidth}
+\includegraphics[scale=0.25]{swap-unclaimed.png}
+\end{minipage}
+\begin{minipage}[t]{0.3\textwidth}
+O jogador que ativa a ação pode trocar a posição de duas mesas não conquistadas. O Empregado também é movido, se presente. \textbf{Requisito:} 4 peças iguais.
+\end{minipage}
+
+\begin{minipage}[t]{0.1\textwidth}
+\includegraphics[scale=0.25]{swap-claimed.png}
+\end{minipage}
+\begin{minipage}[t]{0.3\textwidth}
+O jogador que ativa a ação pode trocar a posição de duas mesas não conquistadas. O Empregado também é movido, se presente. \textbf{Requisito:} 5 peças iguais.
+\end{minipage}
+
 
 \subsection{Exemplo de uma sequência de jogadas}
 \includegraphics[scale=0.75]{board-jogadas.png}\linebreak\linebreak
