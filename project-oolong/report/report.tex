@@ -98,14 +98,14 @@ A organização das 9 mesas deverá seguir a seguinte estrutura: \newline \newli
 Como cada uma das 9 mesas tem 9 posições para jogar será mais fácil imaginar uma bússola por cima do tabuleiro em que cada lugar na mesa e cada mesa representam uma direção (N, NE, E, SE, S, (...) e centro). 
 
 \subsection{Regras do Jogo}
-\paragraph{Começar o jogo}
+\subsubsection{Começar o jogo}
 Quem começa o jogo é o jogador com o chá preto e tem de colocar uma das peç
 as dele na mesa do centro, em qualquer posição. Se os jogadores estiverem envolvidos em múltiplos jogos, quem começa é quem perdeu o último. Cada jogada envolve colocar uma peça, mover o empregado e, possivelmente, ativar uma Ação Especial.
 
-\paragraph{Colocação de peças}
+\subsubsection{Colocação de peças}
 O lugar em que a peça é colocada indica a mesa em que se vai jogar a seguir. Por exemplo, se o jogador Verde jogar no lugar SE da mesa do centro, o jogador Preto tem de jogar na mesa SE do tabuleiro, na posição que quiser, desde que não esteja já ocupada. Se ele jogar na posição NE, o outro jogador tem de jogar na mesa NE e por aí adiante.
 
-\paragraph{Mover o empregado}
+\subsubsection{Mover o empregado}
 O empregado é utilizado para ajudar a saber onde vai ser colocada a próxima peça e onde estava anteriormente. As regras de utilização são as seguintes:
 \begin{itemize}
 \item Quando é jogada uma peça, o empregado é movido para a mesa onde vai ser feita a próxima jogada.
@@ -135,86 +135,99 @@ Quando um jogador tiver 5 peças da sua cor numa mesa, conquista essa mesa. A me
 Quando um jogador conquista 5 das 9 mesas o jogo acaba imediatamente.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
 \section{Representação do Estado do Jogo}
+A representação do estado do jogo não se poderá cingir apenas ao armazenamento do tabuleiro, dada a existência de elementos exteriores dinâmicos - as cartas especiais.
 
-A representação do estado do jogo não se poderá cingir apenas ao armazenamento do tabuleiro, dada a quantidade de fatores exteriores. \newline
-Para tal, achou-se favorável a utilização de duas estruturas de dados extra - um array que faz a correlação entre os marcadores especiais e as mesas e outro que gerencia o jogador que atingiu a maioria em certa mesa. \newline \newline
+Para tal, considerou-se favorável a utilização de uma estrutura de dados adicional - uma lista que correlaciona os marcadores especiais e as mesas.
 
-Posição inicial do jogo
+De facto, seria possível a reserva de um elemento extra na representação de cada mesa, mas por motivos de simplificação e facilidade de impressão do tabuleiro, dividiu-se em dois arrays distintos.
+
+\subsection{Tabuleiro}
+O tabuleiro é uma matriz multidimensional que preserva as 9 mesas redondas, mapeadas de forma similar ao teclado numérico de um telemóvel. Ilustrando,
+
+\begin{itemize}
+\itemsep0em
+\item A \textbf{1ª posição} da matriz corresponde à mesa \textbf{Noroeste} (NW).
+\item A \textbf{2ª posição} da matriz corresponde à mesa \textbf{Norte} (N).
+\item A \textbf{3ª posição} da matriz corresponde à mesa \textbf{Nordeste} (NE).
+\item A \textbf{4ª posição} da matriz corresponde à mesa \textbf{Oeste} (O).
+\item A \textbf{5ª posição} da matriz corresponde à mesa \textbf{central}.
+\item ...
+\end{itemize}
+
+A correspondência de cada posição da mesa a um ponto cardeal segue o mesmo padrão.
+
+\subsubsection{Representação inicial do tabuleiro}
+No estado inicial, todas as células estão vazias - representadas por \texttt{`x'}.
 \begin{lstlisting}
- [
-  [x, x, x, x, x, x, x, x, x],
-  [x, x, x, x, x, x, x, x, x],
-  [x, x, x, x, x, x, x, x, x],
-  [x, x, x, x, x, x, x, x, x],
-  [x, x, x, x, x, x, x, x, x],
-  [x, x, x, x, x, x, x, x, x],
-  [x, x, x, x, x, x, x, x, x],
-  [x, x, x, x, x, x, x, x, x],
-  [x, x, x, x, x, x, x, x, x]
- ]
+  [[x, x, x, x, x, x, x, x, x],
+   [x, x, x, x, x, x, x, x, x],
+   [x, x, x, x, x, x, x, x, x],
+   [x, x, x, x, x, x, x, x, x],
+   [x, x, x, x, x, x, x, x, x],
+   [x, x, x, x, x, x, x, x, x],
+   [x, x, x, x, x, x, x, x, x],
+   [x, x, x, x, x, x, x, x, x],
+   [x, x, x, x, x, x, x, x, x]]
 \end{lstlisting}
 
+\subsubsection{Representação intermédia do tabuleiro}
+No estado intermédio, surge o aparecimento de peças pretas - representadas por \texttt{`b'} - e peças verdes - representadas por \texttt{`g'}.
 \begin{lstlisting}
- [black_move, green_move, black_waiter, green_waiter, 
-  rotate, swap_unclaimed, swap_claimed]
+  [[x, g, x, x, x, b, x, x, x],
+   [b, x, x, b, x, x, g, x, x],
+   [x, b, x, x, b, x, x, g, x],
+   [b, x, g, x, x, x, x, x, x],
+   [x, x, b, x, x, b, x, x, g],
+   [g, g, x, g, g, x, x, x, g],
+   [x, x, x, x, x, b, x, x, x],
+   [x, x, g, x, x, b, x, x, x],
+   [x, x, x, x, x, b, x, b, x]]
 \end{lstlisting}
 
-\begin{lstlisting}
- [x, x, x, x, x, x, x, x, x]
-\end{lstlisting}
+Neste estado em específico ilustrou-se uma situação de vitória de mesa por parte do jogador verde. Note-se que a mesa Este - posição nº6 da matriz - acumula um total de 5 peças verdes, pelo que a maioria nesse ponto está estabelecida.
 
-Posição intermédia do jogo
-\begin{lstlisting}
- [
-  [g, x, g, x, b, x, x, x, x],
-  [x, x, x, x, x, x, x, b, x],
-  [x, x, x, b, g, x, x, x, x],
-  [x, g, x, x, x, x, x, x, x],
-  [b, x, b, x, b, b, x, b, x],
-  [x, x, x, x, x, x, x, x, x],
-  [b, x, x, x, g, x, x, x, x],
-  [x, x, x, x, g, x, g, x, x],
-  [x, x, x, x, x, x, x, x, x]
- ]
-\end{lstlisting}
+\subsubsection{Representação final do tabuleiro}
 
 \begin{lstlisting}
- [black_move, green_move, black_waiter, green_waiter, 
-  rotate, swap_unclaimed, swap_claimed]
+  [[g, g, b, b, b, b, g, g, x],
+   [b, b, b, b, g, x, g, g, b],
+   [g, b, x, g, b, x, g, g, g],
+   [b, g, g, x, b, b, b, b, g],
+   [b, g, b, g, x, b, b, b, g],
+   [g, g, b, g, g, g, g, x, g],
+   [b, x, b, b, g, b, x, b, g],
+   [b, g, g, b, x, b, g, g, b],
+   [g, b, x, g, g, b, b, b, b]]
 \end{lstlisting}
 
+Nesta situação final, o jogador preto emerge vitorioso, tendo conquistado maioria nas cinco mesas Norte, Oeste, central, Sudoeste e Sudeste. \newline
+
+\subsection{Marcadores especiais}
+Dada a atribuição aleatória dos marcadores especiais - 8 ao todo, máximo de um por mesa - no início do jogo e a possibilidade do jogo terminar sem todos (ou até algum!) marcador ser consumido, apresentar-se-á apenas uma possível disposição inicial e intermédia/final.
+
+O mapeamento continua a executar-se do mesmo método descrito anteriormente.
+
+\subsubsection{Representação inicial dos marcadores}
 \begin{lstlisting}
- [x, x, x, x, b, x, x, x, x]
+  [black_move, green_move, black_waiter, green_waiter, 
+   rotate, empty, rotate, swap_unclaimed, swap_claimed]
 \end{lstlisting}
 
-Posição final do jogo
+Neste exemplo, o marcador \textbf{black\_move} está associado à mesa noroeste.
+
+Note-se a repetição da carta especial \textbf{rotate}, que efetivamente possui dois exemplares, e também a utilização da etiqueta \textbf{empty} para identificar mesas sem marcadores - ora consumidos, ora não atribuídos. \newline
+
+\subsubsection{Representação intermédia/final dos marcadores}
 \begin{lstlisting}
- [
-  [g, x, g, x, b, x, x, x, x],
-  [x, x, x, x, x, x, x, b, x],
-  [x, x, x, b, g, x, x, x, x],
-  [x, g, x, x, x, x, x, x, x],
-  [b, x, b, x, b, b, x, b, x],
-  [x, x, x, x, x, x, x, x, x],
-  [b, x, x, x, g, x, x, x, x],
-  [x, x, x, x, g, x, g, x, x],
-  [x, x, x, x, x, x, x, x, x]
- ]
+  [black_move, empty, black_waiter, green_waiter, 
+   rotate, empty, rotate, empty, swap_claimed]
 \end{lstlisting}
 
-\begin{lstlisting}
- [black_move, green_move, black_waiter, green_waiter, 
-  rotate, swap_unclaimed, swap_claimed]
-\end{lstlisting}
+Nesta etapa do jogo, os marcadores \textbf{green\_move} e \textbf{swap\_unclaimed} haverão sido consumidos, daí a sua substituição por \textbf{empty}.
 
-\begin{lstlisting}
- [x, x, x, x, b, x, x, x, x]
-\end{lstlisting}
-
-
-
-Descrever a forma de representação do estado do tabuleiro (tipicamente uma lista de listas), com exemplificação em Prolog de posições iniciais do jogo, posições intermédias e finais, acompanhadas de imagens ilustrativas.
+Descrever a forma de representação do estado do tabuleiro (tipicamente uma lista de listas), com exemplificação em Prolog de posições iniciais do jogo, posições intermédias e finais, acompanhadas de imagens ilustrativas. \newline
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
