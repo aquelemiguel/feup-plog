@@ -205,24 +205,24 @@ Neste estado em específico ilustrou-se uma situação de vitória de mesa por p
 Nesta situação final, o jogador preto emerge vitorioso, tendo conquistado maioria nas cinco mesas Norte, Oeste, central, Sudoeste e Sudeste. \newline
 
 \subsection{Marcadores especiais}
-Dada a atribuição aleatória dos marcadores especiais - 8 ao todo, máximo de um por mesa - no início do jogo e a possibilidade do jogo terminar sem todos (ou até algum!) marcador ser consumido, apresentar-se-á apenas uma possível disposição inicial e intermédia/final.
+Dada a atribuição aleatória dos marcadores especiais - 8 na periferia, máximo de um por mesa - no início do jogo e a possibilidade do jogo terminar sem todos (ou até algum!) marcador ser consumido, apresentar-se-á apenas uma possível disposição inicial e intermédia/final.
 
 O mapeamento continua a executar-se do mesmo método descrito anteriormente.
 
 \subsubsection{Representação inicial dos marcadores}
 \begin{lstlisting}
   [black_move, green_move, black_waiter, green_waiter, 
-   rotate, empty, rotate, swap_unclaimed, swap_claimed]
+   empty, rotate, rotate, swap_unclaimed, swap_claimed]
 \end{lstlisting}
 
 Neste exemplo, o marcador \textbf{black\_move} está associado à mesa noroeste.
 
-Note-se a repetição da carta especial \textbf{rotate}, que efetivamente possui dois exemplares, e também a utilização da etiqueta \textbf{empty} para identificar mesas sem marcadores - ora consumidos, ora não atribuídos. \newline
+Note-se a repetição da carta especial \textbf{rotate}, que efetivamente possui dois exemplares, e também a utilização da etiqueta \textbf{empty} para identificar mesas sem marcadores - ora consumidos, ora não atribuídos, como no caso da mesa central. \newline
 
 \subsubsection{Representação intermédia/final dos marcadores}
 \begin{lstlisting}
   [black_move, empty, black_waiter, green_waiter, 
-   rotate, empty, rotate, empty, swap_claimed]
+   empty, rotate, rotate, empty, swap_claimed]
 \end{lstlisting}
 
 Nesta etapa do jogo, os marcadores \textbf{green\_move} e \textbf{swap\_unclaimed} haverão sido consumidos, daí a sua substituição por \textbf{empty}.
