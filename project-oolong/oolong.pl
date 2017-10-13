@@ -45,8 +45,8 @@ print_formatted_line(X) :-
 
 print_formatted_line(X) :-
   X = 2,
-  nl, put_code(200), put_code(205), put_code(205), put_code(205), put_code(202), put_code(205), put_code(205), put_code(205), put_code(202), put_code(205),
-  put_code(205), put_code(205), put_code(188), nl.
+  put_code(200), put_code(205), put_code(205), put_code(205), put_code(202), put_code(205), put_code(205), put_code(205), put_code(202), put_code(205),
+  put_code(205), put_code(205), put_code(188).
 
 print_formatted_line(X) :-
   X = 3,
@@ -113,9 +113,9 @@ print_block([H|T]) :- nl, nl,
 
   nth0(6, A2, E25), write(E25), write(' '), put_code(186), write(' '),
   nth0(7, A2, E26), write(E26), write(' '), put_code(186), write(' '),
-  nth0(8, A2, E27), write(E27), nl,
+  nth0(8, A2, E27), write(E27), write(' '), put_code(186),
 
-  print_formatted_line(2),
+  nl, print_formatted_line(2), write(' '), print_formatted_line(2), write(' '), print_formatted_line(2),
 
   nl.
 
