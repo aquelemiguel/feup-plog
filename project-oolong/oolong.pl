@@ -56,24 +56,24 @@ print_block([H|T]) :- nl, nl,
 
   nth0(0, H, E1), write(E1), write(' '), put_code(186), write(' '),
   nth0(1, H, E2), write(E2), write(' '), put_code(186), write(' '),
-  nth0(2, H, E3), write(E3), write(' '), put_code(186), write('   '),
+  nth0(2, H, E3), write(E3), write(' '), put_code(186), write(' '), put_code(186),
 
   nth0(0, T, A1),
 
-  nth0(0, A1, E4), write(E4), write('  '),
-  nth0(1, A1, E5), write(E5), write('  '),
-  nth0(2, A1, E6), write(E6), write('    '),
+  nth0(0, A1, E4), write(' '), write(E4), write(' '), put_code(186),
+  nth0(1, A1, E5), write(' '), write(E5), write(' '), put_code(186),
+  nth0(2, A1, E6), write(' '), write(E6), write(' '), put_code(186), write(' '), put_code(186),  
 
   nth0(1, T, A2),
 
-  nth0(0, A2, E7), write(E7), write('  '),
-  nth0(1, A2, E8), write(E8), write('  '),
-  nth0(2, A2, E9), write(E9),
+  nth0(0, A2, E7), write(' '), write(E7), write(' '), put_code(186),
+  nth0(1, A2, E8), write(' '), write(E8), write(' '), put_code(186),
+  nth0(2, A2, E9), write(' '), write(E9), write(' '), put_code(186),
 
   print_formatted_line(1), put_code(186),
 
-  nth0(3, H, E10), write(E10), write('  '),
-  nth0(4, H, E11), write(E11), write('  '),
+  nth0(3, H, E10), write(E10), write(' '), put_code(186),
+  nth0(4, H, E11), write(E11), write(' '), put_code(186),
   nth0(5, H, E12), write(E12), write('    '),
 
   nth0(3, A1, E13), write(E13), write('  '),
