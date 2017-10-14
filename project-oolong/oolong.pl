@@ -4,15 +4,15 @@ play :-
   nl, write('Welcome to PrOolong.'), nl,
   % read(Input),
   game([
-    [a, b, c, d, e, f, g, h, i],
-    [g, b, c, d, e, f, g, h, i],
-    [h, b, c, d, e, f, g, h, i],
-    [i, b, c, d, e, f, g, h, i],
-    [j, b, c, d, e, f, g, h, i],
-    [k, b, c, d, e, f, g, h, i],
-    [l, b, c, d, e, f, g, h, i],
-    [m, b, c, d, e, f, g, h, i],
-    [n, b, c, d, e, f, g, h, i]],
+    [x, x, x, x, x, x, x, x, x],
+    [x, x, x, x, x, x, x, x, x],
+    [x, x, x, x, x, x, x, x, x],
+    [x, x, x, x, x, x, x, x, x],
+    [x, x, x, x, x, x, x, x, x],
+    [x, x, x, x, x, x, x, x, x],
+    [x, x, x, x, x, x, x, x, x],
+    [x, x, x, x, x, x, x, x, x],
+    [x, x, x, x, x, x, x, x, x]],
 
     [b, b, b, b, b, b, b, b, b], % Special cards array.
 

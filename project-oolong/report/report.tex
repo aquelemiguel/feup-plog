@@ -293,6 +293,14 @@ Descrever a forma de representação do estado do tabuleiro (tipicamente uma lis
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Visualização do Tabuleiro}
 
+A representação do tabuleiro em modo de texto não é feita com a disposição original do jogo para efeitos de simplificação. Em vez disso, é usada uma matriz de 3x3 mesas com 3x3 posições cada uma. As posições representam na mesma os pontos cardeais, para facilitar o jogo.
+
+\begin{center}
+\includegraphics[scale=0.33]{tabuleiro.png}
+\end{center}
+
+Para produzir este efeito é usada uma função print\_formatted\_line(X) para desenhar as linhas horizontais em cada matriz, que separam as posições. É usada várias vezes a função put\_code com os códigos ASCII 185, 187, 188, 201, 204, 205 e 206. X pode levar os argumentos 0, 1,2 ou 3 dependendo da linha a imprimir. A função print\_block([ H | T ]) junta a função acima com a impressão do array previamente definido. São usadas as funções nh0, write, put\_code e print\_formatted\_line várias vezes para cada matriz permitindo desenhar o tabuleiro da forma que queremos.
+
 Descrever a forma de visualização do tabuleiro em modo de texto e o(s) predicado(s) Prolog construídos para o efeito.
 Deve ser incluída pelo menos uma imagem correspondente ao output produzido pelo predicado de visualização.
 
