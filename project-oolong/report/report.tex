@@ -285,9 +285,7 @@ Note-se a repetição da carta especial \textbf{rotate}, que efetivamente possui
    empty, rotate, rotate, empty, swap_claimed]
 \end{lstlisting}
 
-Nesta etapa do jogo, os marcadores \textbf{green\_move} e \textbf{swap\_unclaimed} haverão sido consumidos, daí a sua substituição por \textbf{empty}.
-
-Descrever a forma de representação do estado do tabuleiro (tipicamente uma lista de listas), com exemplificação em Prolog de posições iniciais do jogo, posições intermédias e finais, acompanhadas de imagens ilustrativas. \newline
+Nesta etapa do jogo, os marcadores \textbf{green\_move} e \textbf{swap\_unclaimed} haverão sido consumidos, daí a sua substituição por \textbf{empty}. \newline
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -306,9 +304,32 @@ Deve ser incluída pelo menos uma imagem correspondente ao output produzido pelo
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
 \section{Movimentos}
 
-Elencar os movimentos (tipos de jogadas) possíveis e definir os cabeçalhos dos predicados que serão utilizados (ainda não precisam de estar implementados).
+Cada turno, o jogador tem acesso a dois tipos de jogadas distintos:
+
+\begin{itemize}
+\item Colocação de uma peça em Board, enviando a posição de eleição numa lista cuja cabeça \textbf{H} corresponde à mesa e a cauda \textbf{T} à cadeira.
+
+\texttt{place\_token([H|T], Board)}
+
+\item Caso os requerimentos para a ativação de um marcador especial se cumpram, seleção de uma mesa \textbf{Table} do \textbf{Board} e ativação a sua habilidade.
+
+\texttt{activate\_special(Table, Board)}
+\end{itemize}
+
+Note-se que o input adicional exigido ao jogador varia consoante o marcador selecionado. \newline
+
+Por exemplo, o marcador \textbf{rotate} permite a rotação da mesa numa direção no sentido dos ponteiros do relógio ou inverso. Para tal, um possível predicado seria \texttt{rotate\_table(Direction, Table, Board)}. 	\newline
+
+Traduzindo, a direção \textbf{Direction} - introduzida pelo jogador - da rotação da mesa \textbf{Table}, adquirida através do predicado \textbf{activate\_special}. Estas alterações manifestam-se em \textbf{Board}. \newline
+
+Com o desenvolvimento do projeto e avanço da lógica de jogo, mais predicados deste género serão desenvolvidos.
+
+
+
+
 
 
 \end{document}
