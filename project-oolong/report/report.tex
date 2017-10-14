@@ -9,13 +9,14 @@
 \usepackage{verbatim}
 \usepackage{listings}
 \usepackage{float}
+\usepackage{wrapfig}
 
 \begin{document}
 
 \setlength{\textwidth}{16cm}
 \setlength{\textheight}{22cm}
 
-\title{\Huge\textbf{Título do Trabalho}\linebreak\linebreak\linebreak
+\title{\Huge\textbf{Oolong}\linebreak\linebreak\linebreak
 \Large\textbf{Relatório Intercalar}\linebreak\linebreak
 \linebreak\linebreak
 \includegraphics[scale=0.1]{feup-logo.png}\linebreak\linebreak
@@ -24,7 +25,7 @@
 \Large{Programação em Lógica}\linebreak
 }
 
-\author{\textbf{Grupo xx:}\\
+\author{\textbf{Grupo O\_1:}\\
 José Pedro Borges - up201503603 \\
 Miguel Mano Fernandes - up201503538 \\
 \linebreak\linebreak \\
@@ -79,34 +80,29 @@ Miguel Mano Fernandes - up201503538 \\
 %%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{O Jogo Oolong}
 
-Oolong é um jogo de tabuleiro desenvolvido em 2015 pelo artista John Shulters e designer Sarah Graybill e publicado por Black Straw Games.
-Trata-se de um jogo de estratégia para dois jogadores situado numa casa de chá japonesa. Cada jogador representa um fabricante de chá (preto e verde) tentando servir o máximo da sua marca. Quando um jogador servir 5 porções numa mesa, haverá atingido a maioria nessa mesa. Vencer o jogo envolve atingir a maioria em 5 mesas e, consequentemente, na casa.
+Oolong é um jogo de tabuleiro desenvolvido em 2015 pelo artista John Shulters e designer Sarah Graybill e publicado por Black Straw Games. \newline
 
-São requeridos os seguintes componentes para iniciar um jogo:
-\begin{itemize}
-\item 80 peças - 40 pretas e 40 verdes
-\item 8 marcadores especiais quadrados
-\item 9 mesas redondas
-\item 1 peão de empregado de mesa
-\end{itemize}
 
-A organização das 9 mesas deverá seguir a seguinte estrutura: \newline \newline
+Trata-se de um jogo de estratégia para dois jogadores situado numa casa de chá japonesa, em que cada jogador representa um fabricante de chá (preto e verde) tentando servir o máximo da sua marca. 
+
+Quando um jogador servir 5 porções numa mesa, haverá atingido a maioria nessa mesa. Vencer o jogo envolve atingir a maioria em 5 mesas e, consequentemente, na casa. \newline
+
+A organização das 9 mesas deverá seguir a seguinte estrutura: \newline
 \begin{center}
-\includegraphics[scale=0.5]{board-setup.png}\linebreak\linebreak
+\includegraphics[scale=0.5]{board-setup.png}\newline
 \end{center}
 
 Como cada uma das 9 mesas tem 9 posições para jogar será mais fácil imaginar uma bússola por cima do tabuleiro em que cada lugar na mesa e cada mesa representam uma direção (N, NE, E, SE, S, (...) e centro). 
 
 \subsection{Regras do Jogo}
 \subsubsection{Começar o jogo}
-Quem começa o jogo é o jogador com o chá preto e tem de colocar uma das peç
-as dele na mesa do centro, em qualquer posição. Se os jogadores estiverem envolvidos em múltiplos jogos, quem começa é quem perdeu o último. Cada jogada envolve colocar uma peça, mover o empregado e, possivelmente, ativar uma Ação Especial.
+Quem começa o jogo é o jogador com o chá preto e tem de colocar uma das peças dele na mesa do centro, em qualquer posição. Se os jogadores estiverem envolvidos em múltiplos jogos, quem começa é quem perdeu o último. Cada jogada envolve colocar uma peça, mover o empregado e, possivelmente, ativar uma Ação Especial.
 
 \subsubsection{Colocação de peças}
-O lugar em que a peça é colocada indica a mesa em que se vai jogar a seguir. Por exemplo, se o jogador Verde jogar no lugar SE da mesa do centro, o jogador Preto tem de jogar na mesa SE do tabuleiro, na posição que quiser, desde que não esteja já ocupada. Se ele jogar na posição NE, o outro jogador tem de jogar na mesa NE e por aí adiante.
+O lugar em que a peça é colocada indica a mesa em que se vai jogar a seguir. Por exemplo, se o jogador Verde jogar no lugar SE da mesa do centro, o jogador Preto tem de jogar na mesa SE do tabuleiro, em qualquer posição, desde que não esteja já ocupada.
 
 \subsubsection{Mover o empregado}
-O empregado é utilizado para ajudar a saber onde vai ser colocada a próxima peça e onde estava anteriormente. As regras de utilização são as seguintes:
+O empregado é utilizado para ajudar a saber em que mesa será colocada a próxima peça e a sua posição prévia. As regras de utilização são as seguintes:
 \begin{itemize}
 \item Quando é jogada uma peça, o empregado é movido para a mesa onde vai ser feita a próxima jogada.
 \item Ao colocar o empregado é preciso ter o cuidado de o pôr na peça que represente a mesa onde foi jogado o turno anterior.
@@ -114,73 +110,59 @@ O empregado é utilizado para ajudar a saber onde vai ser colocada a próxima pe
 Por exemplo, se o jogador Preto está na mesa do centro e joga na posição W, é preciso colocar o empregado na mesa W e na posição do centro desta.
 
 \subsection{Marcadores especiais}
-Existem 8 marcadores especiais que são designados aleatoriamente às mesas (Cada mesa só tem um no máximo). Cada marcador tem um efeito diferente e são ativados imediatamente mal o requisito que eles exigem seja feito. Após a ação ter sido feita não poderá voltar a ser usado até ao final do jogo. Se uma ação ativar outra ação noutra mesa, esta também será executada, ou seja, é permitido encadeamento de ações especiais.
 
+Existem 8 marcadores especiais que são designados aleatoriamente às mesas na periferia - cada mesa tem um no máximo. 
 
-\begin{minipage}[t]{0.1\textwidth}
-\includegraphics[scale=0.25]{black-move.png}
-\end{minipage}
-\begin{minipage}[t]{0.3\textwidth}
-O jogador preto pode mover uma das suas peças de uma mesa não conquistada para uma outra mesa qualquer não conquistada. \textbf{Requisito:} 3 peças iguais.
-\end{minipage}
+Cada marcador é ativado imediatamente mal o requisito que exigido seja cumprido. Após a ação ter sido feita não poderá voltar a ser usado até ao final do jogo. Se uma ação ativar outra ação noutra mesa, esta também será executada, ou seja, é permitido encadeamento de ações especiais.
 
-\begin{minipage}[t]{0.1\textwidth}
-\includegraphics[scale=0.25]{green-move.png}
-\end{minipage}
-\begin{minipage}[t]{0.3\textwidth}
-O jogador verde pode mover uma das suas peças de uma mesa não conquistada para uma outra mesa qualquer não conquistada. \textbf{Requisito:} 3 peças iguais.
-\end{minipage}
+\begin{itemize}
 
-\begin{minipage}[t]{0.1\textwidth}
-\includegraphics[scale=0.25]{black-waiter.png}
+\begin{minipage}{0.58\textwidth}
+\item O jogador representado pode mover uma das suas peças de uma mesa não conquistada para outra mesa não conquistada. \newline
+\textbf{Requisito:} 3 peças iguais.
 \end{minipage}
-\begin{minipage}[t]{0.3\textwidth}
-O jogador preto pode mover o Empregado do espaço onde está para o mesmo espaço numa mesa diferente. \textbf{Requisito:} 5 peças iguais.
+\hspace{4mm}
+\begin{minipage}{0.58\textwidth}
+\includegraphics[scale=0.2]{black-move.png}
 \end{minipage}
 
-\begin{minipage}[t]{0.1\textwidth}
-\includegraphics[scale=0.25]{green-waiter.png}
+\begin{minipage}{0.58\textwidth}
+\item O jogador representado pode mover o empregado do espaço onde está para o mesmo espaço numa mesa diferente.  \newline
+\textbf{Requisito:} 5 peças iguais.
 \end{minipage}
-\begin{minipage}[t]{0.3\textwidth}
-O jogador preto pode mover o Empregado do espaço onde está para o mesmo espaço numa mesa diferente. \textbf{Requisito:} 5 peças iguais.
-\end{minipage}
-
-\begin{minipage}[t]{0.1\textwidth}
-\includegraphics[scale=0.25]{rotate.png}
-\end{minipage}
-\begin{minipage}[t]{0.3\textwidth}
-(x2)O jogador que ativa a ação pode rodar a mesa para uma orientação qualquer (O Empregado também roda). \textbf{Requisito:} 4 peças iguais.
+\hspace{4mm}
+\begin{minipage}{0.58\textwidth}
+\includegraphics[scale=0.2]{black-waiter.png}
 \end{minipage}
 
-\begin{minipage}[t]{0.1\textwidth}
-\includegraphics[scale=0.25]{swap-unclaimed.png}
+\begin{minipage}{0.58\textwidth}
+\item O jogador pode rodar a mesa para uma orientação qualquer (empregado também roda). \newline
+\textbf{Requisito:} 4 peças iguais.
 \end{minipage}
-\begin{minipage}[t]{0.3\textwidth}
-O jogador que ativa a ação pode trocar a posição de duas mesas não conquistadas. O Empregado também é movido, se presente. \textbf{Requisito:} 4 peças iguais.
-\end{minipage}
-
-\begin{minipage}[t]{0.1\textwidth}
-\includegraphics[scale=0.25]{swap-claimed.png}
-\end{minipage}
-\begin{minipage}[t]{0.3\textwidth}
-O jogador que ativa a ação pode trocar a posição de duas mesas não conquistadas. O Empregado também é movido, se presente. \textbf{Requisito:} 5 peças iguais.
+\hspace{4mm}
+\begin{minipage}{0.58\textwidth}
+\includegraphics[scale=0.2]{rotate.png}
 \end{minipage}
 
+\begin{minipage}{0.58\textwidth}
+\item O jogador que ativa a ação pode trocar a posição de duas mesas não conquistadas. O empregado também é movido, se presente. \newline 
+\textbf{Requisito:} 4 peças iguais.
+\end{minipage}
+\hspace{4mm}
+\begin{minipage}{0.58\textwidth}
+\includegraphics[scale=0.2]{swap-unclaimed.png}
+\end{minipage}
 
-\subsection{Exemplo de uma sequência de jogadas}
-\includegraphics[scale=0.75]{board-jogadas.png}\linebreak\linebreak
-\begin{enumerate}
-\item Preto joga no espaço NE da mesa do centro e posiciona o Empregado(W) no centro da mesa NE.
-\item Verde joga no espaço S da mesa NE e posiciona o Empregado no espaço NE da mesa S.
-\item Preto joga no espaço NW da mesa S e posiciona o Empregado no espaço S da mesa NW.
-\item Verde joga no espaço NW da mesa NW e posiciona o Empregado por cima da sua peça.
-\item Preto joga no espaço do centro da mesa NW e posiciona o Empregado no espaço NW da mesa do centro.
-\item Verde joga no espaço E da mesa do centro e posiciona o Empregado no espaço centro da mesa E.
-\item Preto joga no espaço N da mesa E e posiciona o Empregado no espaço E da mesa N.
-\item Verde joga no espaço NW da mesa N e posiciona o Empregado no espaço N da mesa NW.
-\item Preto joga no espaço W da mesa NW e posiciona o Empregado no espaço NW da mesa W.
-\item Verde joga no espaço centro da mesa W e irá posicionar o Empregado no espaço W da mesa do centro.
-\end{enumerate}
+\begin{minipage}{0.58\textwidth}
+\item O jogador que ativa a ação pode trocar a posição de uma mesa conquistada com uma não conquistada. O empregado também é movido, se presente. \newline 
+\textbf{Requisito:} 5 peças iguais.
+\end{minipage}
+\hspace{4mm}
+\begin{minipage}{0.58\textwidth}
+\includegraphics[scale=0.2]{swap-claimed.png}
+\end{minipage}
+
+\end{itemize}
 
 \subsection{Conquistar uma mesa}
 Quando um jogador tiver 5 peças da sua cor numa mesa, conquista essa mesa. A mesa pode continuar a ser utilizada nas jogadas, mas quando todos os espaços vazios forem preenchidos a mesa será considerada completa e qualquer jogada que levaria um jogador a ir para essa mesa será substituída, fazendo com que o jogador possa escolher um lugar qualquer vazio para colocar a sua peça.
@@ -198,15 +180,13 @@ Para tal, considerou-se favorável a utilização de uma estrutura de dados adic
 De facto, seria possível a reserva de um elemento extra na representação de cada mesa, mas por motivos de simplificação e facilidade de impressão do tabuleiro, dividiu-se em dois arrays distintos.
 
 \subsection{Tabuleiro}
-O tabuleiro é uma matriz multidimensional que preserva as 9 mesas redondas, mapeadas de forma similar ao teclado numérico de um telemóvel. Ilustrando,
+O tabuleiro é uma matriz multidimensional que preserva as 9 mesas redondas, mapeadas de forma similar ao teclado numérico de um telemóvel:
 
 \begin{itemize}
 \itemsep0em
 \item A \textbf{1ª posição} da matriz corresponde à mesa \textbf{Noroeste} (NW).
 \item A \textbf{2ª posição} da matriz corresponde à mesa \textbf{Norte} (N).
-\item A \textbf{3ª posição} da matriz corresponde à mesa \textbf{Nordeste} (NE).
 \item A \textbf{4ª posição} da matriz corresponde à mesa \textbf{Oeste} (O).
-\item A \textbf{5ª posição} da matriz corresponde à mesa \textbf{central}.
 \item ...
 \end{itemize}
 
@@ -214,6 +194,12 @@ A correspondência de cada posição da mesa a um ponto cardeal segue o mesmo pa
 
 \subsubsection{Representação inicial do tabuleiro}
 No estado inicial, todas as células estão vazias - representadas por \texttt{`x'}.
+
+\begin{wrapfigure}{R}{0.3\textwidth}
+\centering
+\includegraphics[width=0.18\textwidth]{board-setup-1.png}
+\end{wrapfigure}
+
 \begin{lstlisting}
   [[x, x, x, x, x, x, x, x, x],
    [x, x, x, x, x, x, x, x, x],
@@ -226,10 +212,14 @@ No estado inicial, todas as células estão vazias - representadas por \texttt{`
    [x, x, x, x, x, x, x, x, x]]
 \end{lstlisting}
 
-\includegraphics[scale=0.5]{board-setup-1.png}
-
 \subsubsection{Representação intermédia do tabuleiro}
 No estado intermédio, surge o aparecimento de peças pretas - representadas por \texttt{`b'} - e peças verdes - representadas por \texttt{`g'}.
+
+\begin{wrapfigure}{R}{0.3\textwidth}
+\centering
+\includegraphics[width=0.18\textwidth]{board-setup-2.png}
+\end{wrapfigure}
+
 \begin{lstlisting}
   [[x, g, x, x, x, b, x, x, x],
    [b, x, x, b, x, x, g, x, x],
@@ -244,9 +234,13 @@ No estado intermédio, surge o aparecimento de peças pretas - representadas por
 
 Neste estado em específico ilustrou-se uma situação de vitória de mesa por parte do jogador verde. Note-se que a mesa Este - posição nº6 da matriz - acumula um total de 5 peças verdes, pelo que a maioria nesse ponto está estabelecida.
 
-\includegraphics[scale=0.5]{board-setup-2.png}
-
 \subsubsection{Representação final do tabuleiro}
+
+\begin{wrapfigure}{R}{0.3\textwidth}
+\centering
+\includegraphics[width=0.18\textwidth]{board-setup-3.png}
+\end{wrapfigure}
+
 
 \begin{lstlisting}
   [[g, g, b, b, b, b, g, g, x],
@@ -262,10 +256,9 @@ Neste estado em específico ilustrou-se uma situação de vitória de mesa por p
 
 Nesta situação final, o jogador preto emerge vitorioso, tendo conquistado maioria nas cinco mesas Norte, Oeste, central, Sudoeste e Sudeste. \newline
 
-\includegraphics[scale=0.5]{board-setup-3.png}
-
 \subsection{Marcadores especiais}
-Dada a atribuição aleatória dos marcadores especiais - 8 na periferia, máximo de um por mesa - no início do jogo e a possibilidade do jogo terminar sem todos (ou até algum!) marcador ser consumido, apresentar-se-á apenas uma possível disposição inicial e intermédia/final.
+
+Dada a atribuição aleatória dos marcadores especiais no início do jogo e a possibilidade do jogo terminar sem todos os marcadores serem ativados, apresentar-se-á apenas uma possível disposição inicial e intermédia/final.
 
 O mapeamento continua a executar-se do mesmo método descrito anteriormente.
 
@@ -289,6 +282,7 @@ Nesta etapa do jogo, os marcadores \textbf{green\_move} e \textbf{swap\_unclaime
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
 \section{Visualização do Tabuleiro}
 
 A representação do tabuleiro em modo de texto não é feita com a disposição original do jogo para efeitos de simplificação. Em vez disso, é usada uma matriz de 3x3 mesas com 3x3 posições cada uma. As posições representam na mesma os pontos cardeais, para facilitar o jogo.
@@ -314,12 +308,12 @@ Cada turno, o jogador tem acesso a dois tipos de jogadas distintos:
 
 \texttt{place\_token([H|T], Board)}
 
-\item Caso os requerimentos para a ativação de um marcador especial se cumpram, seleção de uma mesa \textbf{Table} do \textbf{Board} e ativação a sua habilidade.
+\item Caso os requerimentos para a ativação de um marcador especial se cumpram, a seleção de uma mesa \textbf{Table} do \textbf{Board} e ativação da sua habilidade é automática.
 
 \texttt{activate\_special(Table, Board)}
 \end{itemize}
 
-Note-se que o input adicional exigido ao jogador varia consoante o marcador selecionado. \newline
+Note-se, porém, que o input adicional exigido ao jogador varia consoante o marcador selecionado. \newline
 
 Por exemplo, o marcador \textbf{rotate} permite a rotação da mesa numa direção no sentido dos ponteiros do relógio ou inverso. Para tal, um possível predicado seria \texttt{rotate\_table(Direction, Table, Board)}. 	\newline
 
