@@ -297,7 +297,37 @@ A representação do tabuleiro em modo de texto não é feita com a disposição
 \includegraphics[scale=0.33]{tabuleiro.png}
 \end{center}
 
-Para produzir este efeito é usada uma função print\_formatted\_line(X) para desenhar as linhas horizontais em cada matriz, que separam as posições. É usada várias vezes a função put\_code com os códigos ASCII 185, 187, 188, 201, 204, 205 e 206. X pode levar os argumentos 0, 1,2 ou 3 dependendo da linha a imprimir. A função print\_block([ H | T ]) junta a função acima com a impressão do array previamente definido. São usadas as funções nh0, write, put\_code e print\_formatted\_line várias vezes para cada matriz permitindo desenhar o tabuleiro da forma que queremos.
+Para produzir este efeito é usada o predicado \texttt{print\_formatted\_line(X)} para desenhar as linhas horizontais em cada matriz, que separam as posições. É usada várias vezes o predicado put\_code com os códigos ASCII 185, 187, 188, 201, 204, 205 e 206. X pode levar os argumentos 0, 1,2 ou 3 dependendo da linha a imprimir. Um dos usos do predicado é o seguinte:
+
+\begin{lstlisting}
+print_formatted_line(X) :- X = 1, 
+  nl, put_code(204), put_code(205), put_code(205), put_code(205), 
+  put_code(206), put_code(205), put_code(205), 
+  put_code(205), put_code(206), put_code(205), put_code(205), 
+  put_code(205), put_code(185), nl.
+\end{lstlisting}
+
+O predicado \texttt{print\_block([H|T])} junta o predicado acima com a impressão do array previamente definido. São usadas os predicados nh0, write, put\_code e print\_formatted\_line várias vezes para cada matriz permitindo desenhar o tabuleiro da forma que queremos.
+
+\begin {lstlisting}
+print_block([H|T]) :- nl, print_formatted_line(0), write(' '), 
+  print_formatted_line(0),  write(' '), print_formatted_line(0), nl, 
+  put_code(186), write(' '), nth0(0, H, E1), write(E1), write(' '), 
+  put_code(186), (.....).
+\end{lstlisting}
+
+O predicado \texttt{print\_board([H|T])} é o chamado para imprimir tudo feito pelos predicados mencionados anteriormente.
+
+\begin{lstlisting}
+print_board([H|T]) :- length([H|T], Matrix_Size),
+  Trim_Size is Matrix_Size - 3,
+  trim_tail([H|T], Trim_Size, Block),
+  print_block(Block),
+  trim_head(T, 2, Remain),
+  print_board(Remain).
+\end{lstlisting}
+
+\texttt{trim\_head(L,N,S)} remove N elementos da lista L e guarda o resultado em S. \texttt{trim\_tail(L,N,S)} faz o mesmo, só que em vez de cortar N elementos do principio, corta do fim
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%
