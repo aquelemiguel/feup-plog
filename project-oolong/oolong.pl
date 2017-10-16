@@ -1,5 +1,25 @@
 :- use_module(library(lists)).
 
+include('menus.pl').
+include('utilities.pl').
+
+% Player and pieces.
+player(greenPlayer).
+player(blackPlayer).
+
+piece(greenPiece).
+piece(blackPiece).
+
+oolong :- main_menu. % Entry function call.
+
+
+
+
+
+
+
+
+
 play :-
   nl, write('Welcome to PrOolong.'), nl,
   % read(Input),
@@ -18,6 +38,46 @@ play :-
 
     [b, g, b, g, x, g, g, g, x] % Tile majority tracker.
   ).
+
+game(Board, Special, Majority) :-
+  print_board(Board),
+  win(b, Majority), write('Black wins!').
+
+game(Board, Special, Majority) :-
+  %print_board(Board),
+  win(g, Majority), write('Green wins!').
+
+% Movement predicates.
+place_token(Board, Color, [H|T]) :-
+  Color = b,
+  nth0(H, Board, Sel_Line),
+  nth0(T, Sel_Line, Sel_Pos),
+  Sel_Pos = x,
+  Sel_Pos is Color, % This probably doesn't do anything, need formatted code to check.
+  print_board(Board).
+
+place_token(Board, Color, [H|T]) :-
+  Color = g,
+  nth0(H, Board, Sel_Line),
+  nth0(T, Sel_Line, Sel_Pos),
+  Sel_Pos = x,
+  Sel_Pos is Color, % This probably doesn't do anything, need formatted code to check.
+  print_board(Board).
+
+% TODO: Waiter should only be implemented when board's optimized.
+
+count([], 0).
+count([H|T], N) :- number(H), count(T, N1), N is N1 + 1.
+count([H|T], N) :- \+number(H), count(T, N).
+
+win(X, Majority) :-
+  count(Majority, X), % This predicate does not exist, create it.
+  Y >= 5.
+
+
+
+
+
 
 trim_head(L,N,S) :- length(P,N), append(P,S,L). % Trims head of list. L=list N=amount S=result P=sized list
 trim_tail(L,N,S) :- reverse(L,R), length(P,N), append(P,K,R), reverse(K,S).
@@ -118,75 +178,3 @@ print_block([H|T]) :- nl, nl,
   nl, print_formatted_line(2), write(' '), print_formatted_line(2), write(' '), print_formatted_line(2),
 
   nl.
-
-
-
-/*
-print_board([H|T]) :-
-  length([H|T], Size), % Size of matrix.
-  trim_tail([H|T], Size, Block),
-  print_block(Block),
-  trim_head(T, 2, Remain), % Removes the top 9x3 block.
-  print_board(Remain).
-
-print_block([H|T]) :-
-  print_line([H|T]), nl,
-  print_block(T).
-
-print_line([H|T]) :-
-  nth0(0, H, E1), write(E1),
-  nth0(1, H, E2), write(E2),
-  nth0(2, H, E3), write(E3),
-
-  nth0(0, T, A1), write(' '),
-
-  nth0(0, A1, E4), write(E4),
-  nth0(1, A1, E5), write(E5),
-  nth0(2, A1, E6), write(E6),
-
-  nth0(1, T, A2), write(' '),
-
-  nth0(0, A2, E7), write(E7),
-  nth0(1, A2, E8), write(E8),
-  nth0(2, A2, E9), write(E9).
-*/
-
-% print_line([]) :- nl.
-% print_line([C|T]) :- write(C), write('|'), print_line(T).
-
-game(Board, Special, Majority) :-
-  print_board(Board),
-  win(b, Majority), write('Black wins!').
-
-game(Board, Special, Majority) :-
-  %print_board(Board),
-  win(g, Majority), write('Green wins!').
-
-% Movement predicates.
-
-
-place_token(Board, Color, [H|T]) :-
-  Color = b,
-  nth0(H, Board, Sel_Line),
-  nth0(T, Sel_Line, Sel_Pos),
-  Sel_Pos = x,
-  Sel_Pos is Color, % This probably doesn't do anything, need formatted code to check.
-  print_board(Board).
-
-place_token(Board, Color, [H|T]) :-
-  Color = g,
-  nth0(H, Board, Sel_Line),
-  nth0(T, Sel_Line, Sel_Pos),
-  Sel_Pos = x,
-  Sel_Pos is Color, % This probably doesn't do anything, need formatted code to check.
-  print_board(Board).
-
-% TODO: Waiter should only be implemented when board's optimized.
-
-count([], 0).
-count([H|T], N) :- number(H), count(T, N1), N is N1 + 1.
-count([H|T], N) :- \+number(H), count(T, N).
-
-win(X, Majority) :-
-  count(Majority, X), % This predicate does not exist, create it.
-  Y >= 5.
