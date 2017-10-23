@@ -2,18 +2,15 @@
 
 :- include('game.pl').
 :- include('menus.pl').
+:- include('outputs.pl').
 :- include('utilities.pl').
 
 oolong :- main_menu. % Entry function call.
 
 start_game(Game) :-
   get_board(Game, Board),
+  set_turn(Game, Player),
   print_board(Board).
-
-
-
-
-
 
 
 
@@ -63,6 +60,7 @@ win(X, Majority) :-
 trim_head(L,N,S) :- length(P,N), append(P,S,L). % Trims head of list. L=list N=amount S=result P=sized list
 trim_tail(L,N,S) :- reverse(L,R), length(P,N), append(P,K,R), reverse(K,S).
 
+/*
 print_board([]).
 print_block([]).
 
@@ -159,3 +157,4 @@ print_block([H|T]) :- nl, nl,
   nl, print_formatted_line(2), write(' '), print_formatted_line(2), write(' '), print_formatted_line(2),
 
   nl.
+*/

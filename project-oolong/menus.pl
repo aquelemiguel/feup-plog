@@ -9,9 +9,9 @@ main_menu :-
   nl, nl,
 
   read(Input), (
-  Input == 1 -> play_menu, main_menu;
-  Input == 2 -> rules_menu, main_menu;
-  Input == 3 -> about_menu, main_menu;
+  Input == 1 -> play_menu;
+  Input == 2 -> rules_menu;
+  Input == 3 -> about_menu;
   Input == 4;
 
   nl, write('Invalid input!'), nl, main_menu
@@ -21,11 +21,11 @@ play_menu :-
   nl, write('Select your game mode:'),
   nl, write('  1. Player vs Player'),
   nl, write('  2. Player vs AI'),
-  nl, write('  3. AI vs AI'), nl, nl,
-  nl, write('  4. Exit'),
+  nl, write('  3. AI vs AI'),
+  nl, write('  4. Exit'), nl, nl,
 
   read(Input), (
-  Input == 1 -> init_game(Game, 1), main_menu
+  Input == 1 -> init_game(Game, 1)
   ).
 
 rules_menu :-
