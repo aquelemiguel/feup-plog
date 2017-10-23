@@ -1,4 +1,11 @@
+% TODO: Remove the 'if...else' statement here.
+
 main_menu :-
+  nl, write('Welcome yo'),
+  nl, write('  1. '),
+  nl, write('  2. Player vs AI'),
+  nl, write('  3. AI vs AI'), nl, nl,
+
   read(Input), (
   Input == 1 -> play_menu, main_menu;
   Input == 2 -> rules_menu, main_menu;
@@ -12,9 +19,11 @@ play_menu :-
   nl, write('Select your game mode:'),
   nl, write('  1. Player vs Player'),
   nl, write('  2. Player vs AI'),
-  nl, write('  3. AI vs AI'), nl, nl.
+  nl, write('  3. AI vs AI'), nl, nl,
 
-  % TODO: Add input handling for this menu.
+  read(Input), (
+  Input == 1 -> init_game(Game, 1), main_menu
+  ).
 
 rules_menu :-
   nl, write('Coming soon...'), nl, nl.

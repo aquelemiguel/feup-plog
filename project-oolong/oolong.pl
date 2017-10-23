@@ -1,17 +1,14 @@
 :- use_module(library(lists)).
 
-include('menus.pl').
-include('utilities.pl').
-
-% Player and pieces.
-player(greenPlayer).
-player(blackPlayer).
-
-piece(greenPiece).
-piece(blackPiece).
+:- include('game.pl').
+:- include('menus.pl').
+:- include('utilities.pl').
 
 oolong :- main_menu. % Entry function call.
 
+start_game(Game) :-
+  get_board(Game, Board),
+  print_board(Board).
 
 
 
@@ -20,26 +17,10 @@ oolong :- main_menu. % Entry function call.
 
 
 
-play :-
-  nl, write('Welcome to PrOolong.'), nl,
-  % read(Input),
-  game([
-    [x, x, x, x, x, x, x, x, x],
-    [x, x, x, x, x, x, x, x, x],
-    [x, x, x, x, x, x, x, x, x],
-    [x, x, x, x, x, x, x, x, x],
-    [x, x, x, x, x, x, x, x, x],
-    [x, x, x, x, x, x, x, x, x],
-    [x, x, x, x, x, x, x, x, x],
-    [x, x, x, x, x, x, x, x, x],
-    [x, x, x, x, x, x, x, x, x]],
 
-    [b, b, b, b, b, b, b, b, b], % Special cards array.
 
-    [b, g, b, g, x, g, g, g, x] % Tile majority tracker.
-  ).
 
-game(Board, Special, Majority) :-
+game(Board, _, Majority) :-
   print_board(Board),
   win(b, Majority), write('Black wins!').
 
