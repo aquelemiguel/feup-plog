@@ -9,7 +9,7 @@ oolong :- main_menu. % Entry function call.
 
 start_game(Game) :-
   get_board(Game, Board),
-  set_turn(Game, Player),
+  switch_turn(Game, UpdatedGame),
   print_board(Board).
 
 
@@ -44,21 +44,8 @@ place_token(Board, Color, [H|T]) :-
 
 % TODO: Waiter should only be implemented when board's optimized.
 
-count([], 0).
-count([H|T], N) :- number(H), count(T, N1), N is N1 + 1.
-count([H|T], N) :- \+number(H), count(T, N).
-
-win(X, Majority) :-
-  count(Majority, X), % This predicate does not exist, create it.
-  Y >= 5.
 
 
-
-
-
-
-trim_head(L,N,S) :- length(P,N), append(P,S,L). % Trims head of list. L=list N=amount S=result P=sized list
-trim_tail(L,N,S) :- reverse(L,R), length(P,N), append(P,K,R), reverse(K,S).
 
 /*
 print_board([]).

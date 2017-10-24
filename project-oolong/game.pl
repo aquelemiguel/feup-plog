@@ -19,15 +19,15 @@ get_gamemode(Game, GameMode) :-
   nth0(3, Game, GameMode).
 
 % Switches current turn.
-switch_turn(Game) :-
+switch_turn(Game, UpdatedGame) :-
   get_turn(Game, Turn),
   Turn = greenPlayer,
-  replace(Game, 2, blackPlayer, L2).
+  replace(Game, 2, blackPlayer, UpdatedGame).
 
-switch_turn(Game, greenPlayer) :-
+switch_turn(Game, Result) :-
   get_turn(Game, Turn),
-  Turn = blackPlayer
-  replace(Game, 2, greenPlayer, L2).
+  Turn = blackPlayer,
+  replace(Game, 2, greenPlayer, UpdatedGame).
 
 
 % Player and pieces.
