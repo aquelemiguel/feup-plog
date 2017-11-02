@@ -22,7 +22,8 @@ play_turn(Game, UpdatedGame) :-
   SeatIndex is SeatSimpleIndex - 1,
   validate_move(Game, SeatIndex),
   write('Play validated!'),
-  place_piece(Game, SeatIndex, UpdatedGame).
+  place_piece(Game, SeatIndex, UpdatedGame),
+  nl.
 
 play_turn(Game) :- play_turn(Game).
 
@@ -45,7 +46,7 @@ validate_move(Game, SeatIndex) :-
   write('Seat out of bounds!'), fail.
 
 validate_move(Game, SeatIndex) :-
-  
+
   get_board(Game, Board),
   get_table_index(Game, TableIndex),
 

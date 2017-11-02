@@ -33,7 +33,9 @@ place_piece(Game, SeatIndex, UpdatedGame) :-
   replace(Table, SeatIndex, Player, NewTable),
   replace(Board, TableIndex, NewTable, NewBoard),
 
-  replace(Game, 0, NewBoard, UpdatedGame).
+  replace(Game, 0, NewBoard, TempGame),
+  switch_turn(TempGame, AnotherTemp),
+  replace(AnotherTemp, 3, SeatIndex, UpdatedGame).
 
 % Switches current turn.
 switch_turn(Game, UpdatedGame) :-
@@ -41,7 +43,7 @@ switch_turn(Game, UpdatedGame) :-
   Turn = g,
   replace(Game, 2, b, UpdatedGame).
 
-switch_turn(Game, Result) :-
+switch_turn(Game, UpdatedGame) :-
   get_turn(Game, Turn),
   Turn = b,
   replace(Game, 2, g, UpdatedGame).
