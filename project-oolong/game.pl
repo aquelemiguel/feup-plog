@@ -4,7 +4,6 @@ init_game(Game, GameMode) :-
   Game = [Board, Special, blackPlayer, GameMode],
   start_game(Game).
 
-
 % Game class getters.
 get_board(Game, Board) :-
   nth0(0, Game, Board).
@@ -28,7 +27,6 @@ switch_turn(Game, Result) :-
   get_turn(Game, Turn),
   Turn = blackPlayer,
   replace(Game, 2, greenPlayer, UpdatedGame).
-
 
 % Player and pieces.
 player(greenPlayer).

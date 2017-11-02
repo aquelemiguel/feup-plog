@@ -11,7 +11,8 @@ print_board([H|T]) :-
   trim_head([H|T], 3, Remain),
   print_board(Remain).
 
-print_block(_, Index0) :-
+print_block([H|T], Index0) :-
+  length([H|T], BlockSize),
   NewIndex is Index0 + 3.
 
 

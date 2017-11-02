@@ -12,36 +12,6 @@ start_game(Game) :-
   switch_turn(Game, UpdatedGame),
   print_board(Board).
 
-
-
-
-
-
-game(Board, _, Majority) :-
-  print_board(Board),
-  win(b, Majority), write('Black wins!').
-
-game(Board, Special, Majority) :-
-  %print_board(Board),
-  win(g, Majority), write('Green wins!').
-
-% Movement predicates.
-place_token(Board, Color, [H|T]) :-
-  Color = b,
-  nth0(H, Board, Sel_Line),
-  nth0(T, Sel_Line, Sel_Pos),
-  Sel_Pos = x,
-  Sel_Pos is Color, % This probably doesn't do anything, need formatted code to check.
-  print_board(Board).
-
-place_token(Board, Color, [H|T]) :-
-  Color = g,
-  nth0(H, Board, Sel_Line),
-  nth0(T, Sel_Line, Sel_Pos),
-  Sel_Pos = x,
-  Sel_Pos is Color, % This probably doesn't do anything, need formatted code to check.
-  print_board(Board).
-
 % TODO: Waiter should only be implemented when board's optimized.
 
 
