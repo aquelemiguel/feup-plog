@@ -1,30 +1,35 @@
+/**
+  @desc Prints the full game board.
+*/
 print_board([]).
-
-
 print_board([H|T]) :-
+
   length([H|T], MatrixSize),
   TrimSize is MatrixSize - 3,
   trim_tail([H|T], TrimSize, Block),
 
-  print_block(Block, 0),
+  print_block(Block, Block, 0),
 
   trim_head([H|T], 3, Remain),
   print_board(Remain).
 
-print_block([H|T], Index0) :-
-  length([H|T], BlockSize),
-  NewIndex is Index0 + 3.
+/**
+  @desc Prints a 9x3 block, e.g. the full North block (NW, N, NE).
+*/
+print_block(_, _, 9).
+print_block([O_H|O_T], [H|T], Line0) :-
 
+  Line1 is Line0 + 1,
+  Line2 is Line1 + 1,
 
-print_block([H|T], Index0) :-
+  nth0(Line0, H, Elem1),
+  nth0(Line1, H, Elem2),
+  nth0(Line2, H, Elem3),
 
-  nth0(Index0, H, Elem1),
-  Index1 is Index0 + 1,
-  nth0(Index1, H, Elem2),
-  Index2 is Index0 + 2,
-  nth0(Index2, H, Elem3),
+  write(Elem1), write(' '), write(Elem2), write(' '), write(Elem3), write(' '),
 
-  write(Elem1), nl, write(Elem2), nl, write(Elem3), nl, nl,
-  %append([Elem1, Elem2, Elem3], Line, Line),
+  NewLine is Line0 + 3,
 
-  print_block(T, Index0).
+  % TODO: Remove else-if statement.
+  (T = [] -> write('\n'), print_block([O_H|O_T], [O_H|O_T], NewLine); print_block([O_H|O_T], T, Line0)).
+
