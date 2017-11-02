@@ -10,10 +10,30 @@ oolong :- main_menu. % Entry function call.
 start_game(Game) :-
   get_board(Game, Board),
   switch_turn(Game, UpdatedGame),
-  print_board(Board).
+  play(Game).
+
+
+play(Game) :-
+  print_board(Board),
+  get_gamemode(Game, Mode), Mode = 1,
+  input_coords(table, position).
+
+getInt(Input):-
+	read(TempInput),
+	Input is TempInput - 48.
+
+input_coords(table, position) :-
+  getInt(table).
+
+  % Split Array into Args
+string_to_move(StringA-StringB, ListOfMoves):-
+    StringA is Table, StringB is Position,
+    ListOfMoves = [Table,Position].
+
+is_column(Letter) :- member(Letter, "abcdefghj").
+
 
 % TODO: Waiter should only be implemented when board's optimized.
-
 
 
 
