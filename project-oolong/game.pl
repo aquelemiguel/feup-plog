@@ -33,13 +33,13 @@ place_piece(Game, SeatIndex, UpdatedGame) :-
 
   nth1(TableIndex, Board, Table),
 
-  TableTempIndex is TableIndex -1,
+  TableTempIndex is TableIndex - 1,
   SeatTempIndex is SeatIndex - 1,
 
   replace(Table, SeatTempIndex, Player, NewTable),
   replace(Board, TableTempIndex, NewTable, NewBoard),
 
-  update_waiter(Game, WaiterFixed, SeatIndex),
+  update_waiter(Game, SeatIndex, WaiterFixed),
 
   replace(WaiterFixed, 0, NewBoard, TempGame),
   switch_turn(TempGame, AnotherTemp),
@@ -48,16 +48,13 @@ place_piece(Game, SeatIndex, UpdatedGame) :-
 /**
   @desc Updates the waiter's position on the Game class.
 */
-update_waiter(Game, WaiterFixed, SeatIndex) :-
+update_waiter(Game, SeatIndex, WaiterFixed) :-
   get_waiter(Game, Waiter),
   get_table_index(Game, TableIndex),
 
   nth0(1, Waiter, ArraySeatIndex),
-  ArrayTableIndex is SeatIndex,
 
-  nl,write(ArrayTableIndex), nl, write(ArraySeatIndex),
-
-  replace(Game, 4, [ArraySeatIndex, ArrayTableIndex], WaiterFixed).
+  replace(Game, 4, [ArraySeatIndex, SeatIndex], WaiterFixed).
 
 % Switches current turn.
 switch_turn(Game, UpdatedGame) :-

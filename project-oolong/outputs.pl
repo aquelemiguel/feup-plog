@@ -27,9 +27,9 @@ print_block(Game, [O_H|O_T], [H|T], Line0, TableIndex, SeatIndex) :-
   nth0(Line1, H, Elem2),
   nth0(Line2, H, Elem3),
 
-  NewSeatIndex1 is SeatIndex + 1, print_piece(Game, Elem1, TableIndex, NewSeatIndex1),
-  NewSeatIndex2 is SeatIndex + 2, print_piece(Game, Elem2, TableIndex, NewSeatIndex2),
-  NewSeatIndex3 is SeatIndex + 3, print_piece(Game, Elem3, TableIndex, NewSeatIndex3),
+  print_piece(Game, Elem1, TableIndex, SeatIndex), NewSeatIndex1 is SeatIndex + 1, 
+  print_piece(Game, Elem2, TableIndex, NewSeatIndex1), NewSeatIndex2 is SeatIndex + 2, 
+  print_piece(Game, Elem3, TableIndex, NewSeatIndex2), NewSeatIndex3 is SeatIndex + 3,
 
   NewLine is Line0 + 3,
 
@@ -45,12 +45,13 @@ print_block(Game, [O_H|O_T], [H|T], Line0, TableIndex, SeatIndex) :-
 */
 print_piece(Game, Piece, Table, Seat) :-
   check_waiter(Game, Table, Seat),
+  %write(Table), write('.'), write(Seat), nl,
   Piece = x,
-  ansi_format([bg(red)], ' ', []).
+  ansi_format([bg(red)], '-', []).
 
 print_piece(Game, Piece, Table, Seat) :-
   Piece = x,
-  write(x).
+  ansi_format([fg(black)], '-', []).
 
 print_piece(Game, Piece, Table, Seat) :-
   check_waiter(Game, Table, Seat),
@@ -79,5 +80,5 @@ check_waiter(Game, Table, Seat) :-
   nth0(0, Waiter, WaiterTable),
   nth0(1, Waiter, WaiterSeat),
 
-  Table =:= WaiterTable,
-  Seat =:= WaiterSeat.
+  Table + 1 =:= WaiterTable,
+  Seat + 1 =:= WaiterSeat.
