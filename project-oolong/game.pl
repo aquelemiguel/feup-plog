@@ -1,7 +1,7 @@
 init_game(Game, GameMode) :-
   empty_board(Board),
   special_actions(Special),
-  Game = [Board, Special, b, 4, [5,5], GameMode],
+  Game = [Board, Special, b, 5, [5,5], GameMode],
   start_game(Game).
 
 % Game class getters.
@@ -31,9 +31,13 @@ place_piece(Game, SeatIndex, UpdatedGame) :-
   get_table_index(Game, TableIndex),
   get_turn(Game, Player),
 
-  nth0(TableIndex, Board, Table),
-  replace(Table, SeatIndex, Player, NewTable),
-  replace(Board, TableIndex, NewTable, NewBoard),
+  nth1(TableIndex, Board, Table),
+
+  TableTempIndex is TableIndex -1,
+  SeatTempIndex is SeatIndex - 1,
+
+  replace(Table, SeatTempIndex, Player, NewTable),
+  replace(Board, TableTempIndex, NewTable, NewBoard),
 
   update_waiter(Game, WaiterFixed, SeatIndex),
 
@@ -48,8 +52,10 @@ update_waiter(Game, WaiterFixed, SeatIndex) :-
   get_waiter(Game, Waiter),
   get_table_index(Game, TableIndex),
 
-  ArraySeatIndex is SeatIndex + 1,
-  ArrayTableIndex is TableIndex + 1,
+  nth0(1, Waiter, ArraySeatIndex),
+  ArrayTableIndex is SeatIndex,
+
+  nl,write(ArrayTableIndex), nl, write(ArraySeatIndex),
 
   replace(Game, 4, [ArraySeatIndex, ArrayTableIndex], WaiterFixed).
 

@@ -18,8 +18,8 @@ start_game(Game) :-
   @desc Prompts next position from current player.
 */
 play_turn(Game, UpdatedGame) :-
-  read(SeatSimpleIndex),
-  SeatIndex is SeatSimpleIndex - 1,
+  read(SeatIndex),
+%  SeatIndex is SeatSimpleIndex,
   validate_move(Game, SeatIndex),
   write('Play validated!'),
   place_piece(Game, SeatIndex, UpdatedGame), nl.
@@ -30,18 +30,18 @@ play_turn(Game, UpdatedGame) :- play_turn(Game, UpdatedGame).
   @desc Checks whether the inputted seat is either already occupied or out of bounds.
 */
 validate_move(Game, SeatIndex) :-
-  SeatIndex >= 0, SeatIndex =< 8,
+  SeatIndex >= 1, SeatIndex =< 9,
 
   get_board(Game, Board),
   get_table_index(Game, TableIndex),
 
-  nth0(TableIndex, Board, Table),
-  nth0(SeatIndex, Table, Seat),
+  nth1(TableIndex, Board, Table),
+  nth1(SeatIndex, Table, Seat),
 
   Seat = x.
 
 validate_move(Game, SeatIndex) :-
-  (SeatIndex < 0; SeatIndex > 8),
+  (SeatIndex < 1; SeatIndex > 9),
   write('Seat out of bounds!'), fail.
 
 validate_move(Game, SeatIndex) :-
@@ -49,8 +49,8 @@ validate_move(Game, SeatIndex) :-
   get_board(Game, Board),
   get_table_index(Game, TableIndex),
 
-  nth0(TableIndex, Board, Table),
-  nth0(SeatIndex, Table, Seat),
+  nth1(TableIndex, Board, Table),
+  nth1(SeatIndex, Table, Seat),
 
   Seat \= x,
   write('Seat already occupied!'), fail.
