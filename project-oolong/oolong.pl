@@ -9,7 +9,7 @@ oolong :- main_menu. % Entry function call.
 
 start_game(Game) :-
   get_board(Game, Board),
-  print_board(Board),
+  print_board(Game, Board, 0),
   get_gamemode(Game, Mode), Mode = 1,
   play_turn(Game, UpdatedGame),
   start_game(UpdatedGame).
@@ -22,10 +22,9 @@ play_turn(Game, UpdatedGame) :-
   SeatIndex is SeatSimpleIndex - 1,
   validate_move(Game, SeatIndex),
   write('Play validated!'),
-  place_piece(Game, SeatIndex, UpdatedGame),
-  nl.
+  place_piece(Game, SeatIndex, UpdatedGame), nl.
 
-play_turn(Game) :- play_turn(Game).
+play_turn(Game, UpdatedGame) :- play_turn(Game, UpdatedGame).
 
 /**
   @desc Checks whether the inputted seat is either already occupied or out of bounds.
