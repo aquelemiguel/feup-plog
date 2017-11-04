@@ -1,27 +1,32 @@
 init_game(Game, GameMode) :-
   empty_board(Board),
   special_actions(Special),
-  Game = [Board, Special, b, 5, [5,5], GameMode],
+  majority_tracker(Tracker),
+
+  Game = [Board, Tracker, Special, b, 5, [5,5], GameMode],
   start_game(Game).
 
 % Game class getters.
 get_board(Game, Board) :-
   nth0(0, Game, Board).
 
+get_tracker(Game, Tracker) :-
+  nth0(1, Game, Tracker).
+
 get_special(Game, Special) :-
-  nth0(1, Game, Special).
+  nth0(2, Game, Special).
 
 get_turn(Game, Player) :-
-  nth0(2, Game, Player).
+  nth0(3, Game, Player).
 
 get_table_index(Game, TableIndex) :-
-  nth0(3, Game, TableIndex).
+  nth0(4, Game, TableIndex).
 
 get_waiter(Game, Waiter) :-
-  nth0(4, Game, Waiter).
+  nth0(5, Game, Waiter).
 
 get_gamemode(Game, GameMode) :-
-  nth0(5, Game, GameMode).
+  nth0(6, Game, GameMode).
 
 /**
   @desc Places the current player's piece on the provided seat.
@@ -43,7 +48,14 @@ place_piece(Game, SeatIndex, UpdatedGame) :-
 
   replace(WaiterFixed, 0, NewBoard, TempGame),
   switch_turn(TempGame, AnotherTemp),
-  replace(AnotherTemp, 3, SeatIndex, UpdatedGame).
+  replace(AnotherTemp, 4, SeatIndex, UpdatedGame).
+
+/**
+  @desc
+*/
+check_majority(Game, Table) :-
+  count(b, Table, CountB), write(CountB),
+  count(g, Table, CountG), write(CountG).
 
 /**
   @desc Updates the waiter's position on the Game class.
@@ -54,18 +66,18 @@ update_waiter(Game, SeatIndex, WaiterFixed) :-
 
   nth0(1, Waiter, ArraySeatIndex),
 
-  replace(Game, 4, [ArraySeatIndex, SeatIndex], WaiterFixed).
+  replace(Game, 5, [ArraySeatIndex, SeatIndex], WaiterFixed).
 
 % Switches current turn.
 switch_turn(Game, UpdatedGame) :-
   get_turn(Game, Turn),
   Turn = g,
-  replace(Game, 2, b, UpdatedGame).
+  replace(Game, 3, b, UpdatedGame).
 
 switch_turn(Game, UpdatedGame) :-
   get_turn(Game, Turn),
   Turn = b,
-  replace(Game, 2, g, UpdatedGame).
+  replace(Game, 3, g, UpdatedGame).
 
 % Initial boards.
 empty_board([
@@ -81,3 +93,5 @@ empty_board([
 ).
 
 special_actions([b, b, b, b, b, b, b, b, b]).
+
+majority_tracker([x, x, x, x, x, x, x, x, x]).
