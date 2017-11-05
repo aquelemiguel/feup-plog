@@ -51,6 +51,44 @@ rotate_table(Table, Orientation, Turns, RotatedTable) :-
 
   rotate_table(Table, Orientation, UpdatedTurns, [E1, E2, E5, E0, E4, E8, E3, E6, E7]).
 
+/**
+  @desc Checks whether the table is still unclaimed (majority not reached by one player).
+        If it fails, a message is printed.
+*/
+check_unclaimed_table(Game, TableIndex) :-
+  get_board(Game, Board),
+  nth1(TableIndex, Board, Table),
+
+  count(b, ActualTable1, CountB), count(g, ActualTable1, CountG),
+  CountB < 5, CountG < 5.
+
+check_unclaimed_table(Game, TableIndex) :-
+  write('Selected table has already been claimed!'), nl, fail.
+
+/**
+  @desc Checks whether the table has already been claimed (majority reached by one of the player).
+        If it fails, a message is printed.
+*/
+check_claimed_table(Game, TableIndex) :-
+  get_board(Game, Board),
+  nth1(TableIndex, Board, Table),
+
+  count(b, ActualTable1, CountB), count(g, ActualTable1, CountG),
+  (CountB >= 5; CountG >= 5).
+
+check_claimed_table(Game, TableIndex) :-
+  write('Selected table is still unclaimed!'), nl, fail.
+
+/**
+  @desc Checks whether the inputted index falls within the 1-9 range.
+*/
+check_index_out_of_bounds(Index) :-
+  Index > 0, Index < 10.
+
+check_index_out_of_bounds(Index) :-
+  write('Index out of bounds!'), nl, fail.
+
+
 
 
 

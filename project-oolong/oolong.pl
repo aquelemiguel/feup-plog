@@ -95,6 +95,7 @@ trigger_special(Game, TableIndex, UpdatedGame) :-
   DecrementedTableIndex is TableIndex - 1,
   nth1(DecrementedTableIndex, Special, Marker),
 
+  write('The index '), write(TableIndex), write(' has the marker '), write(Marker), write('.'), nl,
   handle_specific_special(Game, TableIndex, Marker, UpdatedGame).
 
 trigger_special(Game, TableIndex, UpdatedGame). % No special marker was triggered.
@@ -105,8 +106,6 @@ trigger_special(Game, TableIndex, UpdatedGame). % No special marker was triggere
         Triggered with 4 matching tokens.
 */
 handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
-
-  %write('The index '), write(TableIndex), write(' has the marker '), write(Marker), write('.'), nl,
 
   get_board(Game, Board),
   nth1(TableIndex, Board, Table),
@@ -125,8 +124,6 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
   replace(Game, 0, UpdatedBoard, UpdatedGame).
 
 handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
-
-  %write('The index '), write(TableIndex), write(' has the marker '), write(Marker), write('.'), nl,
 
   get_board(Game, Board),
   nth1(TableIndex, Board, Table),
@@ -151,8 +148,6 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
 */
 handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
 
-  write('The index '), write(TableIndex), write(' has the marker '), write(Marker), write('.'), nl,
-
   get_board(Game, Board),
   nth1(TableIndex, Board, Table),
 
@@ -161,7 +156,7 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
   count(g, Table, CountG),
   (CountB = 4; CountG = 4),
 
-  menu_swap_unclaimed(TableIndex1, TableIndex2),
+  menu_swap_unclaimed(Game, TableIndex1, TableIndex2),
   nth1(TableIndex1, Board, Table1),
   nth1(TableIndex2, Board, Table2),
 
@@ -175,9 +170,34 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
 
   write('Tables switched!'), nl.
 
-  %
-  % Em cima não se devia verificar se as tables estão unclaimed?
-  %
+/**
+  @desc SWAPMIXED special marker handler.
+        Allows triggering player to swap position of any claimed tile with any unclaimed tile.
+        Triggered with 5 matching tokens.
+*/
+handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
+  
+  get_board(Game, Board),
+  nth1(TableIndex, Board, Table),
+
+  Marker = 'SwapMixed',
+  count(b, Table, CountB),
+  count(g, Table, CountG),
+  (CountB = 4; CountG = 4),
+
+  menu_swap_unclaimed(Game, TableIndex1, TableIndex2),
+  nth1(TableIndex1, Board, Table1),
+  nth1(TableIndex2, Board, Table2),
+
+  LessTableIndex1 is TableIndex1 - 1,
+  LessTableIndex2 is TableIndex2 - 1,
+
+  % Switches the provided tables.
+  replace(Board, LessTableIndex1, Table2, TempBoard),
+  replace(TempBoard, LessTableIndex2, Table1, FinalBoard),
+  replace(Game, 0, FinalBoard, UpdatedGame),
+
+  write('Tables switched!'), nl.
 
 handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
 
