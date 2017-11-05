@@ -36,7 +36,7 @@ print_block(Game, [O_H|O_T], [H|T], Line0, TableIndex, SeatIndex) :-
   NewTableIndex is TableIndex + 1,
 
   % TODO: Remove else-if statement.
-  (T = [] -> write('\n'), print_block(Game, [O_H|O_T], [O_H|O_T], NewLine, NewTableIndex, 0);
+  (T = [] -> nl, nl, print_block(Game, [O_H|O_T], [O_H|O_T], NewLine, NewTableIndex, 0);
              print_block(Game, [O_H|O_T], T, Line0, TableIndex, NewSeatIndex3)).
 
 /**
@@ -47,29 +47,29 @@ print_piece(Game, Piece, Table, Seat) :-
   check_waiter(Game, Table, Seat),
   %write(Table), write('.'), write(Seat), nl,
   Piece = x,
-  ansi_format([bg(red)], '-', []).
+  ansi_format([bg(red)], ' - ', []).
 
 print_piece(Game, Piece, Table, Seat) :-
   Piece = x,
-  ansi_format([fg(black)], '-', []).
+  ansi_format([fg(black)], ' - ', []).
 
 print_piece(Game, Piece, Table, Seat) :-
   check_waiter(Game, Table, Seat),
   Piece = b,
-  ansi_format([fg(black), bg(red)], 'B', []).
+  ansi_format([fg(black), bg(red)], ' B ', []).
 
 print_piece(Game, Piece, Table, Seat) :-
   Piece = b,
-  ansi_format([fg(black)], 'B', []).
+  ansi_format([fg(black)], ' B ', []).
 
 print_piece(Game, Piece, Table, Seat) :-
   check_waiter(Game, Table, Seat),
   Piece = g,
-  ansi_format([fg(green), bg(red)], 'G', []).
+  ansi_format([fg(green), bg(red)], ' G ', []).
 
 print_piece(Game, Piece, Table, Seat) :-
   Piece = g,
-  ansi_format([fg(green)], 'G', []).
+  ansi_format([fg(green)], ' G ', []).
 
 /**
   @desc Checks whether the waiter is standing in the current printing position.

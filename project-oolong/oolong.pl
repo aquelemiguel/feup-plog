@@ -21,12 +21,14 @@ play_turn(Game, UpdatedGame) :-
   read(SeatIndex),
 
   validate_move(Game, SeatIndex),
-  write('Play validated!'),
+  write('Play validated!'), nl,
   place_piece(Game, SeatIndex, UpdatedGame),
 
   get_board(UpdatedGame, Board),
   get_table_index(Game, TableIndex),
   nth1(TableIndex, Board, Table),
+
+  trigger_special(UpdatedGame, TableIndex, WhateverGame),
 
   check_majority(UpdatedGame, Table, UpdatedGame2),
   check_win(UpdatedGame2).
@@ -61,3 +63,43 @@ validate_move(Game, SeatIndex) :-
 
   Seat \= x,
   write('Seat already occupied!'), fail.
+
+/**
+  @desc Triggers the special markers.
+*/
+trigger_special(Game, TableIndex, UpdatedGame) :-
+
+  get_board(Game, Board),
+  nth1(TableIndex, Board, Table),
+  get_special(Game, Special),
+
+  TableIndex = 5, % Ignores the center table.
+  write('Center has no special markers assigned.'), nl.
+
+trigger_special(Game, TableIndex, UpdatedGame) :-
+
+  get_board(Game, Board),
+  nth1(TableIndex, Board, Table),
+  get_special(Game, Special),
+
+  TableIndex < 5,
+  nth1(TableIndex, Special, Marker),
+  write('This marker is '), write(Marker), write('.'), nl.
+
+trigger_special(Game, TableIndex, UpdatedGame) :-
+
+  get_board(Game, Board),
+  nth1(TableIndex, Board, Table),
+  get_special(Game, Special),
+
+  TableIndex > 5,
+  DecrementedTableIndex is TableIndex - 1,
+  nth1(DecrementedTableIndex, Special, Marker),
+  write('This marker is '), write(Marker), write('.'), nl.
+
+
+
+
+
+
+

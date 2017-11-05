@@ -51,10 +51,12 @@ place_piece(Game, SeatIndex, UpdatedGame) :-
 
   replace(WaiterFixed, 0, NewBoard, TempGame),
   switch_turn(TempGame, AnotherTemp),
+
+  % TODO: Separate the SeatIndex switch from this predicate.
   replace(AnotherTemp, 4, SeatIndex, UpdatedGame).
 
 /**
-  @desc
+  @desc Determines whether a player has filled 5 out of 9 seats on a table, thus claiming majority on it.
 */
 check_majority(Game, Table, UpdatedGame) :-
   count(b, Table, CountB),
@@ -68,13 +70,11 @@ check_majority(Game, Table, UpdatedGame) :-
   get_table_index(Game, TableIndex),
   add_to_tracker(Game, g, TableIndex, UpdatedGame).
 
-add_to_tracker(Game, Player, TableIndex, UpdatedGame) :-
-  get_tracker(Game, Tracker),
-  replace(Tracker, TableIndex, Player, UpdatedTracker),
-  replace(Game, 1, UpdatedTracker, UpdatedGame).
+check_majority(Game, Table, UpdatedGame) :-
+  append(Game, [], UpdatedGame). % Copies the unaltered game class to UpdatedGame so check_win functions correctly.
 
 /**
-  @desc Determines whether a player has successfully filled 5 out of 9 tables.
+  @desc Determines whether a player has filled 5 out of 9 tables, thus winning the game.
 */
 check_win(Game) :-
   get_tracker(Game, Tracker),
@@ -84,9 +84,19 @@ check_win(Game) :-
 
 check_win(Game) :-
   get_tracker(Game, Tracker),
-  count(g, Tracker, CountB),
+  count(g, Tracker, CountG),
   CountG >= 5,
   write('Green wins!').
+
+check_win(Game).
+
+/**
+  @desc Updates the majority tracker and refreshes it on the game class.
+*/
+add_to_tracker(Game, Player, TableIndex, UpdatedGame) :-
+  get_tracker(Game, Tracker),
+  replace(Tracker, TableIndex, Player, UpdatedTracker),
+  replace(Game, 1, UpdatedTracker, UpdatedGame).
 
 /**
   @desc Updates the waiter's position on the Game class.
