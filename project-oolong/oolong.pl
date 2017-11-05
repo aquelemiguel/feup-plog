@@ -28,8 +28,8 @@ play_turn(Game, UpdatedGame) :-
   get_table_index(Game, TableIndex),
   nth1(TableIndex, Board, Table),
 
-  check_majority(UpdatedGame, Table),
-  check_win(UpdatedGame, Table).
+  check_majority(UpdatedGame, Table, UpdatedGame2),
+  check_win(UpdatedGame2).
 
 play_turn(Game, UpdatedGame) :- play_turn(Game, UpdatedGame).
 
