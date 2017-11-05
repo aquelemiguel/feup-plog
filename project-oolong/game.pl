@@ -1,9 +1,12 @@
 init_game(Game, GameMode) :-
   empty_board(Board),
+
   special_actions(Special),
+  random_permutation(Special, ShuffledSpecial),
+  
   majority_tracker(Tracker),
 
-  Game = [Board, Tracker, Special, b, 5, [5,5], GameMode],
+  Game = [Board, Tracker, ShuffledSpecial, b, 5, [5,5], GameMode],
   start_game(Game).
 
 % Game class getters.
@@ -79,7 +82,6 @@ switch_turn(Game, UpdatedGame) :-
   Turn = b,
   replace(Game, 3, g, UpdatedGame).
 
-% Initial boards.
 empty_board([
   [x, x, x, x, x, x, x, x, x],
   [x, x, x, x, x, x, x, x, x],
@@ -92,6 +94,6 @@ empty_board([
   [x, x, x, x, x, x, x, x, x]]
 ).
 
-special_actions([b, b, b, b, b, b, b, b, b]).
+special_actions(['MoveUUBlack', 'MoveUUGreen', 'WaiterBlack', 'WaiterGreen', 'Rotate1', 'Rotate2', 'SwapUU', 'SwapCU']).
 
 majority_tracker([x, x, x, x, x, x, x, x, x]).
