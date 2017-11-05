@@ -22,13 +22,14 @@ play_turn(Game, UpdatedGame) :-
 
   validate_move(Game, SeatIndex),
   write('Play validated!'),
-  place_piece(Game, SeatIndex, UpdatedGame), 
+  place_piece(Game, SeatIndex, UpdatedGame),
 
   get_board(UpdatedGame, Board),
   get_table_index(Game, TableIndex),
   nth1(TableIndex, Board, Table),
 
-  check_majority(UpdatedGame, Table), nl.
+  check_majority(UpdatedGame, Table),
+  check_win(UpdatedGame, Table).
 
 play_turn(Game, UpdatedGame) :- play_turn(Game, UpdatedGame).
 

@@ -57,8 +57,33 @@ place_piece(Game, SeatIndex, UpdatedGame) :-
   @desc
 */
 check_majority(Game, Table) :-
-  count(b, Table, CountB), write(CountB),
-  count(g, Table, CountG), write(CountG).
+  count(b, Table, CountB),
+  CountB >= 5,
+  get_table_index(Game, TableIndex),
+  add_to_tracker(b, TableIndex, Game).
+
+check_majority(Game, Table) :-
+  count(g, Table, CountG),
+  CountG >= 5,
+  get_table_index(Game, TableIndex),
+  add_to_tracker(g, TableIndex, Game).
+
+add_to_tracker(Player, TableIndex, NewGame) :-
+  get_tracker(Game, Tracker),
+  replace(Tracker, TableIndex, Player, UpdatedTracker),
+  replace(Game, 1, UpdatedTracker, NewGame).
+
+check_win(UpdatedGame, Table) :-
+  count(b, Table, CountB),
+  CountB >= 5,
+  write('Black wins').
+
+check_win(UpdatedGame, Table) :-
+  count(g, Table, CountB),
+  CountB >= 5,
+  write('Green wins').
+
+
 
 /**
   @desc Updates the waiter's position on the Game class.
