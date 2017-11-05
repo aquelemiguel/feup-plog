@@ -79,7 +79,6 @@ trigger_special(Game, TableIndex, UpdatedGame) :-
 trigger_special(Game, TableIndex, UpdatedGame) :-
 
   get_board(Game, Board),
-  nth1(TableIndex, Board, Table),
   get_special(Game, Special),
 
   TableIndex < 5,
@@ -90,7 +89,6 @@ trigger_special(Game, TableIndex, UpdatedGame) :-
 trigger_special(Game, TableIndex, UpdatedGame) :-
 
   get_board(Game, Board),
-  nth1(TableIndex, Board, Table),
   get_special(Game, Special),
 
   TableIndex > 5,
@@ -107,7 +105,7 @@ trigger_special(Game, TableIndex, UpdatedGame). % No special marker was triggere
         Triggered with 4 matching tokens.
 */
 handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
-  
+
   %write('The index '), write(TableIndex), write(' has the marker '), write(Marker), write('.'), nl,
 
   get_board(Game, Board),
@@ -127,7 +125,7 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
   replace(Game, 0, UpdatedBoard, UpdatedGame).
 
 handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
-  
+
   %write('The index '), write(TableIndex), write(' has the marker '), write(Marker), write('.'), nl,
 
   get_board(Game, Board),
@@ -152,7 +150,7 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
         Triggered with 4 matching tokens.
 */
 handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
-  
+
   write('The index '), write(TableIndex), write(' has the marker '), write(Marker), write('.'), nl,
 
   get_board(Game, Board),
@@ -177,9 +175,96 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
 
   write('Tables switched!'), nl.
 
+  %
+  % Em cima não se devia verificar se as tables estão unclaimed?
+  %
+
+handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
+
+  get_board(Game, Board),
+  nth1(TableIndex, Board, Table),
+
+  Marker = 'MoveBlack',
+  count(b, Table, CountB),
+  CountB >= 5,
+
+  menu_move_black(TableIndex1, TableIndex2),
+  nth1(TableIndex1, Board, Table1),
+  nth1(TableIndex2, Board, Table2),
+
+  LessTableIndex1 is TableIndex1 - 1,
+  LessTableIndex2 is TableIndex2 - 1,
+
+    % Switches the provided tables.
+  get_tracker(Game, Tracker),
+  nth1(TableIndex1, Tracker, Majority),
+  Majority = x,
+
+  get_tracker(Game, AnotherTracker),
+  nth1(TableIndex1, AnotherTracker, Majority2),
+  Majority2 = x,
+
+  menu_move_black_piece(SeatIndex1, SeatIndex2)
+  nth1(SeatIndex1, Table1, Seat),
+  Seat = b,
+
+  nth1(SeatIndex2, Table2, Seat2),
+  Seat = x,
+
+  replace(Table1, SeatIndex1, x, NewTable),
+  replace(Board, TableIndex1, NewTable, NewBoard),
+
+  replace(Table2, SeatIndex2, b, NewTable2),
+  replace(NewBoard, TableIndex2, NewTable2, FinalBoard),
+
+  replace(Game, 0, FinalBoard, UpdatedGame),
 
 
+  write('Piece switched!'), nl.
 
+handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
 
+  get_board(Game, Board),
+  nth1(TableIndex, Board, Table),
 
+  Marker = 'MoveGreen',
+  count(g, Table, CountB),
+  CountB >= 5,
 
+  %Retrieves the tables where the pieces are going to be switched
+  menu_move_black(TableIndex1, TableIndex2),
+  nth1(TableIndex1, Board, Table1),
+  nth1(TableIndex2, Board, Table2),
+
+  LessTableIndex1 is TableIndex1 - 1,
+  LessTableIndex2 is TableIndex2 - 1,
+
+      % Checks whether the tables are unclaimed or not
+  get_tracker(Game, Tracker),
+  nth1(TableIndex1, Tracker, Majority),
+  Majority = x,
+
+  get_tracker(Game, AnotherTracker),
+  nth1(TableIndex1, AnotherTracker, Majority2),
+  Majority2 = x,
+
+  % Retrieves the seat indexes of the pieces
+
+  menu_move_black_piece(SeatIndex1, SeatIndex2)
+  nth1(SeatIndex1, Table1, Seat),
+  Seat = g,
+
+  nth1(SeatIndex2, Table2, Seat2),
+  Seat = x,
+
+  %Updates the tables
+
+  replace(Table1, SeatIndex1, x, NewTable),
+  replace(Board, TableIndex1, NewTable, NewBoard),
+
+  replace(Table2, SeatIndex2, g, NewTable2),
+  replace(NewBoard, TableIndex2, NewTable2, FinalBoard),
+
+  replace(Game, 0, FinalBoard, UpdatedGame),
+
+  write('Piece switched!'), nl.

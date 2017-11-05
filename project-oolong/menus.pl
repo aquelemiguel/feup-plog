@@ -51,3 +51,16 @@ menu_swap_unclaimed(Table1, Table2) :-
   write('Select table #2.'), nl,
   read(Table2).
 
+menu_move_black(Table1, Table2) :-
+  write('MOVEBLACK special marker has been triggered!'), nl,
+  write('Select table #1.'), nl,
+  read(Table1), nl,
+  write('Select table #2.'), nl,
+  read(Table2).
+
+menu_move_black_piece(SeatIndex1, SeatIndex2) :-
+  write('MOVEGREEN special marker has been triggered!'), nl,
+  write('Select piece #1.'), nl,
+  read(SeatIndex1), nl,
+  write('Select piece #2.'), nl,
+  read(SeatIndex2).
