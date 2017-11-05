@@ -204,7 +204,7 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
   nth1(TableIndex1, AnotherTracker, Majority2),
   Majority2 = x,
 
-  menu_move_black_piece(SeatIndex1, SeatIndex2)
+  menu_move_black_piece(SeatIndex1, SeatIndex2),
   nth1(SeatIndex1, Table1, Seat),
   Seat = b,
 
@@ -250,7 +250,7 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
 
   % Retrieves the seat indexes of the pieces
 
-  menu_move_black_piece(SeatIndex1, SeatIndex2)
+  menu_move_black_piece(SeatIndex1, SeatIndex2),
   nth1(SeatIndex1, Table1, Seat),
   Seat = g,
 
