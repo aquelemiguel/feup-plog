@@ -28,10 +28,10 @@ play_turn(Game, UpdatedGame) :-
   get_table_index(Game, TableIndex),
   nth1(TableIndex, Board, Table),
 
-  trigger_special(UpdatedGame, TableIndex, WhateverGame),
+  trigger_special(UpdatedGame, TableIndex, UpdatedGame2),
 
-  check_majority(UpdatedGame, Table, UpdatedGame2),
-  check_win(UpdatedGame2).
+  check_majority(UpdatedGame2, Table, UpdatedGame3),
+  check_win(UpdatedGame3).
 
 play_turn(Game, UpdatedGame) :- play_turn(Game, UpdatedGame).
 
@@ -84,7 +84,8 @@ trigger_special(Game, TableIndex, UpdatedGame) :-
 
   TableIndex < 5,
   nth1(TableIndex, Special, Marker),
-  write('This marker is '), write(Marker), write('.'), nl.
+
+  handle_specific_special(Game, TableIndex, Marker, UpdatedGame).
 
 trigger_special(Game, TableIndex, UpdatedGame) :-
 
@@ -95,7 +96,86 @@ trigger_special(Game, TableIndex, UpdatedGame) :-
   TableIndex > 5,
   DecrementedTableIndex is TableIndex - 1,
   nth1(DecrementedTableIndex, Special, Marker),
-  write('This marker is '), write(Marker), write('.'), nl.
+
+  handle_specific_special(Game, TableIndex, Marker, UpdatedGame).
+
+trigger_special(Game, TableIndex, UpdatedGame). % No special marker was triggered.
+
+/**
+  @desc ROTATE special marker handler.
+        Allows triggering player to rotate the targeted tile to any orientation (waiter rotates with tile).
+        Triggered with 4 matching tokens.
+*/
+handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
+  
+  %write('The index '), write(TableIndex), write(' has the marker '), write(Marker), write('.'), nl,
+
+  get_board(Game, Board),
+  nth1(TableIndex, Board, Table),
+
+  (Marker = 'Rotate1'; Marker = 'Rotate2'),
+  count(b, Table, CountB),
+  CountB = 4,
+
+  menu_rotate_tile(Orientation, Turns),
+
+  rotate_table(Table, Orientation, Turns, RotatedTable),
+  write('Table rotated!'), nl,
+
+  LessTableIndex is TableIndex - 1,
+  replace(Board, TableIndex, RotatedTable, UpdatedBoard),
+  replace(Game, 0, UpdatedBoard, UpdatedGame).
+
+handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
+  
+  %write('The index '), write(TableIndex), write(' has the marker '), write(Marker), write('.'), nl,
+
+  get_board(Game, Board),
+  nth1(TableIndex, Board, Table),
+
+  (Marker = 'Rotate1'; Marker = 'Rotate2'),
+  count(g, Table, CountG),
+  CountG = 4,
+
+  menu_rotate_tile(Orientation, Turns),
+
+  rotate_table(Table, Orientation, Turns, RotatedTable),
+  write('Table rotated!'), nl,
+
+  LessTableIndex is TableIndex - 1,
+  replace(Board, TableIndex, RotatedTable, UpdatedBoard),
+  replace(Game, 0, UpdatedBoard, UpdatedGame).
+
+/**
+  @desc SWAPUNCLAIMED special marker handler.
+        Allows triggering player to swap position of any two unclaimed tiles.
+        Triggered with 4 matching tokens.
+*/
+handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
+  
+  write('The index '), write(TableIndex), write(' has the marker '), write(Marker), write('.'), nl,
+
+  get_board(Game, Board),
+  nth1(TableIndex, Board, Table),
+
+  Marker = 'SwapUnclaimed',
+  count(b, Table, CountB),
+  count(g, Table, CountG),
+  (CountB = 4; CountG = 4),
+
+  menu_swap_unclaimed(TableIndex1, TableIndex2),
+  nth1(TableIndex1, Board, Table1),
+  nth1(TableIndex2, Board, Table2),
+
+  LessTableIndex1 is TableIndex1 - 1,
+  LessTableIndex2 is TableIndex2 - 1,
+
+  % Switches the provided tables.
+  replace(Board, LessTableIndex1, Table2, TempBoard),
+  replace(TempBoard, LessTableIndex2, Table1, FinalBoard),
+  replace(Game, 0, FinalBoard, UpdatedGame),
+
+  write('Tables switched!'), nl.
 
 
 

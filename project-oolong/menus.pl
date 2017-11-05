@@ -35,3 +35,19 @@ about_menu :-
   nl, write('PrOolong was developed by:'),
   nl, write(' - Jose Pedro Borges up201503603'),
   nl, write(' - Miguel Mano Fernandes, up201503538'), nl, nl.
+
+% TODO: Specific printing for each player.
+menu_rotate_tile(Orientation, Turns) :-
+  write('ROTATE special marker has been triggered on this tile!'), nl,
+  write('Which orientation to rotate?'),
+  read(Orientation),
+  write('How many turns?'),
+  read(Turns).
+
+menu_swap_unclaimed(Table1, Table2) :-
+  write('SWAPUNCLAIMED special marker has been triggered!'), nl,
+  write('Select table #1.'), nl,
+  read(Table1), nl,
+  write('Select table #2.'), nl,
+  read(Table2).
+

@@ -23,3 +23,34 @@ count(X, [X|T], N) :-
 count(X, [Y|T], N) :- 
   X \= Y, 
   count(X, T, N).
+
+rotate_table(_, _, 0, _).
+rotate_table(Table, Orientation, Turns, RotatedTable) :-
+  
+  Orientation = 'CW',
+  UpdatedTurns is Turns - 1,
+
+  nth0(0, RotatedTable, E0), nth0(1, RotatedTable, E1),
+  nth0(2, RotatedTable, E2), nth0(3, RotatedTable, E3),
+  nth0(4, RotatedTable, E4), nth0(5, RotatedTable, E5),
+  nth0(6, RotatedTable, E6), nth0(7, RotatedTable, E7),
+  nth0(8, RotatedTable, E8),
+
+  rotate_table(Table, Orientation, UpdatedTurns, [E3, E0, E1, E6, E4, E2, E7, E8, E5]).
+
+rotate_table(Table, Orientation, Turns, RotatedTable) :-
+  
+  Orientation = 'CCW',
+  UpdatedTurns is Turns - 1,
+
+  nth0(0, RotatedTable, E0), nth0(1, RotatedTable, E1),
+  nth0(2, RotatedTable, E2), nth0(3, RotatedTable, E3),
+  nth0(4, RotatedTable, E4), nth0(5, RotatedTable, E5),
+  nth0(6, RotatedTable, E6), nth0(7, RotatedTable, E7),
+  nth0(8, RotatedTable, E8),
+
+  rotate_table(Table, Orientation, UpdatedTurns, [E1, E2, E5, E0, E4, E8, E3, E6, E7]).
+
+
+
+

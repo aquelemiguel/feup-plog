@@ -132,6 +132,6 @@ empty_board([
   [x, x, x, x, x, x, x, x, x]]
 ).
 
-special_actions(['MoveUUBlack', 'MoveUUGreen', 'WaiterBlack', 'WaiterGreen', 'Rotate1', 'Rotate2', 'SwapUU', 'SwapCU']).
+special_actions(['MoveBlack', 'MoveGreen', 'WaiterBlack', 'WaiterGreen', 'Rotate1', 'Rotate2', 'SwapUnclaimed', 'SwapMixed']).
 
 majority_tracker([x, x, x, x, x, x, x, x, x]).
