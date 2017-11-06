@@ -176,7 +176,7 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
         Triggered with 5 matching tokens.
 */
 handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
-  
+
   get_board(Game, Board),
   nth1(TableIndex, Board, Table),
 
@@ -211,7 +211,7 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
 
   Marker = 'MoveBlack',
   count(b, Table, CountB),
-  CountB >= 5,
+  CountB = 3,
 
   menu_move_black(TableIndex1, TableIndex2),
   nth1(TableIndex1, Board, Table1),
@@ -259,7 +259,7 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
 
   Marker = 'MoveGreen',
   count(g, Table, CountB),
-  CountB >= 5,
+  CountB = 3,
 
   %Retrieves the tables where the pieces are going to be switched
   menu_move_black(TableIndex1, TableIndex2),
