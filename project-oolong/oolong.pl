@@ -199,6 +199,11 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
 
   write('Tables switched!'), nl.
 
+/**
+  @desc MOVEBLACK special marker handler.
+        Allows black player to move one of their tokens from any unclaimed tile to any other unclaimed tile.
+        Triggered with 3 matching tokens.
+*/
 handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
 
   get_board(Game, Board),
@@ -242,6 +247,11 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
 
   write('Piece switched!'), nl.
 
+/**
+  @desc MOVEGREEN special marker handler.
+        Allows green player to move one of their tokens from any unclaimed tile to any other unclaimed tile.
+        Triggered with 3 matching tokens.
+*/
 handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
 
   get_board(Game, Board),
