@@ -1,6 +1,17 @@
 % TODO: Remove the 'if...else' statement here.
 
+display_logo :-
+  nl,
+  write('             ( ('), nl,
+  write('            ) )'), nl,
+  write('          ........'), nl,
+  write('          |oolong|'), nl,
+  write('          |      |]'), nl,
+  write('           \\    /'), nl,
+  write('           `----\''), nl.
+
 main_menu :-
+  display_logo,
   nl, write('Select your game mode:'),
   nl, write('  1. Play'),
   nl, write('  2. Rules'),
@@ -84,8 +95,20 @@ menu_move_black(Table1, Table2) :-
   write('Select table #2.'), nl,
   read(Table2).
 
-menu_move_black_piece(SeatIndex1, SeatIndex2) :-
+menu_move_green(Table1, Table2) :-
   write('MOVEGREEN special marker has been triggered!'), nl,
+  write('Select table #1.'), nl,
+  read(Table1), nl,
+  write('Select table #2.'), nl,
+  read(Table2).
+
+menu_move_black_piece(SeatIndex1, SeatIndex2) :-
+  write('Select piece #1.'), nl,
+  read(SeatIndex1), nl,
+  write('Select piece #2.'), nl,
+  read(SeatIndex2).
+
+menu_move_green_piece(SeatIndex1, SeatIndex2) :-
   write('Select piece #1.'), nl,
   read(SeatIndex1), nl,
   write('Select piece #2.'), nl,

@@ -22,16 +22,16 @@ play_turn(Game, UpdatedGame) :-
 
   validate_move(Game, SeatIndex),
   write('Play validated!'), nl,
-  place_piece(Game, SeatIndex, UpdatedGame),
+  place_piece(Game, SeatIndex, UpdatedGame2),
 
-  get_board(UpdatedGame, Board),
+  get_board(UpdatedGame2, Board),
   get_table_index(Game, TableIndex),
   nth1(TableIndex, Board, Table),
 
-  trigger_special(UpdatedGame, TableIndex, UpdatedGame2),
+  trigger_special(UpdatedGame2, TableIndex, UpdatedGame3),
 
-  check_majority(UpdatedGame2, Table, UpdatedGame3),
-  check_win(UpdatedGame3).
+  check_majority(UpdatedGame3, Table, UpdatedGame),
+  check_win(UpdatedGame).
 
 play_turn(Game, UpdatedGame) :- play_turn(Game, UpdatedGame).
 
@@ -74,6 +74,8 @@ trigger_special(Game, TableIndex, UpdatedGame) :-
   get_special(Game, Special),
 
   TableIndex = 5, % Ignores the center table.
+
+  append(Game, [], UpdatedGame),
   write('Center has no special markers assigned.'), nl.
 
 trigger_special(Game, TableIndex, UpdatedGame) :-
@@ -84,6 +86,7 @@ trigger_special(Game, TableIndex, UpdatedGame) :-
   TableIndex < 5,
   nth1(TableIndex, Special, Marker),
 
+  write('The index '), write(TableIndex), write(' has the marker '), write(Marker), write('.'), nl,
   handle_specific_special(Game, TableIndex, Marker, UpdatedGame).
 
 trigger_special(Game, TableIndex, UpdatedGame) :-
@@ -98,7 +101,7 @@ trigger_special(Game, TableIndex, UpdatedGame) :-
   write('The index '), write(TableIndex), write(' has the marker '), write(Marker), write('.'), nl,
   handle_specific_special(Game, TableIndex, Marker, UpdatedGame).
 
-trigger_special(Game, TableIndex, UpdatedGame). % No special marker was triggered.
+trigger_special(Game, TableIndex, UpdatedGame) :- append(Game, [], UpdatedGame). % No special marker was triggered.
 
 /**
   @desc ROTATE special marker handler.
@@ -220,7 +223,7 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
   LessTableIndex1 is TableIndex1 - 1,
   LessTableIndex2 is TableIndex2 - 1,
 
-    % Switches the provided tables.
+  % Switches the provided tables.
   get_tracker(Game, Tracker),
   nth1(TableIndex1, Tracker, Majority),
   Majority = x,
@@ -258,11 +261,11 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
   nth1(TableIndex, Board, Table),
 
   Marker = 'MoveGreen',
-  count(g, Table, CountB),
-  CountB = 3,
+  count(g, Table, CountG),
+  CountG = 3,
 
   %Retrieves the tables where the pieces are going to be switched
-  menu_move_black(TableIndex1, TableIndex2),
+  menu_move_green(TableIndex1, TableIndex2),
   nth1(TableIndex1, Board, Table1),
   nth1(TableIndex2, Board, Table2),
 
@@ -280,7 +283,7 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
 
   % Retrieves the seat indexes of the pieces
 
-  menu_move_black_piece(SeatIndex1, SeatIndex2),
+  menu_move_green_piece(SeatIndex1, SeatIndex2),
   nth1(SeatIndex1, Table1, Seat),
   Seat = g,
 
