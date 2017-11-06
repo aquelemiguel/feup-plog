@@ -3,7 +3,7 @@
 */
 print_board(_, [], _).
 print_board(Game, [H|T], TableIndex) :-
-
+ 
   length([H|T], MatrixSize),
   TrimSize is MatrixSize - 3,
   trim_tail([H|T], TrimSize, Block), % Divides the board into a smaller 9x3 block.

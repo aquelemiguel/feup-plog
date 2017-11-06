@@ -80,6 +80,42 @@ check_claimed_table(Game, TableIndex) :-
   write('Selected table is still unclaimed!'), nl, fail.
 
 /**
+  @desc Checks whether there's a table that is claimed (majority reached by one of the player).
+        If no tables are found, the predicate fails.
+*/
+check_exists_any_claimed(_, 10) :-
+  write('No claimed tables were found!'), nl, fail.
+
+check_exists_any_claimed(Game, Index) :-
+  get_board(Game, Board),
+  nth1(Index, Board, Table),
+
+  count(b, Table, CountB), count(g, Table, CountG),
+  (CountB >= 5; CountG >= 5).
+
+check_exists_any_claimed(Game, Index) :-
+  NewIndex is Index + 1,
+  check_exists_any_claimed(Game, NewIndex).
+
+/**
+  @desc Checks whether there's a table that is unclaimed.
+        If no tables are found, the predicate fails.
+*/
+check_exists_any_unclaimed(_, 10) :-
+  write('No unclaimed tables were found!'), nl, fail.
+
+check_exists_any_unclaimed(Game, Index) :-
+  get_board(Game, Board),
+  nth1(Index, Board, Table),
+
+  count(b, Table, CountB), count(g, Table, CountG),
+  (CountB < 5; CountG < 5).
+
+check_exists_any_unclaimed(Game, Index) :-
+  NewIndex is Index + 1,
+  check_exists_any_claimed(Game, NewIndex).
+
+/**
   @desc Checks whether the inputted index falls within the 1-9 range.
 */
 check_index_out_of_bounds(Index) :-

@@ -8,6 +8,7 @@
 oolong :- main_menu. % Entry function call.
 
 start_game(Game) :-
+  %clear_console,
   get_board(Game, Board),
   print_board(Game, Board, 0),
   get_gamemode(Game, Mode), Mode = 1,
@@ -159,6 +160,8 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
   count(g, Table, CountG),
   (CountB = 4; CountG = 4),
 
+  check_exists_any_unclaimed(Game, 1),
+
   menu_swap_unclaimed(Game, TableIndex1, TableIndex2),
   nth1(TableIndex1, Board, Table1),
   nth1(TableIndex2, Board, Table2),
@@ -188,7 +191,10 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
   count(g, Table, CountG),
   (CountB = 4; CountG = 4),
 
-  menu_swap_unclaimed(Game, TableIndex1, TableIndex2),
+  check_exists_any_claimed(Game, 1), % If there's no claimed table to swap, this shouldn't run.
+  check_exists_any_unclaimed(Game, 1), % If there's no unclaimed table to swap, this shouldn't run. 
+
+  menu_swap_mixed(Game, TableIndex1, TableIndex2),
   nth1(TableIndex1, Board, Table1),
   nth1(TableIndex2, Board, Table2),
 

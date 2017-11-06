@@ -1,46 +1,103 @@
 % TODO: Remove the 'if...else' statement here.
 
-display_logo :-
-  nl,
-  write('             ( ('), nl,
-  write('            ) )'), nl,
-  write('          ........'), nl,
-  write('          |oolong|'), nl,
-  write('          |      |]'), nl,
-  write('           \\    /'), nl,
-  write('           `----\''), nl.
-
 main_menu :-
-  display_logo,
-  nl, write('Select your game mode:'),
-  nl, write('  1. Play'),
-  nl, write('  2. Rules'),
-  nl, write('  3. About'),
-  nl, write('  4. Exit'),
-  nl, nl,
+  clear_console,
+  nl,
+  write('      _..,----,.._       __   __       __        __ '), nl,
+  write('   .-;\'-.,____,.-\';     |  | |  | |   |  | |\\ | | _ '), nl,
+  write('  (( |            |     |__| |__| |__ |__| | \\| |__| '), nl,
+  write('   `))            ;     Dominate the tea house.    '), nl,
+  write('    ` \\          /     '), nl,
+  write('   .-\' `,.____.,\' \'-.    (1) Play   (2) Rulebook     '), nl,
+  write('  (     \'------\'     )   (3) About  (4) Exit'), nl,
+  write('   `-=..________..--\'     '), nl, nl,
 
   read(Input), (
-  Input == 1 -> play_menu;
-  Input == 2 -> rules_menu;
+  Input == 1 -> gamemode_menu;
+  Input == 2 -> rules_menu_page1;
   Input == 3 -> about_menu;
   Input == 4;
 
   nl, write('Invalid input!'), nl, main_menu
   ).
 
-play_menu :-
-  nl, write('Select your game mode:'),
-  nl, write('  1. Player vs Player'),
-  nl, write('  2. Player vs AI'),
-  nl, write('  3. AI vs AI'),
-  nl, write('  4. Exit'), nl, nl,
+gamemode_menu :-
+  clear_console,
+  nl,
+  write('      _..,----,.._       __   __       __        __ '), nl,
+  write('   .-;\'-.,____,.-\';     |  | |  | |   |  | |\\ | | _ '), nl,
+  write('  (( |            |     |__| |__| |__ |__| | \\| |__| '), nl,
+  write('   `))            ;     Dominate the tea house.    '), nl,
+  write('    ` \\          /     '), nl,
+  write('   .-\' `,.____.,\' \'-.    (1) Single Player  (2) Multiplayer     '), nl,
+  write('  (     \'------\'     )   (3) Skynet Mode    (4) Back'), nl,
+  write('   `-=..________..--\'     '), nl, nl,
 
   read(Input), (
-  Input == 1 -> init_game(Game, 1)
+  Input == 2 -> init_game(Game, 1);
+  Input == 4 -> main_menu
   ).
 
-rules_menu :-
-  nl, write('Coming soon...'), nl, nl.
+rules_menu_page1 :-
+  clear_console,
+  nl,
+  write('      _..,----,.._       __   __       __        __ '), nl,
+  write('   .-;\'-.,____,.-\';     |  | |  | |   |  | |\\ | | _ '), nl,
+  write('  (( |            |     |__| |__| |__ |__| | \\| |__| '), nl,
+  write('   `))            ;     Dominate the tea house.    '), nl,
+  write('    ` \\          /     '), nl,
+  write('   .-\' `,.____.,\' \'-.    (1) Next Page'), nl,
+  write('  (     \'------\'     )   (3) Back'), nl,
+  write('   `-=..________..--\'     '), nl, nl,
+
+  write('   [Page 1/3]'), nl,
+  write('    Welcome to Oolong.'), nl, nl,
+
+  read(Input), (
+    Input == 1 -> rules_menu_page2;
+    Input == 3 -> main_menu
+  ).
+
+rules_menu_page2 :-
+  clear_console,
+  nl,
+  write('      _..,----,.._       __   __       __        __ '), nl,
+  write('   .-;\'-.,____,.-\';     |  | |  | |   |  | |\\ | | _ '), nl,
+  write('  (( |            |     |__| |__| |__ |__| | \\| |__| '), nl,
+  write('   `))            ;     Dominate the tea house.    '), nl,
+  write('    ` \\          /     '), nl,
+  write('   .-\' `,.____.,\' \'-.    (1) Next Page  (2) Previous Page'), nl,
+  write('  (     \'------\'     )   (3) Back'), nl,
+  write('   `-=..________..--\'     '), nl, nl,
+
+  write('   [Page 2/3]'), nl,
+  write('    Welcome to Oolong.'), nl, nl,
+
+  read(Input), (
+    Input == 1 -> rules_menu_page3;
+    Input == 2 -> rules_menu_page1;
+    Input == 3 -> main_menu
+  ).
+
+rules_menu_page3 :-
+  clear_console,
+  nl,
+  write('      _..,----,.._       __   __       __        __ '), nl,
+  write('   .-;\'-.,____,.-\';     |  | |  | |   |  | |\\ | | _ '), nl,
+  write('  (( |            |     |__| |__| |__ |__| | \\| |__| '), nl,
+  write('   `))            ;     Dominate the tea house.    '), nl,
+  write('    ` \\          /     '), nl,
+  write('   .-\' `,.____.,\' \'-.                   (2) Previous Page'), nl,
+  write('  (     \'------\'     )   (3) Back'), nl,
+  write('   `-=..________..--\'     '), nl, nl,
+
+  write('   [Page 3/3]'), nl,
+  write('    Welcome to Oolong.'), nl, nl,
+
+  read(Input), (
+    Input == 2 -> rules_menu_page2;
+    Input == 3 -> main_menu
+  ).
 
 about_menu :-
   nl, write('PrOolong was developed by:'),
