@@ -72,7 +72,7 @@ check_claimed_table(Game, TableIndex) :-
   get_board(Game, Board),
   nth1(TableIndex, Board, Table),
 
-  count(b, ActualTable1, CountB), count(g, ActualTable1, CountG),
+  count(b, Table, CountB), count(g, Table, CountG),
   (CountB >= 5; CountG >= 5).
 
 check_claimed_table(Game, TableIndex) :-

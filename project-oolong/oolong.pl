@@ -285,8 +285,6 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
   nth1(SeatIndex2, Table2, Seat2),
   Seat2 = x,
 
-
-
   SeatReplace is SeatIndex1 - 1,
   SeatReplace2 is SeatIndex2 - 1,
 
@@ -296,10 +294,6 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
 
   replace(Table2, SeatReplace2, b, NewTable2),
   replace(NewBoard, LessTableIndex2, NewTable2, FinalBoard),
-
-
-  write('chegou aqui'), nl,
-
 
   replace(Game, 0, FinalBoard, UpdatedGame),
 
