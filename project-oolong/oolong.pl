@@ -8,7 +8,7 @@
 oolong :- main_menu. % Entry function call.
 
 start_game(Game) :-
-  %clear_console,
+  clear_console,
   get_board(Game, Board),
   print_board(Game, Board, 0),
   get_gamemode(Game, Mode), Mode = 1,
@@ -19,10 +19,11 @@ start_game(Game) :-
   @desc Prompts next position from current player.
 */
 play_turn(Game, UpdatedGame) :-
+
+  print_next_turn_message(Game),
   read(SeatIndex),
 
   validate_move(Game, SeatIndex),
-  write('Play validated!'), nl,
   place_piece(Game, SeatIndex, UpdatedGame2),
 
   get_board(UpdatedGame2, Board),
@@ -64,6 +65,17 @@ validate_move(Game, SeatIndex) :-
 
   Seat \= x,
   write('Seat already occupied!'), fail.
+
+validate_move(Game, SeatIndex) :-
+  
+  get_board(Game, Board),
+  get_table_index(Game, TableIndex),
+
+  nth1(SeatIndex, Board, Table),
+  count(x, Table, CountEmpty),
+
+  CountEmpty = 0,
+  write('Table already full!'), fail.
 
 /**
   @desc Triggers the special markers.
@@ -115,8 +127,8 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
   nth1(TableIndex, Board, Table),
 
   (Marker = 'Rotate1'; Marker = 'Rotate2'),
-  count(b, Table, CountB),
-  CountB = 4,
+  count(b, Table, CountB), count(g, Table, CountG),
+  (CountB = 4; CountG = 4),
 
   menu_rotate_tile(Orientation, Turns),
 
@@ -124,25 +136,8 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
   write('Table rotated!'), nl,
 
   LessTableIndex is TableIndex - 1,
-  replace(Board, TableIndex, RotatedTable, UpdatedBoard),
-  replace(Game, 0, UpdatedBoard, UpdatedGame).
 
-handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
-
-  get_board(Game, Board),
-  nth1(TableIndex, Board, Table),
-
-  (Marker = 'Rotate1'; Marker = 'Rotate2'),
-  count(g, Table, CountG),
-  CountG = 4,
-
-  menu_rotate_tile(Orientation, Turns),
-
-  rotate_table(Table, Orientation, Turns, RotatedTable),
-  write('Table rotated!'), nl,
-
-  LessTableIndex is TableIndex - 1,
-  replace(Board, TableIndex, RotatedTable, UpdatedBoard),
+  replace(Board, LessTableIndex, RotatedTable, UpdatedBoard),
   replace(Game, 0, UpdatedBoard, UpdatedGame).
 
 /**
@@ -307,3 +302,6 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
   replace(Game, 0, FinalBoard, UpdatedGame),
 
   write('Piece switched!'), nl.
+
+handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
+  append(Game, [], UpdatedGame).

@@ -2,6 +2,7 @@ init_game(Game, GameMode) :-
   empty_board(Board),
 
   special_actions(Special),
+
   random_permutation(Special, ShuffledSpecial),
   
   majority_tracker(Tracker),

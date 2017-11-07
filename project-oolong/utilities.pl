@@ -24,32 +24,31 @@ count(X, [Y|T], N) :-
   X \= Y, 
   count(X, T, N).
 
-rotate_table(_, _, 0, _).
-rotate_table(Table, Orientation, Turns, RotatedTable) :-
-  
-  Orientation = 'CW',
-  UpdatedTurns is Turns - 1,
 
-  nth0(0, RotatedTable, E0), nth0(1, RotatedTable, E1),
-  nth0(2, RotatedTable, E2), nth0(3, RotatedTable, E3),
-  nth0(4, RotatedTable, E4), nth0(5, RotatedTable, E5),
-  nth0(6, RotatedTable, E6), nth0(7, RotatedTable, E7),
-  nth0(8, RotatedTable, E8),
-
-  rotate_table(Table, Orientation, UpdatedTurns, [E3, E0, E1, E6, E4, E2, E7, E8, E5]).
+rotate_table(Table, _, 0, RotatedTable) :-
+  append(Table, [], RotatedTable).
 
 rotate_table(Table, Orientation, Turns, RotatedTable) :-
-  
-  Orientation = 'CCW',
+
+  Orientation = 0,
   UpdatedTurns is Turns - 1,
 
-  nth0(0, RotatedTable, E0), nth0(1, RotatedTable, E1),
-  nth0(2, RotatedTable, E2), nth0(3, RotatedTable, E3),
-  nth0(4, RotatedTable, E4), nth0(5, RotatedTable, E5),
-  nth0(6, RotatedTable, E6), nth0(7, RotatedTable, E7),
-  nth0(8, RotatedTable, E8),
+  nth0(0, Table, E0), nth0(1, Table, E1), nth0(2, Table, E2), 
+  nth0(3, Table, E3), nth0(4, Table, E4), nth0(5, Table, E5),
+  nth0(6, Table, E6), nth0(7, Table, E7), nth0(8, Table, E8),
 
-  rotate_table(Table, Orientation, UpdatedTurns, [E1, E2, E5, E0, E4, E8, E3, E6, E7]).
+  rotate_table([E3, E0, E1, E6, E4, E2, E7, E8, E5], Orientation, UpdatedTurns, RotatedTable).
+
+rotate_table(Table, Orientation, Turns, RotatedTable) :-
+  
+  Orientation = 1,
+  UpdatedTurns is Turns - 1,
+
+  nth0(0, Table, E0), nth0(1, Table, E1), nth0(2, Table, E2), 
+  nth0(3, Table, E3), nth0(4, Table, E4), nth0(5, Table, E5),
+  nth0(6, Table, E6), nth0(7, Table, E7), nth0(8, Table, E8),
+
+  rotate_table([E1, E2, E5, E0, E4, E8, E3, E6, E7], Orientation, UpdatedTurns, RotatedTable).
 
 /**
   @desc Checks whether the table is still unclaimed (majority not reached by one player).

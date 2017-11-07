@@ -82,3 +82,15 @@ check_waiter(Game, Table, Seat) :-
 
   Table + 1 =:= WaiterTable,
   Seat + 1 =:= WaiterSeat.
+
+print_next_turn_message(Game) :-
+  get_turn(Game, Player),
+  Player = 'b',
+
+  ansi_format([fg(black)], 'Make your move, BLACK!\n', []).
+
+print_next_turn_message(Game) :-
+  get_turn(Game, Player),
+  Player = 'g',
+
+  ansi_format([fg(green)], 'Make your move, GREEN!\n', []).
