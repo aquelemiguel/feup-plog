@@ -34,7 +34,9 @@ gamemode_menu :-
   write('   `-=..________..--\'     '), nl, nl,
 
   read(Input), (
-  Input == 2 -> init_game(Game, 1);
+  Input == 1 -> init_game(Game, 1);
+  Input == 2 -> init_game(Game, 2);
+  Input == 3 -> init_game(Game, 3);
   Input == 4 -> main_menu
   ).
 

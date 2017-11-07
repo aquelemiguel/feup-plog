@@ -8,7 +8,7 @@ init_game(Game, GameMode) :-
   majority_tracker(Tracker),
 
   Game = [Board, Tracker, ShuffledSpecial, b, 5, [5,5], GameMode],
-  start_game(Game).
+  game_loop(Game).
 
 % Game class getters.
 get_board(Game, Board) :-

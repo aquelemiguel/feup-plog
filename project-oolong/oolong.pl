@@ -3,17 +3,61 @@
 :- include('game.pl').
 :- include('menus.pl').
 :- include('outputs.pl').
+:- include('ai.pl').
 :- include('utilities.pl').
 
 oolong :- main_menu. % Entry function call.
 
-start_game(Game) :-
+
+/**
+  @desc Main game loop for the Player vs AI gamemode.
+*/
+game_loop(Game) :-
+  get_gamemode(Game, Mode),
+  Mode = 1,
+
   clear_console,
   get_board(Game, Board),
   print_board(Game, Board, 0),
-  get_gamemode(Game, Mode), Mode = 1,
+
   play_turn(Game, UpdatedGame),
-  start_game(UpdatedGame).
+  get_board(UpdatedGame, NewBoard),
+  print_board(UpdatedGame, NewBoard, 0),
+
+  write('Bot is thinking...'), nl,
+  sleep(1),
+  bot_play_turn_easy(UpdatedGame, UpdatedGame2),
+
+  game_loop(UpdatedGame2).
+
+/**
+  @desc Main game loop for the Player vs Player gamemode.
+*/
+game_loop(Game) :-
+  get_gamemode(Game, Mode),
+  Mode = 2,
+
+  clear_console,
+  get_board(Game, Board),
+  print_board(Game, Board, 0),
+  play_turn(Game, UpdatedGame),
+  game_loop(UpdatedGame).
+
+/**
+  @desc Main game loop for the AI vs AI gamemode.
+*/
+game_loop(Game) :-
+  get_gamemode(Game, Mode),
+  Mode = 3,
+
+  sleep(1),
+  clear_console,
+  get_board(Game, Board),
+  print_board(Game, Board, 0),
+  
+  bot_play_turn_easy(Game, UpdatedGame),
+
+  game_loop(UpdatedGame).
 
 /**
   @desc Prompts next position from current player.
