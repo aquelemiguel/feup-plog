@@ -106,14 +106,41 @@ about_menu :-
   nl, write(' - Jose Pedro Borges up201503603'),
   nl, write(' - Miguel Mano Fernandes, up201503538'), nl, nl.
 
-% TODO: Specific printing for each player.
-menu_rotate_tile(Orientation, Turns) :-
+/**
+  @desc Displays the ROTATE special marker menu.
+*/
+menu_rotate_tile(Game, Orientation, Turns) :-
+  
+  get_gamemode(Game, Gamemode),
+  get_turn(Game, Player),
+  
+  ((Gamemode = 1, Player = b); Gamemode = 2), % Manual input if it's Multiplayer or the player's turn on Single Player.
+
   write('ROTATE special marker has been triggered on this tile!'), nl,
-  write('Which orientation to rotate?'),
+  
+  write('Which orientation to rotate?'), nl,
   read(Orientation),
-  write('How many turns?'),
+  write('How many turns?'), nl,
   read(Turns).
 
+menu_rotate_tile(Game, Orientation, Turns) :-
+  
+  get_gamemode(Game, Gamemode),
+  get_turn(Game, Player),
+  get_table_index(Game, TableIndex),
+  
+  ((Gamemode = 1, Player = g); Gamemode = 3), % Automatic input if it's Skynet Mode or the bot's turn on Single Player.
+
+  write('ROTATE special marker has been triggered on this tile!'), nl,
+
+  random_between(0, 1, Orientation),
+  random_between(0, 9, Turns),
+
+  write('Bot has rotated table #'), write(TableIndex), write('!'), nl.
+
+/**
+  @desc Displays the SWAPUNCLAIMED special marker menu.
+*/
 menu_swap_unclaimed(Game, Table1, Table2) :-
   write('SWAPUNCLAIMED special marker has been triggered!'), nl,
   
@@ -147,27 +174,27 @@ menu_swap_mixed(Game, Table1, Table2) :-
   menu_swap_mixed(Game, Table1, Table2).
 
 
-menu_move_black(Table1, Table2) :-
+menu_move_black(Game, Table1, Table2) :-
   write('MOVEBLACK special marker has been triggered!'), nl,
   write('Select table #1.'), nl,
   read(Table1), nl,
   write('Select table #2.'), nl,
   read(Table2).
 
-menu_move_green(Table1, Table2) :-
+menu_move_green(Game, Table1, Table2) :-
   write('MOVEGREEN special marker has been triggered!'), nl,
   write('Select table #1.'), nl,
   read(Table1), nl,
   write('Select table #2.'), nl,
   read(Table2).
 
-menu_move_black_piece(SeatIndex1, SeatIndex2) :-
+menu_move_black_piece(Game, SeatIndex1, SeatIndex2) :-
   write('Select piece #1.'), nl,
   read(SeatIndex1), nl,
   write('Select piece #2.'), nl,
   read(SeatIndex2).
 
-menu_move_green_piece(SeatIndex1, SeatIndex2) :-
+menu_move_green_piece(Game, SeatIndex1, SeatIndex2) :-
   write('Select piece #1.'), nl,
   read(SeatIndex1), nl,
   write('Select piece #2.'), nl,

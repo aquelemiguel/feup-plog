@@ -174,7 +174,7 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
   count(b, Table, CountB), count(g, Table, CountG),
   (CountB = 4; CountG = 4),
 
-  menu_rotate_tile(Orientation, Turns),
+  menu_rotate_tile(Game, Orientation, Turns),
 
   rotate_table(Table, Orientation, Turns, RotatedTable),
   write('Table rotated!'), nl,
@@ -261,7 +261,7 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
   count(b, Table, CountB),
   CountB = 3,
 
-  menu_move_black(TableIndex1, TableIndex2),
+  menu_move_black(Game, TableIndex1, TableIndex2),
   nth1(TableIndex1, Board, Table1),
   nth1(TableIndex2, Board, Table2),
 
@@ -277,7 +277,7 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
   nth1(TableIndex1, AnotherTracker, Majority2),
   Majority2 = x,
 
-  menu_move_black_piece(SeatIndex1, SeatIndex2),
+  menu_move_black_piece(Game, SeatIndex1, SeatIndex2),
   nth1(SeatIndex1, Table1, Seat),
   Seat = b,
 
@@ -310,7 +310,7 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
   CountG = 3,
 
   %Retrieves the tables where the pieces are going to be switched
-  menu_move_green(TableIndex1, TableIndex2),
+  menu_move_green(Game, TableIndex1, TableIndex2),
   nth1(TableIndex1, Board, Table1),
   nth1(TableIndex2, Board, Table2),
 
@@ -328,7 +328,7 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
 
   % Retrieves the seat indexes of the pieces
 
-  menu_move_green_piece(SeatIndex1, SeatIndex2),
+  menu_move_green_piece(Game, SeatIndex1, SeatIndex2),
   nth1(SeatIndex1, Table1, Seat),
   Seat = g,
 
@@ -347,5 +347,5 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
 
   write('Piece switched!'), nl.
 
-handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
+handle_specific_special(Game, _, _, UpdatedGame) :-
   append(Game, [], UpdatedGame).
