@@ -111,7 +111,7 @@ validate_move(Game, SeatIndex) :-
   write('Seat already occupied!'), fail.
 
 validate_move(Game, SeatIndex) :-
-  
+
   get_board(Game, Board),
   get_table_index(Game, TableIndex),
 
@@ -231,7 +231,7 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
   (CountB = 4; CountG = 4),
 
   check_exists_any_claimed(Game, 1), % If there's no claimed table to swap, this shouldn't run.
-  check_exists_any_unclaimed(Game, 1), % If there's no unclaimed table to swap, this shouldn't run. 
+  check_exists_any_unclaimed(Game, 1), % If there's no unclaimed table to swap, this shouldn't run.
 
   menu_swap_mixed(Game, TableIndex1, TableIndex2),
   nth1(TableIndex1, Board, Table1),
@@ -278,17 +278,28 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
   Majority2 = x,
 
   menu_move_black_piece(Game, SeatIndex1, SeatIndex2),
+
   nth1(SeatIndex1, Table1, Seat),
   Seat = b,
 
   nth1(SeatIndex2, Table2, Seat2),
-  Seat = x,
+  Seat2 = x,
 
-  replace(Table1, SeatIndex1, x, NewTable),
-  replace(Board, TableIndex1, NewTable, NewBoard),
 
-  replace(Table2, SeatIndex2, b, NewTable2),
-  replace(NewBoard, TableIndex2, NewTable2, FinalBoard),
+
+  SeatReplace is SeatIndex1 - 1,
+  SeatReplace2 is SeatIndex2 - 1,
+
+
+  replace(Table1, SeatReplace, x, NewTable),
+  replace(Board, LessTableIndex1, NewTable, NewBoard),
+
+  replace(Table2, SeatReplace2, b, NewTable2),
+  replace(NewBoard, LessTableIndex2, NewTable2, FinalBoard),
+
+
+  write('chegou aqui'), nl,
+
 
   replace(Game, 0, FinalBoard, UpdatedGame),
 
@@ -333,15 +344,20 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
   Seat = g,
 
   nth1(SeatIndex2, Table2, Seat2),
-  Seat = x,
+  Seat2 = x,
 
   %Updates the tables
 
-  replace(Table1, SeatIndex1, x, NewTable),
-  replace(Board, TableIndex1, NewTable, NewBoard),
+  SeatReplace is SeatIndex1 - 1,
+  SeatReplace2 is SeatIndex2 - 1,
 
-  replace(Table2, SeatIndex2, g, NewTable2),
-  replace(NewBoard, TableIndex2, NewTable2, FinalBoard),
+  replace(Table1, SeatReplace, x, NewTable),
+  replace(Board, LessTableIndex1, NewTable, NewBoard),
+
+  replace(Table2, SeatReplace2, g, NewTable2),
+  replace(NewBoard, LessTableIndex2, NewTable2, FinalBoard),
+
+
 
   replace(Game, 0, FinalBoard, UpdatedGame),
 
