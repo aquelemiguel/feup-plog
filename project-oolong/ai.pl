@@ -26,14 +26,33 @@ bot_play_turn_easy(Game, UpdatedGame) :- bot_play_turn_easy(Game, UpdatedGame).
 		On NORMAL mode, the bot (loosely) takes into account the various outcomes of his plays, but plays special markers randomly.
 		If two choices are equally good, it randomly picks one.
 */
-bot_play_turn_normal(Game, UpdatedGame).
+bot_play_turn_normal(Game, UpdatedGame) :-
+	
+	return_play_ratings(Game, 1, Ratings).
 
 /**
-  @desc Bot performs its play on the HARD difficulty.
-		On HARD mode, the bot (strongly) takes into account the various outcomes of his plays, but plays special markers randomly.
-		If two choices are equally good, it randomly picks one.
+  @desc
 */
-bot_play_turn_hard(Game, UpdatedGame).
+return_play_ratings(_, 9, Ratings).
+
+return_play_ratings(Game, SeatIndex, Ratings) :-
+	
+	rate_play(Game, SeatIndex, Rating),
+	append(Ratings, Rating, NewRatings),
+
+	NewIndex is SeatIndex + 1,
+
+	return_play_ratings(Game, NewIndex, NewRatings).
+
+/**
+  @desc
+*/
+rate_play(Game, SeatIndex, Rating) :-
+	
+	validate_move(Game, SeatIndex).
+
+rate_play(Game, SeatIndex, Rating) :- Rating is 0. % If the move fails to validate.
+	
 
 
 

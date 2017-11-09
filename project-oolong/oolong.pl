@@ -228,7 +228,7 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
   Marker = 'SwapMixed',
   count(b, Table, CountB),
   count(g, Table, CountG),
-  (CountB = 4; CountG = 4),
+  (CountB = 5; CountG = 5),
 
   check_exists_any_claimed(Game, 1), % If there's no claimed table to swap, this shouldn't run.
   check_exists_any_unclaimed(Game, 1), % If there's no unclaimed table to swap, this shouldn't run.
