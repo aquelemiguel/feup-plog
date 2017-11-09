@@ -49,7 +49,16 @@ return_play_ratings(Game, SeatIndex, Ratings) :-
 */
 rate_play(Game, SeatIndex, Rating) :-
 	
-	validate_move(Game, SeatIndex).
+	validate_move(Game, SeatIndex),
+
+	get_turn(Game, Player), Player = b,
+
+	get_board(Game, Board),
+	nth1(SeatIndex, Board, Table),
+	count(g, Table, CountG), CountG = 0,
+
+	Rating is 5.
+
 
 rate_play(Game, SeatIndex, Rating) :- Rating is 0. % If the move fails to validate.
 	
