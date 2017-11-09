@@ -4,7 +4,7 @@ init_game(Game, GameMode) :-
   special_actions(Special),
 
   random_permutation(Special, ShuffledSpecial),
-  
+
   majority_tracker(Tracker),
 
   Game = [Board, Tracker, ShuffledSpecial, b, 5, [5,5], GameMode],
@@ -106,9 +106,9 @@ update_waiter(Game, SeatIndex, WaiterFixed) :-
   get_waiter(Game, Waiter),
   get_table_index(Game, TableIndex),
 
-  nth0(1, Waiter, ArraySeatIndex),
+  nth0(0, Waiter, ArraySeatIndex),
 
-  replace(Game, 5, [ArraySeatIndex, SeatIndex], WaiterFixed).
+  replace(Game, 5, [SeatIndex, ArraySeatIndex], WaiterFixed).
 
 % Switches current turn.
 switch_turn(Game, UpdatedGame) :-
