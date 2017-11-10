@@ -27,9 +27,10 @@ game_loop(Game) :-
 
   write('Bot is thinking...'), nl,
   sleep(1),
-  bot_play_turn_easy(UpdatedGame, UpdatedGame2),
+  bot_play_turn_normal(UpdatedGame, UpdatedGame2),
 
   game_loop(UpdatedGame2).
+
 
 /**
   @desc Main game loop for the Player vs Player gamemode.
@@ -56,9 +57,11 @@ game_loop(Game) :-
   get_board(Game, Board),
   print_board(Game, Board, 0),
   
-  bot_play_turn_easy(Game, UpdatedGame),
+  bot_play_turn_normal(Game, UpdatedGame),
 
   game_loop(UpdatedGame).
+
+game_loop(Game) :- game_loop(Game).
 
 /**
   @desc Prompts next position from current player.

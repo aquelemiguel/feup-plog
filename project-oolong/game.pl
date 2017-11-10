@@ -32,6 +32,13 @@ get_waiter(Game, Waiter) :-
 get_gamemode(Game, GameMode) :-
   nth0(6, Game, GameMode).
 
+get_table(Game, Index, Table) :-
+  get_board(Game, Board),
+  nth0(Index, Board, Table).
+
+get_opponent(b, g).
+get_opponent(g, b).
+
 /**
   @desc Places the current player's piece on the provided seat.
 */
