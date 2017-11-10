@@ -19,7 +19,9 @@ bot_play_turn_easy(Game, UpdatedGame) :-
   	check_majority(UpdatedGame3, Table, UpdatedGame),
   	check_win(UpdatedGame).
 
-bot_play_turn_easy(Game, UpdatedGame) :- bot_play_turn_easy(Game, UpdatedGame).
+bot_play_turn_easy(Game, UpdatedGame) :- 
+	append(Game, [], UpdatedGame), 
+	bot_play_turn_easy(Game, UpdatedGame). % If bot performs an invalid play.
 
 /**
   @desc Bot performs its play on the NORMAL difficulty.
@@ -29,16 +31,35 @@ bot_play_turn_easy(Game, UpdatedGame) :- bot_play_turn_easy(Game, UpdatedGame).
 bot_play_turn_normal(Game, UpdatedGame) :-
 	
 	return_play_ratings(Game, 0, NewRatings, DefinitelyRatings), write(DefinitelyRatings), nl,
-	max_list(DefinitelyRatings, Max), write(Max), nl,
-	nth1(SeatIndex, DefinitelyRatings, Max), write(SeatIndex),
+	max_list(DefinitelyRatings, Max),
+	get_random_max_index(Max, DefinitelyRatings, SeatIndex), write('gotototoot: '), write(SeatIndex), nl,
+	
+	nth1(SeatIndex, DefinitelyRatings, Max), %write(SeatIndex),
 
-	validate_move(Game, SeatIndex),
 	place_piece(Game, SeatIndex, UpdatedGame2),
 
 	trigger_special(UpdatedGame2, TableIndex, UpdatedGame3),
 
   	check_majority(UpdatedGame3, Table, UpdatedGame),
   	check_win(UpdatedGame).
+
+ bot_play_turn_normal(Game, UpdatedGame) :- 
+ 	append(Game, [], UpdatedGame), 
+ 	bot_play_turn_normal(Game, UpdatedGame). % If bot performs an invalid play.
+
+/**
+  @desc
+*/
+get_random_max_index(Max, List, SeatIndex) :-
+
+	random_between(1, 9, Random),
+	validate_move(Game, Random),
+	nth1(Random, List, Elem),
+	Elem = Max,
+	SeatIndex is Random.
+
+get_random_max_index(Max, List, SeatIndex) :- get_random_max_index(Max, List, SeatIndex).
+
 
 /**
   @desc
@@ -65,47 +86,47 @@ return_play_ratings(Game, SeatIndex, Ratings, DefinitelyRatings) :-
   @desc
 */
 play_rating(0, 0, 5).
-play_rating(0, 1, 6).
-play_rating(0, 2, 7).
-play_rating(0, 3, 8).
-play_rating(0, 4, 9).
+play_rating(0, 1, 4).
+play_rating(0, 2, 3).
+play_rating(0, 3, 2).
+play_rating(0, 4, 1).
 play_rating(0, 5, 10).
 play_rating(0, 6, 10).
 play_rating(0, 7, 10).
 play_rating(0, 8, 10).
 play_rating(0, 9, 0).
 
-play_rating(1, 0, 4).
+play_rating(1, 0, 6).
 play_rating(1, 1, 5).
-play_rating(1, 2, 6).
-play_rating(1, 3, 7).
-play_rating(1, 4, 8).
+play_rating(1, 2, 4).
+play_rating(1, 3, 3).
+play_rating(1, 4, 1).
 play_rating(1, 5, 10).
 play_rating(1, 6, 10).
 play_rating(1, 7, 10).
 play_rating(1, 8, 0).
 
-play_rating(2, 0, 3).
-play_rating(2, 1, 4).
+play_rating(2, 0, 7).
+play_rating(2, 1, 6).
 play_rating(2, 2, 5).
-play_rating(2, 3, 6).
-play_rating(2, 4, 7).
+play_rating(2, 3, 4).
+play_rating(2, 4, 1).
 play_rating(2, 5, 10).
 play_rating(2, 6, 10).
 play_rating(2, 7, 0).
 
-play_rating(3, 0, 2).
-play_rating(3, 1, 3).
-play_rating(3, 2, 4).
+play_rating(3, 0, 8).
+play_rating(3, 1, 7).
+play_rating(3, 2, 6).
 play_rating(3, 3, 5).
-play_rating(3, 4, 6).
+play_rating(3, 4, 1).
 play_rating(3, 5, 10).
 play_rating(3, 6, 0).
 
-play_rating(4, 0, 1).
-play_rating(4, 1, 1).
-play_rating(4, 2, 1).
-play_rating(4, 3, 1).
+play_rating(4, 0, 9).
+play_rating(4, 1, 8).
+play_rating(4, 2, 7).
+play_rating(4, 3, 6).
 play_rating(4, 4, 1).
 play_rating(4, 5, 0).
 
