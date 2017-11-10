@@ -361,5 +361,20 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
 
   write('Piece switched!'), nl.
 
+handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
+  get_board(Game, Board),
+  nth1(TableIndex, Board, Table),
+
+  Marker = 'WaiterBlack',
+  count(b, Table, CountB),
+  CountB = 5,
+
+  move_black_waiter(Game, TableIndex2),
+
+  update_waiter(Game, TableIndex2, UpdatedGame).
+
+
+
+
 handle_specific_special(Game, _, _, UpdatedGame) :-
   append(Game, [], UpdatedGame).
