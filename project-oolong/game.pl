@@ -104,9 +104,9 @@ add_to_tracker(Game, Player, TableIndex, UpdatedGame) :-
 */
 update_waiter(Game, SeatIndex, WaiterFixed) :-
   get_waiter(Game, Waiter),
-  get_table_index(Game, TableIndex),
 
   nth0(0, Waiter, ArraySeatIndex),
+  write('ESta e a nova mesa:'), write(SeatIndex),
 
   replace(Game, 5, [SeatIndex, ArraySeatIndex], WaiterFixed).
 
