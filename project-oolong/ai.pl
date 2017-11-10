@@ -37,7 +37,7 @@ return_play_ratings(_, 9, Ratings).
 
 return_play_ratings(Game, SeatIndex, Ratings) :-
 	
-	rate_play(Game, SeatIndex, Rating),
+	play_rating(Game, SeatIndex, Rating),
 	append(Ratings, Rating, NewRatings),
 
 	NewIndex is SeatIndex + 1,
@@ -47,7 +47,7 @@ return_play_ratings(Game, SeatIndex, Ratings) :-
 /**
   @desc
 */
-rate_play(Game, SeatIndex, Rating) :-
+play_rating(Game, SeatIndex, Rating) :-
 	
 	validate_move(Game, SeatIndex),
 
@@ -60,8 +60,73 @@ rate_play(Game, SeatIndex, Rating) :-
 	Rating is 5.
 
 
-rate_play(Game, SeatIndex, Rating) :- Rating is 0. % If the move fails to validate.
-	
+play_rating(0, 0, 5).
+play_rating(0, 1, 4).
+play_rating(0, 2, 3).
+play_rating(0, 3, 2).
+play_rating(0, 4, 1).
+play_rating(0, 5, 8).
+play_rating(0, 6, 8).
+play_rating(0, 7, 8).
+play_rating(0, 8, 8).
+play_rating(0, 9, 0).
+
+play_rating(1, 0, 5).
+play_rating(1, 1, 4).
+play_rating(1, 2, 3).
+play_rating(1, 3, 2).
+play_rating(1, 4, 1).
+play_rating(1, 5, 8).
+play_rating(1, 6, 8).
+play_rating(1, 7, 8).
+play_rating(1, 8, 0).
+
+play_rating(2, 0, 5).
+play_rating(2, 1, 4).
+play_rating(2, 2, 3).
+play_rating(2, 3, 2).
+play_rating(2, 4, 1).
+play_rating(2, 5, 8).
+play_rating(2, 6, 8).
+play_rating(2, 7, 0).
+
+play_rating(3, 0, 5).
+play_rating(3, 1, 4).
+play_rating(3, 2, 3).
+play_rating(3, 3, 2).
+play_rating(3, 4, 1).
+play_rating(3, 5, 8).
+play_rating(3, 6, 0).
+
+play_rating(4, 0, 7).
+play_rating(4, 1, 6).
+play_rating(4, 2, 5).
+play_rating(4, 3, 4).
+play_rating(4, 4, 0).
+play_rating(4, 5, 0).
+
+play_rating(5, 0, 8).
+play_rating(5, 1, 8).
+play_rating(5, 2, 8).
+play_rating(5, 3, 8).
+play_rating(5, 4, 0).
+
+play_rating(6, 0, 8).
+play_rating(6, 1, 8).
+play_rating(6, 2, 8).
+play_rating(6, 3, 0).
+
+play_rating(7, 0, 8).
+play_rating(7, 1, 8).
+play_rating(7, 2, 0).
+
+play_rating(8, 0, 8).
+play_rating(8, 1, 0).
+
+play_rating(9, 0, 0).
+
+
+
 
 
 
