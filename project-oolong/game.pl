@@ -1,4 +1,4 @@
-init_game(Game, GameMode) :-
+init_game(Game, GameMode, BotDifficulty) :-
   empty_board(Board),
 
   special_actions(Special),
@@ -7,7 +7,7 @@ init_game(Game, GameMode) :-
 
   majority_tracker(Tracker),
 
-  Game = [Board, Tracker, ShuffledSpecial, b, 5, [5,5], GameMode],
+  Game = [Board, Tracker, ShuffledSpecial, b, 5, [5,5], GameMode, BotDifficulty],
   game_loop(Game).
 
 % Game class getters.
@@ -35,6 +35,9 @@ get_gamemode(Game, GameMode) :-
 get_table(Game, Index, Table) :-
   get_board(Game, Board),
   nth0(Index, Board, Table).
+
+get_bot_difficulty(Game, Difficulty) :-
+  nth0(7, Game, Difficulty).
 
 get_opponent(b, g).
 get_opponent(g, b).

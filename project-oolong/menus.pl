@@ -34,10 +34,46 @@ gamemode_menu :-
   write('   `-=..________..--\'     '), nl, nl,
 
   read(Input), (
-  Input == 1 -> init_game(Game, 1);
-  Input == 2 -> init_game(Game, 2);
-  Input == 3 -> init_game(Game, 3);
+  Input == 1 -> difficulty_menu_single_player;
+  Input == 2 -> init_game(Game, 2, _);
+  Input == 3 -> difficulty_menu_skynet;
   Input == 4 -> main_menu
+  ).
+
+difficulty_menu_single_player :-
+  clear_console,
+  nl,
+  write('      _..,----,.._       __   __       __        __ '), nl,
+  write('   .-;\'-.,____,.-\';     |  | |  | |   |  | |\\ | | _ '), nl,
+  write('  (( |            |     |__| |__| |__ |__| | \\| |__| '), nl,
+  write('   `))            ;     Dominate the tea house.    '), nl,
+  write('    ` \\          /     '), nl,
+  write('   .-\' `,.____.,\' \'-.    (1) Easy  (2) Normal     '), nl,
+  write('  (     \'------\'     )   (3) Back                        '), nl,
+  write('   `-=..________..--\'     '), nl, nl,
+
+  read(Input), (
+  Input == 1 -> init_game(Game, 1, easy);
+  Input == 2 -> init_game(Game, 1, normal);
+  Input == 3 -> gamemode_menu
+  ).
+
+difficulty_menu_skynet :-
+  clear_console,
+  nl,
+  write('      _..,----,.._       __   __       __        __ '), nl,
+  write('   .-;\'-.,____,.-\';     |  | |  | |   |  | |\\ | | _ '), nl,
+  write('  (( |            |     |__| |__| |__ |__| | \\| |__| '), nl,
+  write('   `))            ;     Dominate the tea house.    '), nl,
+  write('    ` \\          /     '), nl,
+  write('   .-\' `,.____.,\' \'-.    (1) Easy  (2) Normal     '), nl,
+  write('  (     \'------\'     )   (3) Back                        '), nl,
+  write('   `-=..________..--\'     '), nl, nl,
+
+  read(Input), (
+  Input == 1 -> init_game(Game, 3, easy);
+  Input == 2 -> init_game(Game, 3, normal);
+  Input == 3 -> gamemode_menu
   ).
 
 rules_menu_page1 :-
