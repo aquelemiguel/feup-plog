@@ -34,7 +34,6 @@ bot_play_turn_normal(Game, UpdatedGame) :-
 
 	return_play_ratings(Game, 0, [], Ratings),
 	parse_invalid_moves(Game, Ratings, 1, FinalRatings),
-
 	max_list(FinalRatings, Max),
 	ite(Max = -1, (select_when_full(Game, NewGame), append(NewGame, [], TempGame)), append(Game, [], TempGame)),
 
@@ -42,14 +41,18 @@ bot_play_turn_normal(Game, UpdatedGame) :-
 	nth1(SeatIndex, Ratings, Max),
 
 	place_piece(TempGame, SeatIndex, UpdatedGame2),
+	get_board(UpdatedGame2, Board),
 
 	%trigger_special(UpdatedGame2, _, UpdatedGame3),
 
 	get_waiter(Game, Waiter),
 	nth0(1, Waiter, TableIndex),
 	nth1(TableIndex, Board, Table),
+	write('Esta e a table'), write(Table),
 
   	check_majority(UpdatedGame2, Table, UpdatedGame),
+		get_tracker(UpdatedGame, Majority), write('Tracker pos check_majority'),
+		write(Majority), nl,
   	check_win(UpdatedGame).
 
  bot_play_turn_normal(Game, UpdatedGame) :-
