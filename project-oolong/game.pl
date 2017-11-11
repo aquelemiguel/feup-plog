@@ -1,18 +1,14 @@
 init_game(Game, GameMode, BotDifficulty) :-
   empty_board(Board),
 
-  special_actions(Special),
+  special_actions(TempSpecial),
+  random_permutation(TempSpecial, TempShuffled),
 
-  trim_tail(Special, 5, Head),
-  random_permutation(Head, ShuffledHead),
+  trim_tail(TempShuffled, 4, Head),
+  trim_head(TempShuffled, 4, Tail),
 
-  trim_head(Special, 5, Tail),
-  random_permutation(Tail, ShuffledTail),
-
-  append(ShuffledHead, ['Empty'], Shuffled1),
-  append(Shuffled1, ShuffledTail, Shuffled),
-
-  write(Shuffled),
+  append(Head, ['Empty'], Shuffled1),
+  append(Shuffled1, Tail, Shuffled),
 
   majority_tracker(Tracker),
 
@@ -158,6 +154,6 @@ empty_board([
   [x, x, x, x, x, x, x, x, x]]
 ).
 
-special_actions(['MoveBlack', 'MoveGreen', 'WaiterBlack', 'WaiterGreen', 'Empty', 'Rotate1', 'Rotate2', 'SwapUnclaimed', 'SwapMixed']).
+special_actions(['MoveBlack', 'MoveGreen', 'WaiterBlack', 'WaiterGreen', 'Rotate1', 'Rotate2', 'SwapUnclaimed', 'SwapMixed']).
 
 majority_tracker([x, x, x, x, x, x, x, x, x]).
