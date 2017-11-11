@@ -1,5 +1,4 @@
 :- use_module(library(lists)).
-:- use_module(library(unicode)).
 :- use_module(library(random)).
 
 :- include('game.pl').
@@ -145,7 +144,7 @@ validate_move(Game, SeatIndex) :-
 
   Seat = x.
 
-validate_move(Game, SeatIndex) :-
+validate_move(_, SeatIndex) :-
   (SeatIndex < 1; SeatIndex > 9),
   write('Seat out of bounds!'), fail.
 
@@ -163,7 +162,6 @@ validate_move(Game, SeatIndex) :-
 validate_move(Game, SeatIndex) :-
 
   get_board(Game, Board),
-  get_table_index(Game, TableIndex),
 
   nth1(SeatIndex, Board, Table),
   count(x, Table, CountEmpty),
@@ -174,41 +172,16 @@ validate_move(Game, SeatIndex) :-
 /**
   @desc Triggers the special markers.
 */
-trigger_special(Game, TableIndex, UpdatedGame) :-
-
-  get_board(Game, Board),
-  nth1(TableIndex, Board, Table),
-  get_special(Game, Special),
-
-  TableIndex = 5, % Ignores the center table.
-
-  append(Game, [], UpdatedGame),
-  write('Center has no special markers assigned.'), nl.
 
 trigger_special(Game, TableIndex, UpdatedGame) :-
 
-  get_board(Game, Board),
   get_special(Game, Special),
-
-  TableIndex < 5,
   nth1(TableIndex, Special, Marker),
 
   write('The index '), write(TableIndex), write(' has the marker '), write(Marker), write('.'), nl,
   handle_specific_special(Game, TableIndex, Marker, UpdatedGame).
 
-trigger_special(Game, TableIndex, UpdatedGame) :-
-
-  get_board(Game, Board),
-  get_special(Game, Special),
-
-  TableIndex > 5,
-  DecrementedTableIndex is TableIndex - 1,
-  nth1(DecrementedTableIndex, Special, Marker),
-
-  write('The index '), write(TableIndex), write(' has the marker '), write(Marker), write('.'), nl,
-  handle_specific_special(Game, TableIndex, Marker, UpdatedGame).
-
-trigger_special(Game, TableIndex, UpdatedGame) :- append(Game, [], UpdatedGame). % No special marker was triggered.
+trigger_special(Game, _, UpdatedGame) :- append(Game, [], UpdatedGame). % No special marker was triggered.
 
 /**
   @desc ROTATE special marker handler.
@@ -402,7 +375,6 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
   replace(NewBoard, LessTableIndex2, NewTable2, FinalBoard),
 
 
-
   replace(Game, 0, FinalBoard, UpdatedGame),
 
   write('Piece switched!'), nl.
@@ -419,8 +391,15 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
 
   update_waiter(Game, TableIndex2, UpdatedGame).
 
-
-
-
 handle_specific_special(Game, _, _, UpdatedGame) :-
   append(Game, [], UpdatedGame).
+
+/**
+  @desc If a marker triggers but cannot be executed, it's unbinded from the table.
+        e.g. SWAPMIXED is triggered but there aren't any claimed tables.
+*/
+unbind_marker_from_table(Game, TableIndex, UpdatedGame) :-
+
+  get_special(Game, Special),
+  replace(Special, TableIndex, 'Empty', NewSpecial),
+  replace(Game, 2, NewSpecial, UpdatedGame).

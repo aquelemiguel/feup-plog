@@ -34,15 +34,15 @@ bot_play_turn_normal(Game, UpdatedGame) :-
 	%parse_invalid_moves(Game, Ratings, 1, DefinitelyRatings),
 
 	max_list(Ratings, Max),
-	get_random_max_index(Game, Max, Ratings, SeatIndex), write(Ratings), nl,
+	get_random_max_index(Max, Ratings, SeatIndex), write(Ratings), nl,
 	
 	nth1(SeatIndex, Ratings, Max), %write(SeatIndex),
 
 	place_piece(Game, SeatIndex, UpdatedGame2),
 
-	trigger_special(UpdatedGame2, TableIndex, UpdatedGame3),
+	trigger_special(UpdatedGame2, _, UpdatedGame3),
 
-  	check_majority(UpdatedGame3, Table, UpdatedGame),
+  	check_majority(UpdatedGame3, _, UpdatedGame),
   	check_win(UpdatedGame).
 
  bot_play_turn_normal(Game, UpdatedGame) :- 
@@ -52,14 +52,14 @@ bot_play_turn_normal(Game, UpdatedGame) :-
 /**
   @desc
 */
-get_random_max_index(Game, Max, List, SeatIndex) :-
+get_random_max_index(Max, List, SeatIndex) :-
 	
 	random_between(1, 9, Random),
 	nth1(Random, List, Elem),
 	Elem = Max,
 	SeatIndex is Random.
 
-get_random_max_index(Game, Max, List, SeatIndex) :- get_random_max_index(Game, Max, List, SeatIndex).
+get_random_max_index(Max, List, SeatIndex) :- get_random_max_index(Max, List, SeatIndex).
 
 
 /**

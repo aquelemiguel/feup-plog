@@ -46,29 +46,29 @@ print_block(Game, [O_H|O_T], [H|T], Line0, OriginalTable, TableIndex, SeatIndex)
 print_piece(Game, Piece, Table, Seat) :-
   check_waiter(Game, Table, Seat),
   Piece = x,
-  ansi_format([bg(red)], ' - ', []).
+  ansi_format([fg(black), bg(red)], ' ~w ', ['-']).
 
-print_piece(Game, Piece, Table, Seat) :-
+print_piece(_, Piece, _, _) :-
   Piece = x,
-  ansi_format([fg(black)], ' - ', []).
+  ansi_format([fg(black)], ' ~w ', ['-']).
 
 print_piece(Game, Piece, Table, Seat) :-
   check_waiter(Game, Table, Seat),
   Piece = b,
-  ansi_format([fg(black), bg(red)], ' B ', []).
+  ansi_format([fg(black), bg(red)], ' ~w ', ["\u25CF"]).
 
-print_piece(Game, Piece, Table, Seat) :-
+print_piece(_, Piece, _, _) :-
   Piece = b,
-  ansi_format([fg(black)], ' B ', []).
+  ansi_format([fg(black)], ' ~w ', ["\u25CF"]).
 
 print_piece(Game, Piece, Table, Seat) :-
   check_waiter(Game, Table, Seat),
   Piece = g,
-  ansi_format([fg(green), bg(red)], ' G ', []).
+  ansi_format([fg(green), bg(red)], ' ~w ', ["\u25CF"]).
 
-print_piece(Game, Piece, Table, Seat) :-
+print_piece(_, Piece, _, _) :-
   Piece = g,
-  ansi_format([fg(green)], ' G ', []).
+  ansi_format([fg(green)], ' ~w ', ["\u25CF"]).
 
 /**
   @desc Checks whether the waiter is standing in the current printing position.

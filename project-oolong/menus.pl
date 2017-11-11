@@ -1,5 +1,3 @@
-% TODO: Remove the 'if...else' statement here.
-
 main_menu :-
   clear_console,
   nl,
@@ -35,7 +33,7 @@ gamemode_menu :-
 
   read(Input), (
   Input == 1 -> difficulty_menu_single_player;
-  Input == 2 -> init_game(Game, 2, _);
+  Input == 2 -> init_game(_, 2, _);
   Input == 3 -> difficulty_menu_skynet;
   Input == 4 -> main_menu
   ).
@@ -53,8 +51,8 @@ difficulty_menu_single_player :-
   write('   `-=..________..--\'     '), nl, nl,
 
   read(Input), (
-  Input == 1 -> init_game(Game, 1, easy);
-  Input == 2 -> init_game(Game, 1, normal);
+  Input == 1 -> init_game(_, 1, easy);
+  Input == 2 -> init_game(_, 1, normal);
   Input == 3 -> gamemode_menu
   ).
 
@@ -71,8 +69,8 @@ difficulty_menu_skynet :-
   write('   `-=..________..--\'     '), nl, nl,
 
   read(Input), (
-  Input == 1 -> init_game(Game, 3, easy);
-  Input == 2 -> init_game(Game, 3, normal);
+  Input == 1 -> init_game(_, 3, easy);
+  Input == 2 -> init_game(_, 3, normal);
   Input == 3 -> gamemode_menu
   ).
 
@@ -174,7 +172,6 @@ menu_rotate_tile(Game, Orientation, Turns) :-
 
   get_gamemode(Game, Gamemode),
   get_turn(Game, Player),
-  get_table_index(Game, TableIndex),
 
   ((Gamemode = 1, Player = g); Gamemode = 3), % Automatic input if it's Skynet Mode or the bot's turn on Single Player.
 

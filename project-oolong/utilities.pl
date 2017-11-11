@@ -58,10 +58,10 @@ check_unclaimed_table(Game, TableIndex) :-
   get_board(Game, Board),
   nth1(TableIndex, Board, Table),
 
-  count(b, ActualTable1, CountB), count(g, ActualTable1, CountG),
+  count(b, Table, CountB), count(g, Table, CountG),
   CountB < 5, CountG < 5.
 
-check_unclaimed_table(Game, TableIndex) :-
+check_unclaimed_table(_, _) :-
   write('Selected table has already been claimed!'), nl, fail.
 
 /**
@@ -75,7 +75,7 @@ check_claimed_table(Game, TableIndex) :-
   count(b, Table, CountB), count(g, Table, CountG),
   (CountB >= 5; CountG >= 5).
 
-check_claimed_table(Game, TableIndex) :-
+check_claimed_table(_, _) :-
   write('Selected table is still unclaimed!'), nl, fail.
 
 /**
@@ -120,7 +120,7 @@ check_exists_any_unclaimed(Game, Index) :-
 check_index_out_of_bounds(Index) :-
   Index > 0, Index < 10.
 
-check_index_out_of_bounds(Index) :-
+check_index_out_of_bounds(_) :-
   write('Index out of bounds!'), nl, fail.
 
 

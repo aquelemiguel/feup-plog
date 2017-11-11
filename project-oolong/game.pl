@@ -3,11 +3,20 @@ init_game(Game, GameMode, BotDifficulty) :-
 
   special_actions(Special),
 
-  random_permutation(Special, ShuffledSpecial),
+  trim_tail(Special, 5, Head),
+  random_permutation(Head, ShuffledHead),
+
+  trim_head(Special, 5, Tail),
+  random_permutation(Tail, ShuffledTail),
+
+  append(ShuffledHead, ['Empty'], Shuffled1),
+  append(Shuffled1, ShuffledTail, Shuffled),
+
+  write(Shuffled),
 
   majority_tracker(Tracker),
 
-  Game = [Board, Tracker, ShuffledSpecial, b, 5, [5,5], GameMode, BotDifficulty],
+  Game = [Board, Tracker, Shuffled, b, 5, [5,5], GameMode, BotDifficulty],
   game_loop(Game).
 
 % Game class getters.
@@ -81,7 +90,7 @@ check_majority(Game, Table, UpdatedGame) :-
   get_table_index(Game, TableIndex),
   add_to_tracker(Game, g, TableIndex, UpdatedGame).
 
-check_majority(Game, Table, UpdatedGame) :-
+check_majority(Game, _, UpdatedGame) :-
   append(Game, [], UpdatedGame). % Copies the unaltered game class to UpdatedGame so check_win functions correctly.
 
 /**
@@ -99,7 +108,7 @@ check_win(Game) :-
   CountG >= 5,
   write('Green wins!').
 
-check_win(Game).
+check_win(_).
 
 /**
   @desc Updates the majority tracker and refreshes it on the game class.
@@ -143,6 +152,6 @@ empty_board([
   [x, x, x, x, x, x, x, x, x]]
 ).
 
-special_actions(['MoveBlack', 'MoveGreen', 'WaiterBlack', 'WaiterGreen', 'Rotate1', 'Rotate2', 'SwapUnclaimed', 'SwapMixed']).
+special_actions(['MoveBlack', 'MoveGreen', 'WaiterBlack', 'WaiterGreen', 'Empty', 'Rotate1', 'Rotate2', 'SwapUnclaimed', 'SwapMixed']).
 
 majority_tracker([x, x, x, x, x, x, x, x, x]).
