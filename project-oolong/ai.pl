@@ -8,7 +8,7 @@ bot_play_turn_easy(Game, UpdatedGame) :-
 
 	get_waiter(Game, Waiter),
 	nth0(0, Waiter, TableIndex),
-	
+
 	nth1(TableIndex, Board, Table),
 
 	random_between(1, 9, SeatIndex),
@@ -36,11 +36,12 @@ bot_play_turn_normal(Game, UpdatedGame) :-
 	parse_invalid_moves(Game, Ratings, 1, FinalRatings),
 
 	max_list(FinalRatings, Max),
-	get_random_max_index(Max, FinalRatings, SeatIndex), write(FinalRatings), nl,
-	
-	nth1(SeatIndex, Ratings, Max), %write(SeatIndex),
+	ite(Max = -1, (select_when_full(Game, NewGame), append(NewGame, [], TempGame)), append(Game, [], TempGame)),
 
-	place_piece(Game, SeatIndex, UpdatedGame2),
+	get_random_max_index(Max, FinalRatings, SeatIndex),
+	nth1(SeatIndex, Ratings, Max),
+
+	place_piece(TempGame, SeatIndex, UpdatedGame2),
 
 	trigger_special(UpdatedGame2, _, UpdatedGame3),
 
@@ -50,6 +51,31 @@ bot_play_turn_normal(Game, UpdatedGame) :-
  bot_play_turn_normal(Game, UpdatedGame) :- 
  	append(Game, [], UpdatedGame), 
  	bot_play_turn_normal(Game, UpdatedGame). % If bot performs an invalid play.
+
+/**
+  @desc When the bot gets sent to a table which is full, it attempts to select a non-full table.
+  		This predicate is only used by the smarter difficulty bot.
+*/
+select_when_full(Game, UpdatedGame) :-
+	
+	random_between(1, 9, RandomIndex),
+	check_table_is_full(Game, RandomIndex),
+	update_waiter(Game, RandomIndex, UpdatedGame).
+
+select_when_full(Game, UpdatedGame) :- select_when_full(Game, UpdatedGame).
+
+/**
+  @desc Fails if the provided table is full.
+  		In case the bot is sent to a full table, it tries to select a non-full table to play on.
+*/
+check_table_is_full(Game, TableIndex) :-
+	
+	get_table(Game, TableIndex, Table),
+	count(x, Table, EmptyCount),
+	EmptyCount = 0.
+
+check_table_is_full(_, _) :- fail.
+
 
 /**
   @desc

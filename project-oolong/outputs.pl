@@ -1,13 +1,14 @@
 /**
   @desc Prints the full game board.
 */
-print_board(_, [], _).
+print_board(_, [], _) :- print_formatted_line(top), nl, nl.
 print_board(Game, [H|T], TableIndex) :-
 
   length([H|T], MatrixSize),
   TrimSize is MatrixSize - 3,
   trim_tail([H|T], TrimSize, Block), % Divides the board into a smaller 9x3 block.
 
+  print_formatted_line(top), nl,
   print_block(Game, Block, Block, 0, TableIndex, TableIndex, 0),
   NewTableIndex is TableIndex + 3,
 
@@ -17,8 +18,14 @@ print_board(Game, [H|T], TableIndex) :-
 /**
   Prints a 9x3 block, e.g. the full North block (NW, N, NE).
 */
-print_block(_, _, _, 9, _, _, _).
+print_block(_, _, _, 9, _, _, _) :- 
+  write('\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b'),
+  write('\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b'),
+  write('\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b').
+
 print_block(Game, [O_H|O_T], [H|T], Line0, OriginalTable, TableIndex, SeatIndex) :-
+  
+  write('|'), 
 
   Line1 is Line0 + 1,
   Line2 is Line1 + 1,
@@ -36,8 +43,18 @@ print_block(Game, [O_H|O_T], [H|T], Line0, OriginalTable, TableIndex, SeatIndex)
   NewTableIndex is TableIndex + 1,
 
   % TODO: Remove else-if statement.
-  (T = [] -> nl, nl, Asdf is OriginalTable, print_block(Game, [O_H|O_T], [O_H|O_T], NewLine, OriginalTable, Asdf, NewSeatIndex3);
+  (T = [] -> write('|'), nl, print_formatted_line(medium), nl, Asdf is OriginalTable, print_block(Game, [O_H|O_T], [O_H|O_T], NewLine, OriginalTable, Asdf, NewSeatIndex3);
              print_block(Game, [O_H|O_T], T, Line0, OriginalTable, NewTableIndex, SeatIndex)).
+
+/**
+  @desc Prints a formatted pretty line.
+*/
+print_formatted_line(top) :-
+  write('o---------o---------o---------o').
+
+print_formatted_line(medium) :-
+  write('|         |         |         |').
+
 
 /**
   @desc Prints a single piece, according to its type.
