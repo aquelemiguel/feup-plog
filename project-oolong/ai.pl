@@ -31,10 +31,10 @@ bot_play_turn_easy(Game, UpdatedGame) :-
 bot_play_turn_normal(Game, UpdatedGame) :-
 
 	return_play_ratings(Game, 0, [], Ratings),
-	%parse_invalid_moves(Game, Ratings, 1, DefinitelyRatings),
+	parse_invalid_moves(Game, Ratings, 1, FinalRatings),
 
-	max_list(Ratings, Max),
-	get_random_max_index(Max, Ratings, SeatIndex), write(Ratings), nl,
+	max_list(FinalRatings, Max),
+	get_random_max_index(Max, FinalRatings, SeatIndex), write(FinalRatings), nl,
 	
 	nth1(SeatIndex, Ratings, Max), %write(SeatIndex),
 
@@ -86,13 +86,22 @@ return_play_ratings(Game, SeatIndex, Ratings, DefinitelyRatings) :-
 /**
   @desc
 */
-parse_invalid_moves(_, _, 10, _).
+parse_invalid_moves(_, Ratings, 10, FinalRatings) :- append(Ratings, [], FinalRatings).
 
 parse_invalid_moves(Game, Ratings, Index, FinalRatings) :-
 	
 	validate_move(Game, Index),
 	NewIndex is Index + 1,
 	parse_invalid_moves(Game, Ratings, NewIndex, FinalRatings).
+
+parse_invalid_moves(Game, Ratings, Index, FinalRatings) :- 
+	
+	LessIndex is Index - 1,
+	replace(Ratings, LessIndex, -1, UpdatedRatings),
+	NewIndex is Index + 1,
+	parse_invalid_moves(Game, UpdatedRatings, NewIndex, FinalRatings).
+	
+
 
 
 /**

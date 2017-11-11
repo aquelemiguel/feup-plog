@@ -123,6 +123,12 @@ check_index_out_of_bounds(Index) :-
 check_index_out_of_bounds(_) :-
   write('Index out of bounds!'), nl, fail.
 
+/**
+  @desc If/ then/ else predicate.
+*/
+ite(If, Then, _) :- If, !, Then.
+ite(_, _, Else) :- Else.
+
 
 
 
