@@ -29,12 +29,14 @@ bot_play_turn_easy(Game, UpdatedGame) :-
 		If two choices are equally good, it randomly picks one.
 */
 bot_play_turn_normal(Game, UpdatedGame) :-
+
+	return_play_ratings(Game, 0, [], Ratings),
+	%parse_invalid_moves(Game, Ratings, 1, DefinitelyRatings),
+
+	max_list(Ratings, Max),
+	get_random_max_index(Game, Max, Ratings, SeatIndex), write(Ratings), nl,
 	
-	return_play_ratings(Game, 0, NewRatings, DefinitelyRatings), write(DefinitelyRatings), nl,
-	max_list(DefinitelyRatings, Max),
-	get_random_max_index(Max, DefinitelyRatings, SeatIndex), write('gotototoot: '), write(SeatIndex), nl,
-	
-	nth1(SeatIndex, DefinitelyRatings, Max), %write(SeatIndex),
+	nth1(SeatIndex, Ratings, Max), %write(SeatIndex),
 
 	place_piece(Game, SeatIndex, UpdatedGame2),
 
@@ -50,21 +52,20 @@ bot_play_turn_normal(Game, UpdatedGame) :-
 /**
   @desc
 */
-get_random_max_index(Max, List, SeatIndex) :-
-
+get_random_max_index(Game, Max, List, SeatIndex) :-
+	
 	random_between(1, 9, Random),
-	validate_move(Game, Random),
 	nth1(Random, List, Elem),
 	Elem = Max,
 	SeatIndex is Random.
 
-get_random_max_index(Max, List, SeatIndex) :- get_random_max_index(Max, List, SeatIndex).
+get_random_max_index(Game, Max, List, SeatIndex) :- get_random_max_index(Game, Max, List, SeatIndex).
 
 
 /**
   @desc
 */
-return_play_ratings(_, 9, NewRatings, DefinitelyRatings) :- append(NewRatings, [], DefinitelyRatings).
+return_play_ratings(_, 9, Ratings, DefinitelyRatings) :- append(Ratings, [], DefinitelyRatings).
 
 return_play_ratings(Game, SeatIndex, Ratings, DefinitelyRatings) :-
 
@@ -81,6 +82,18 @@ return_play_ratings(Game, SeatIndex, Ratings, DefinitelyRatings) :-
 	NewIndex is SeatIndex + 1,
 
 	return_play_ratings(Game, NewIndex, NewRatings, DefinitelyRatings).
+
+/**
+  @desc
+*/
+parse_invalid_moves(_, _, 10, _).
+
+parse_invalid_moves(Game, Ratings, Index, FinalRatings) :-
+	
+	validate_move(Game, Index),
+	NewIndex is Index + 1,
+	parse_invalid_moves(Game, Ratings, NewIndex, FinalRatings).
+
 
 /**
   @desc

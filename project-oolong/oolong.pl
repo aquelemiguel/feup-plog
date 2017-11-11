@@ -1,5 +1,6 @@
 :- use_module(library(lists)).
 :- use_module(library(unicode)).
+:- use_module(library(random)).
 
 :- include('game.pl').
 :- include('menus.pl').
