@@ -18,14 +18,16 @@ print_board(Game, [H|T], TableIndex) :-
 /**
   Prints a 9x3 block, e.g. the full North block (NW, N, NE).
 */
-print_block(_, _, _, 9, _, _, _) :- 
+print_block(_, _, _, 9, _, _, _) :-
   write('\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b'),
   write('\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b'),
-  write('\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b').
+  write('\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b'),
+  write('\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b'),
+  write('\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b').
 
 print_block(Game, [O_H|O_T], [H|T], Line0, OriginalTable, TableIndex, SeatIndex) :-
-  
-  write('|'), 
+
+  write('|'),
 
   Line1 is Line0 + 1,
   Line2 is Line1 + 1,

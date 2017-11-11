@@ -63,15 +63,13 @@ place_piece(Game, SeatIndex, UpdatedGame) :-
   replace(Table, SeatTempIndex, Player, NewTable),
   replace(Board, TableTempIndex, NewTable, NewBoard),
 
-  write(SeatIndex),
-
   update_waiter(Game, SeatIndex, WaiterFixed),
-  %get_waiter(Game, Waiter2),
-  %write(Waiter2),
 
   replace(WaiterFixed, 0, NewBoard, TempGame),
-  get_waiter(WaiterFixed, Waiter2),
-  write(Waiter2),
+  get_tracker(Game, Tracker),
+  write('Este e o tracker do place_piece'),
+  write(Tracker),nl,
+
   switch_turn(TempGame, UpdatedGame).
 
 /**
@@ -79,16 +77,18 @@ place_piece(Game, SeatIndex, UpdatedGame) :-
 */
 check_majority(Game, Table, UpdatedGame) :-
   count(b, Table, CountB),
-  CountB >= 5,
+  CountB = 5,
   get_waiter(Game, Waiter),
-  nth0(0, Waiter, TableIndex),
+  nth0(1, Waiter, TableIndex),
+  write('Este e o tableindex do check_majority:'),
+  write(TableIndex),nl,
   add_to_tracker(Game, b, TableIndex, UpdatedGame).
 
 check_majority(Game, Table, UpdatedGame) :-
   count(g, Table, CountG),
-  CountG >= 5,
+  CountG = 5,
   get_waiter(Game, Waiter),
-  nth0(0, Waiter, TableIndex),
+  nth0(1, Waiter, TableIndex),
   add_to_tracker(Game, g, TableIndex, UpdatedGame).
 
 check_majority(Game, _, UpdatedGame) :-
@@ -101,13 +101,15 @@ check_win(Game) :-
   get_tracker(Game, Tracker),
   count(b, Tracker, CountB),
   CountB >= 5,
-  write('Black wins!').
+  write('Black wins!'),
+  fail.
 
 check_win(Game) :-
   get_tracker(Game, Tracker),
   count(g, Tracker, CountG),
   CountG >= 5,
-  write('Green wins!').
+  write('Green wins!'),
+  fail.
 
 check_win(_).
 
@@ -115,8 +117,12 @@ check_win(_).
   @desc Updates the majority tracker and refreshes it on the game class.
 */
 add_to_tracker(Game, Player, TableIndex, UpdatedGame) :-
-  get_tracker(Game, Tracker),
-  replace(Tracker, TableIndex, Player, UpdatedTracker),
+  get_tracker(Game, Tracker),nl,
+  TableTempIndex is TableIndex - 1,
+  write('Supostamente este e o tableindex que devia ser substituido no tracker:'), write(TableTempIndex),
+  replace(Tracker, TableTempIndex, Player, UpdatedTracker),
+  get_tracker(Game, Tracker2),nl,
+  write('Este e o tracker:'),write(Tracker2), nl,
   replace(Game, 1, UpdatedTracker, UpdatedGame).
 
 /**
@@ -126,7 +132,6 @@ update_waiter(Game, SeatIndex, WaiterFixed) :-
   get_waiter(Game, Waiter),
 
   nth0(0, Waiter, ArraySeatIndex),
-  write([SeatIndex, ArraySeatIndex]),
 
   replace(Game, 4, [SeatIndex, ArraySeatIndex], WaiterFixed).
 

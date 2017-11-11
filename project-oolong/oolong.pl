@@ -101,6 +101,7 @@ game_loop(Game) :-
   clear_console,
   get_board(Game, Board),
   print_board(Game, Board, 0),
+  get_tracker(Game, Tracker),
 
   bot_play_turn_normal(Game, UpdatedGame),
 
@@ -127,7 +128,7 @@ play_turn(Game, UpdatedGame) :-
 
   trigger_special(UpdatedGame2, TableIndex, UpdatedGame3),
 
-  check_majority(UpdatedGame3, Table, UpdatedGame),
+  check_majority(UpdatedGame2, Table, UpdatedGame),
   check_win(UpdatedGame).
 
 play_turn(Game, UpdatedGame) :- play_turn(Game, UpdatedGame).
