@@ -3,7 +3,7 @@
 		On EASY mode, the bot selects its piece positions randomly.
 */
 bot_play_turn_easy(Game, UpdatedGame) :-
-	
+
 	get_board(Game, Board),
 
 	get_waiter(Game, Waiter),
@@ -21,8 +21,8 @@ bot_play_turn_easy(Game, UpdatedGame) :-
   	check_majority(UpdatedGame3, Table, UpdatedGame),
   	check_win(UpdatedGame).
 
-bot_play_turn_easy(Game, UpdatedGame) :- 
-	append(Game, [], UpdatedGame), 
+bot_play_turn_easy(Game, UpdatedGame) :-
+	append(Game, [], UpdatedGame),
 	bot_play_turn_easy(Game, UpdatedGame). % If bot performs an invalid play.
 
 /**
@@ -43,13 +43,17 @@ bot_play_turn_normal(Game, UpdatedGame) :-
 
 	place_piece(TempGame, SeatIndex, UpdatedGame2),
 
-	trigger_special(UpdatedGame2, _, UpdatedGame3),
+	%trigger_special(UpdatedGame2, _, UpdatedGame3),
 
-  	check_majority(UpdatedGame3, _, UpdatedGame),
+	get_waiter(Game, Waiter),
+	nth0(1, Waiter, TableIndex),
+	nth1(TableIndex, Board, Table),
+
+  	check_majority(UpdatedGame2, Table, UpdatedGame),
   	check_win(UpdatedGame).
 
- bot_play_turn_normal(Game, UpdatedGame) :- 
- 	append(Game, [], UpdatedGame), 
+ bot_play_turn_normal(Game, UpdatedGame) :-
+ 	append(Game, [], UpdatedGame),
  	bot_play_turn_normal(Game, UpdatedGame). % If bot performs an invalid play.
 
 /**
@@ -57,7 +61,7 @@ bot_play_turn_normal(Game, UpdatedGame) :-
   		This predicate is only used by the smarter difficulty bot.
 */
 select_when_full(Game, UpdatedGame) :-
-	
+
 	random_between(1, 9, RandomIndex),
 	check_table_is_full(Game, RandomIndex),
 	update_waiter(Game, RandomIndex, UpdatedGame).
@@ -69,7 +73,7 @@ select_when_full(Game, UpdatedGame) :- select_when_full(Game, UpdatedGame).
   		In case the bot is sent to a full table, it tries to select a non-full table to play on.
 */
 check_table_is_full(Game, TableIndex) :-
-	
+
 	get_table(Game, TableIndex, Table),
 	count(x, Table, EmptyCount),
 	EmptyCount = 0.
@@ -81,7 +85,7 @@ check_table_is_full(_, _) :- fail.
   @desc
 */
 get_random_max_index(Max, List, SeatIndex) :-
-	
+
 	random_between(1, 9, Random),
 	nth1(Random, List, Elem),
 	Elem = Max,
@@ -101,7 +105,7 @@ return_play_ratings(Game, SeatIndex, Ratings, DefinitelyRatings) :-
 	get_opponent(Player, Opponent),
 
 	get_table(Game, SeatIndex, Table),
-	count(Player, Table, CountP), 
+	count(Player, Table, CountP),
 	count(Opponent, Table, CountO),
 
 	play_rating(CountP, CountO, Rating),
@@ -117,18 +121,18 @@ return_play_ratings(Game, SeatIndex, Ratings, DefinitelyRatings) :-
 parse_invalid_moves(_, Ratings, 10, FinalRatings) :- append(Ratings, [], FinalRatings).
 
 parse_invalid_moves(Game, Ratings, Index, FinalRatings) :-
-	
+
 	validate_move(Game, Index),
 	NewIndex is Index + 1,
 	parse_invalid_moves(Game, Ratings, NewIndex, FinalRatings).
 
-parse_invalid_moves(Game, Ratings, Index, FinalRatings) :- 
-	
+parse_invalid_moves(Game, Ratings, Index, FinalRatings) :-
+
 	LessIndex is Index - 1,
 	replace(Ratings, LessIndex, -1, UpdatedRatings),
 	NewIndex is Index + 1,
 	parse_invalid_moves(Game, UpdatedRatings, NewIndex, FinalRatings).
-	
+
 
 
 
@@ -199,9 +203,3 @@ play_rating(8, 0, 10).
 play_rating(8, 1, 0).
 
 play_rating(9, 0, 0).
-
-
-
-
-
-
