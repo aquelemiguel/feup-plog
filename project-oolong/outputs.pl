@@ -16,13 +16,16 @@ print_board(Game, [H|T], TableIndex) :-
   print_board(Game, Remain, NewTableIndex).
 
 /**
-  Prints a 9x3 block, e.g. the full North block (NW, N, NE).
+  @desc Don't ask.
 */
 print_block(_, _, _, 9, _, _, _) :- 
   write('\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b'),
   write('\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b'),
   write('\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b').
 
+/**
+  @desc Prints a 9x3 block, e.g. the full North block (NW, N, NE).
+*/
 print_block(Game, [O_H|O_T], [H|T], Line0, OriginalTable, TableIndex, SeatIndex) :-
   
   write('|'), 
@@ -38,22 +41,24 @@ print_block(Game, [O_H|O_T], [H|T], Line0, OriginalTable, TableIndex, SeatIndex)
   print_piece(Game, Elem2, TableIndex, NewSeatIndex1), NewSeatIndex2 is SeatIndex + 2,
   print_piece(Game, Elem3, TableIndex, NewSeatIndex2), NewSeatIndex3 is SeatIndex + 3,
 
+  write('|'),
+
   NewLine is Line0 + 3,
 
   NewTableIndex is TableIndex + 1,
 
   % TODO: Remove else-if statement.
-  (T = [] -> write('|'), nl, print_formatted_line(medium), nl, Asdf is OriginalTable, print_block(Game, [O_H|O_T], [O_H|O_T], NewLine, OriginalTable, Asdf, NewSeatIndex3);
+  (T = [] -> nl, print_formatted_line(medium), nl, Asdf is OriginalTable, print_block(Game, [O_H|O_T], [O_H|O_T], NewLine, OriginalTable, Asdf, NewSeatIndex3);
              print_block(Game, [O_H|O_T], T, Line0, OriginalTable, NewTableIndex, SeatIndex)).
 
 /**
   @desc Prints a formatted pretty line.
 */
 print_formatted_line(top) :-
-  write('o---------o---------o---------o').
+  write(' ---------  ---------  --------- ').
 
 print_formatted_line(medium) :-
-  write('|         |         |         |').
+  write('|         ||         ||         |').
 
 
 /**
