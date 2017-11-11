@@ -5,8 +5,10 @@
 bot_play_turn_easy(Game, UpdatedGame) :-
 	
 	get_board(Game, Board),
-	get_table_index(Game, TableIndex),
 
+	get_waiter(Game, Waiter),
+	nth0(0, Waiter, TableIndex),
+	
 	nth1(TableIndex, Board, Table),
 
 	random_between(1, 9, SeatIndex),

@@ -385,6 +385,10 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
 
   write('Piece switched!'), nl.
 
+/**
+  @desc WAITERBLACK special marker handler.
+        Triggered with x matching tokens.
+*/
 handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
   get_board(Game, Board),
   nth1(TableIndex, Board, Table),
@@ -394,6 +398,19 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
   CountB = 5,
 
   move_black_waiter(Game, TableIndex2),
+
+  update_waiter(Game, TableIndex, TempGame),
+  update_waiter(TempGame, TableIndex2, UpdatedGame).
+
+handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
+  get_board(Game, Board),
+  nth1(TableIndex, Board, Table),
+
+  Marker = 'WaiterGreen',
+  count(g, Table, CountG),
+  CountG = 5,
+
+  move_green_waiter(Game, TableIndex2),
 
   update_waiter(Game, TableIndex, TempGame),
   update_waiter(TempGame, TableIndex2, UpdatedGame).

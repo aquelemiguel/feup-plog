@@ -374,3 +374,20 @@ move_black_waiter(Game, TableIndex) :-
   ((Gamemode = 1, Player = b); Gamemode = 3), % Automatic input if it's Skynet Mode or the bot's turn on Single Player.
 
   random_between(1, 9, TableIndex).
+
+move_green_waiter(Game, TableIndex) :-
+
+  get_gamemode(Game, Gamemode),
+  get_turn(Game, Player),
+  ((Gamemode = 1, Player = g); Gamemode = 2), % Manual input if it's Multiplayer or the player's turn on Single Player.
+
+  write('WAITERGREEN has been activated! Select table where you want to move the waiter.'), nl,
+  read(TableIndex), nl.
+
+move_green_waiter(Game, TableIndex) :-
+
+  get_gamemode(Game, Gamemode),
+  get_turn(Game, Player),
+  ((Gamemode = 1, Player = g); Gamemode = 3), % Automatic input if it's Skynet Mode or the bot's turn on Single Player.
+
+  random_between(1, 9, TableIndex).

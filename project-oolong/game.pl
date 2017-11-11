@@ -10,6 +10,8 @@ init_game(Game, GameMode, BotDifficulty) :-
   append(Head, ['Empty'], Shuffled1),
   append(Shuffled1, Tail, Shuffled),
 
+  write(Shuffled),
+
   majority_tracker(Tracker),
 
   Game = [Board, Tracker, Shuffled, b, [5,5], GameMode, BotDifficulty],
@@ -34,12 +36,12 @@ get_waiter(Game, Waiter) :-
 get_gamemode(Game, GameMode) :-
   nth0(5, Game, GameMode).
 
+get_bot_difficulty(Game, Difficulty) :-
+  nth0(6, Game, Difficulty).
+
 get_table(Game, Index, Table) :-
   get_board(Game, Board),
   nth0(Index, Board, Table).
-
-get_bot_difficulty(Game, Difficulty) :-
-  nth0(6, Game, Difficulty).
 
 get_opponent(b, g).
 get_opponent(g, b).
@@ -68,12 +70,9 @@ place_piece(Game, SeatIndex, UpdatedGame) :-
   %write(Waiter2),
 
   replace(WaiterFixed, 0, NewBoard, TempGame),
-  get_waiter(Game, Waiter2),
+  get_waiter(WaiterFixed, Waiter2),
   write(Waiter2),
-  switch_turn(TempGame, AnotherTemp),
-
-  % TODO: Separate the SeatIndex switch from this predicate.
-  replace(AnotherTemp, 4, SeatIndex, UpdatedGame).
+  switch_turn(TempGame, UpdatedGame).
 
 /**
   @desc Determines whether a player has filled 5 out of 9 seats on a table, thus claiming majority on it.
