@@ -16,7 +16,7 @@ init_game(Game, GameMode, BotDifficulty) :-
 
   majority_tracker(Tracker),
 
-  Game = [Board, Tracker, Shuffled, b, 5, [5,5], GameMode, BotDifficulty],
+  Game = [Board, Tracker, Shuffled, b, [5,5], GameMode, BotDifficulty],
   game_loop(Game).
 
 % Game class getters.
@@ -32,21 +32,18 @@ get_special(Game, Special) :-
 get_turn(Game, Player) :-
   nth0(3, Game, Player).
 
-get_table_index(Game, TableIndex) :-
-  nth0(4, Game, TableIndex).
-
 get_waiter(Game, Waiter) :-
-  nth0(5, Game, Waiter).
+  nth0(4, Game, Waiter).
 
 get_gamemode(Game, GameMode) :-
-  nth0(6, Game, GameMode).
+  nth0(5, Game, GameMode).
 
 get_table(Game, Index, Table) :-
   get_board(Game, Board),
   nth0(Index, Board, Table).
 
 get_bot_difficulty(Game, Difficulty) :-
-  nth0(7, Game, Difficulty).
+  nth0(6, Game, Difficulty).
 
 get_opponent(b, g).
 get_opponent(g, b).
@@ -56,7 +53,8 @@ get_opponent(g, b).
 */
 place_piece(Game, SeatIndex, UpdatedGame) :-
   get_board(Game, Board),
-  get_table_index(Game, TableIndex),
+  get_waiter(Game, Waiter),
+  nth0(0, Waiter, TableIndex),
   get_turn(Game, Player),
 
   nth1(TableIndex, Board, Table),
@@ -67,9 +65,15 @@ place_piece(Game, SeatIndex, UpdatedGame) :-
   replace(Table, SeatTempIndex, Player, NewTable),
   replace(Board, TableTempIndex, NewTable, NewBoard),
 
+  write(SeatIndex),
+
   update_waiter(Game, SeatIndex, WaiterFixed),
+  %get_waiter(Game, Waiter2),
+  %write(Waiter2),
 
   replace(WaiterFixed, 0, NewBoard, TempGame),
+  get_waiter(Game, Waiter2),
+  write(Waiter2),
   switch_turn(TempGame, AnotherTemp),
 
   % TODO: Separate the SeatIndex switch from this predicate.
@@ -81,13 +85,15 @@ place_piece(Game, SeatIndex, UpdatedGame) :-
 check_majority(Game, Table, UpdatedGame) :-
   count(b, Table, CountB),
   CountB >= 5,
-  get_table_index(Game, TableIndex),
+  get_waiter(Game, Waiter),
+  nth0(0, Waiter, TableIndex),
   add_to_tracker(Game, b, TableIndex, UpdatedGame).
 
 check_majority(Game, Table, UpdatedGame) :-
   count(g, Table, CountG),
   CountG >= 5,
-  get_table_index(Game, TableIndex),
+  get_waiter(Game, Waiter),
+  nth0(0, Waiter, TableIndex),
   add_to_tracker(Game, g, TableIndex, UpdatedGame).
 
 check_majority(Game, _, UpdatedGame) :-
@@ -125,9 +131,9 @@ update_waiter(Game, SeatIndex, WaiterFixed) :-
   get_waiter(Game, Waiter),
 
   nth0(0, Waiter, ArraySeatIndex),
-  write('ESta e a nova mesa:'), write(SeatIndex),
+  write([SeatIndex, ArraySeatIndex]),
 
-  replace(Game, 5, [SeatIndex, ArraySeatIndex], WaiterFixed).
+  replace(Game, 4, [SeatIndex, ArraySeatIndex], WaiterFixed).
 
 % Switches current turn.
 switch_turn(Game, UpdatedGame) :-

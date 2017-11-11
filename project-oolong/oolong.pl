@@ -84,13 +84,13 @@ game_loop(Game) :-
   clear_console,
   get_board(Game, Board),
   print_board(Game, Board, 0),
-  
+
   bot_play_turn_easy(Game, UpdatedGame),
 
   game_loop(UpdatedGame).
 
 game_loop(Game) :-
-  
+
   get_gamemode(Game, Mode),
   get_bot_difficulty(Game, BotDifficulty),
 
@@ -101,7 +101,7 @@ game_loop(Game) :-
   clear_console,
   get_board(Game, Board),
   print_board(Game, Board, 0),
-  
+
   bot_play_turn_normal(Game, UpdatedGame),
 
   game_loop(UpdatedGame).
@@ -120,7 +120,9 @@ play_turn(Game, UpdatedGame) :-
   place_piece(Game, SeatIndex, UpdatedGame2),
 
   get_board(UpdatedGame2, Board),
-  get_table_index(Game, TableIndex),
+  get_waiter(Game, Waiter),
+  nth0(0, Waiter, TableIndex),
+
   nth1(TableIndex, Board, Table),
 
   trigger_special(UpdatedGame2, TableIndex, UpdatedGame3),
@@ -137,7 +139,9 @@ validate_move(Game, SeatIndex) :-
   SeatIndex >= 1, SeatIndex =< 9,
 
   get_board(Game, Board),
-  get_table_index(Game, TableIndex),
+  get_waiter(Game, Waiter),
+
+  nth0(0, Waiter, TableIndex),
 
   nth1(TableIndex, Board, Table),
   nth1(SeatIndex, Table, Seat),
@@ -151,7 +155,9 @@ validate_move(_, SeatIndex) :-
 validate_move(Game, SeatIndex) :-
 
   get_board(Game, Board),
-  get_table_index(Game, TableIndex),
+  get_waiter(Game, Waiter),
+
+  nth0(0, Waiter, TableIndex),
 
   nth1(TableIndex, Board, Table),
   nth1(SeatIndex, Table, Seat),
@@ -389,7 +395,8 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
 
   move_black_waiter(Game, TableIndex2),
 
-  update_waiter(Game, TableIndex2, UpdatedGame).
+  update_waiter(Game, TableIndex, TempGame),
+  update_waiter(TempGame, TableIndex2, UpdatedGame).
 
 handle_specific_special(Game, _, _, UpdatedGame) :-
   append(Game, [], UpdatedGame).
