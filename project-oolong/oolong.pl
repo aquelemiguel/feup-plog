@@ -32,8 +32,9 @@ game_loop(Game) :-
 
   sleep_time(SleepTime), sleep(SleepTime),
   bot_play_turn_easy(UpdatedGame, UpdatedGame2),
+  switch_turn(UpdatedGame2, FinalGame),
 
-  game_loop(UpdatedGame2).
+  game_loop(FinalGame).
 
 game_loop(Game) :-
   get_gamemode(Game, Mode),
@@ -53,8 +54,10 @@ game_loop(Game) :-
   write('Bot is thinking...'), nl,
   sleep_time(SleepTime), sleep(SleepTime),
   bot_play_turn_normal(UpdatedGame, UpdatedGame2),
+  switch_turn(UpdatedGame2, FinalGame),
 
-  game_loop(UpdatedGame2).
+
+  game_loop(FinalGame).
 
 /**
   @desc Main game loop for the Player vs Player gamemode.
@@ -85,7 +88,8 @@ game_loop(Game) :-
   get_board(Game, Board),
   print_board(Game, Board, 0),
 
-  bot_play_turn_easy(Game, UpdatedGame),
+  bot_play_turn_easy(Game, TempGame),
+  switch_turn(TempGame, UpdatedGame),
 
   game_loop(UpdatedGame).
 
@@ -102,7 +106,8 @@ game_loop(Game) :-
   get_board(Game, Board),
   print_board(Game, Board, 0),
 
-  bot_play_turn_normal(Game, UpdatedGame),
+  bot_play_turn_normal(Game, TempGame),
+  switch_turn(TempGame, UpdatedGame),
 
   game_loop(UpdatedGame).
 
@@ -126,7 +131,16 @@ play_turn(Game, UpdatedGame) :-
 
   trigger_special(UpdatedGame2, TableIndex, UpdatedGame3),
 
-  check_majority(UpdatedGame3, Table, UpdatedGame),
+  get_board(UpdatedGame3, Board2),
+  nth1(TableIndex, Board2, Table2),
+
+  check_majority(UpdatedGame3, Table2, TempGame),
+
+  get_tracker(TempGame, YayTracker),
+
+  write('Este e o tracker pos switch: '), write(YayTracker),nl,
+
+  switch_turn(TempGame, UpdatedGame),
   check_win(UpdatedGame).
 
 play_turn(Game, UpdatedGame) :- play_turn(Game, UpdatedGame).
@@ -275,9 +289,20 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
   % Switches the provided tables.
   replace(Board, LessTableIndex1, Table2, TempBoard),
   replace(TempBoard, LessTableIndex2, Table1, FinalBoard),
+
   replace(Game, 0, FinalBoard, TempGame),
 
-  unbind_marker_from_table(TempGame, LessTableIndex, UpdatedGame),
+  unbind_marker_from_table(TempGame, LessTableIndex, UpdatedGame2),
+
+  get_tracker(UpdatedGame2, Tracker),
+  get_turn(UpdatedGame2, Player),
+  replace(Tracker, LessTableIndex2, Player, TempTracker),
+  replace(TempTracker, LessTableIndex1, x, FinalTracker),
+  replace(UpdatedGame2, 1, FinalTracker, UpdatedGame),
+
+  get_tracker(UpdatedGame, YayTracker),
+
+  write('Este e o tracker pos switch: '), write(YayTracker),nl,
 
   write('Tables switched!'), nl.
 
@@ -316,9 +341,10 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
   replace(NewBoard, LessTableIndex2, NewTable2, FinalBoard),
 
   replace(Game, 0, FinalBoard, TempGame),
+  check_majority(TempGame, NewTable2, TempGame2),
 
   Asdf is TableIndex - 1,
-  unbind_marker_from_table(TempGame, Asdf, UpdatedGame),
+  unbind_marker_from_table(TempGame2, Asdf, UpdatedGame),
 
   write('Piece switched!'), nl.
 
@@ -359,7 +385,9 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
   replace(Game, 0, FinalBoard, TempGame),
 
   Asdf is TableIndex - 1,
-  unbind_marker_from_table(TempGame, Asdf, UpdatedGame),
+  unbind_marker_from_table(TempGame, Asdf, UpdatedGame2),
+
+  check_majority(UpdatedGame2, NewTable2, UpdatedGame),
 
   write('Piece switched!'), nl.
 

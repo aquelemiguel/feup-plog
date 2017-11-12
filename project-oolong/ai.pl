@@ -4,16 +4,16 @@
 */
 bot_play_turn_easy(Game, UpdatedGame) :-
 
-	random_between(1, 9, SeatIndex), 
+	random_between(1, 9, SeatIndex),
 
 	validate_move(Game, SeatIndex),
 	place_piece(Game, SeatIndex, UpdatedGame2),
 
-	get_board(UpdatedGame2, Board), 
+	get_board(UpdatedGame2, Board),
 	get_waiter(UpdatedGame2, Waiter),
 
-	nth0(1, Waiter, TableIndex), 
-	nth1(TableIndex, Board, Table), 
+	nth0(1, Waiter, TableIndex),
+	nth1(TableIndex, Board, Table),
 
 	trigger_special(UpdatedGame2, TableIndex, UpdatedGame3), !,
 

@@ -66,9 +66,7 @@ place_piece(Game, SeatIndex, UpdatedGame) :-
 
   update_waiter(Game, SeatIndex, WaiterFixed),
 
-  replace(WaiterFixed, 0, NewBoard, TempGame),
-
-  switch_turn(TempGame, UpdatedGame).
+  replace(WaiterFixed, 0, NewBoard, UpdatedGame).
 
 /**
   @desc Determines whether a player has filled 5 out of 9 seats on a table, thus claiming majority on it.
@@ -98,14 +96,14 @@ check_win(Game) :-
   count(b, Tracker, CountB),
   CountB >= 5,
   write('Black wins!'),
-  fail.
+  halt.
 
 check_win(Game) :-
   get_tracker(Game, Tracker),
   count(g, Tracker, CountG),
   CountG >= 5,
   write('Green wins!'),
-  fail.
+  halt.
 
 check_win(_).
 
