@@ -68,8 +68,6 @@ bot_play_turn_normal(Game, UpdatedGame) :-
 
 	check_table_is_full(Game, CurrentTableIndex),
 
-	write(CurrentTableIndex),
-
 	table_full_menu_bot(Game, TableIndex, SeatIndex),
 
 	update_waiter_table(Game, TableIndex, NewGame),
@@ -136,7 +134,6 @@ check_table_is_full(Game, TableIndex) :-
 	TableIndex2 is TableIndex - 1,
 	get_table(Game, TableIndex2, Table),
 	count(x, Table, EmptyCount),
-	write(EmptyCount), nl,
 	EmptyCount = 0.
 
 check_table_is_full(_, _) :- fail.
