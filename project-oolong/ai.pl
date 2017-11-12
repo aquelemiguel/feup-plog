@@ -15,12 +15,11 @@ bot_play_turn_easy(Game, UpdatedGame) :-
 	nth0(1, Waiter, TableIndex), 
 	nth1(TableIndex, Board, Table), 
 
-
 	trigger_special(UpdatedGame2, TableIndex, UpdatedGame3),
 	!,
 
   	check_majority(UpdatedGame3, Table, UpdatedGame),
-  	check_win(UpdatedGame). 
+  	check_win(UpdatedGame).
 
 bot_play_turn_easy(Game, UpdatedGame) :-
 	append(Game, [], UpdatedGame),
