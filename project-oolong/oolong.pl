@@ -32,8 +32,9 @@ game_loop(Game) :-
 
   sleep_time(SleepTime), sleep(SleepTime),
   bot_play_turn_easy(UpdatedGame, UpdatedGame2),
+  switch_turn(UpdatedGame2, FinalGame),
 
-  game_loop(UpdatedGame2).
+  game_loop(FinalGame).
 
 game_loop(Game) :-
   get_gamemode(Game, Mode),
@@ -53,8 +54,10 @@ game_loop(Game) :-
   write('Bot is thinking...'), nl,
   sleep_time(SleepTime), sleep(SleepTime),
   bot_play_turn_normal(UpdatedGame, UpdatedGame2),
+  switch_turn(UpdatedGame2, FinalGame),
 
-  game_loop(UpdatedGame2).
+
+  game_loop(FinalGame).
 
 /**
   @desc Main game loop for the Player vs Player gamemode.
@@ -85,7 +88,8 @@ game_loop(Game) :-
   get_board(Game, Board),
   print_board(Game, Board, 0),
 
-  bot_play_turn_easy(Game, UpdatedGame),
+  bot_play_turn_easy(Game, TempGame),
+  switch_turn(TempGame, UpdatedGame),
 
   game_loop(UpdatedGame).
 
@@ -102,7 +106,8 @@ game_loop(Game) :-
   get_board(Game, Board),
   print_board(Game, Board, 0),
 
-  bot_play_turn_normal(Game, UpdatedGame),
+  bot_play_turn_normal(Game, TempGame),
+  switch_turn(TempGame, UpdatedGame),
 
   game_loop(UpdatedGame).
 
@@ -340,7 +345,9 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
   replace(Table2, SeatReplace2, b, NewTable2),
   replace(NewBoard, LessTableIndex2, NewTable2, FinalBoard),
 
-  replace(Game, 0, FinalBoard, UpdatedGame),
+  replace(Game, 0, FinalBoard, UpdatedGame2),
+
+  check_majority(UpdatedGame2, NewTable2, UpdatedGame),
 
 
   write('Piece switched!'), nl.
@@ -397,7 +404,9 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
   replace(NewBoard, LessTableIndex2, NewTable2, FinalBoard),
 
 
-  replace(Game, 0, FinalBoard, UpdatedGame),
+  replace(Game, 0, FinalBoard, UpdatedGame2),
+
+  check_majority(UpdatedGame2, NewTable2, UpdatedGame),
 
   write('Piece switched!'), nl.
 
