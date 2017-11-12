@@ -4,22 +4,23 @@
 */
 bot_play_turn_easy(Game, UpdatedGame) :-
 
-	get_board(Game, Board),
-
-	get_waiter(Game, Waiter),
-	nth0(0, Waiter, TableIndex),
-
-	nth1(TableIndex, Board, Table),
-
-	random_between(1, 9, SeatIndex),
+	random_between(1, 9, SeatIndex), 
 
 	validate_move(Game, SeatIndex),
 	place_piece(Game, SeatIndex, UpdatedGame2),
 
+	get_board(UpdatedGame2, Board), 
+	get_waiter(UpdatedGame2, Waiter),
+
+	nth0(1, Waiter, TableIndex), 
+	nth1(TableIndex, Board, Table), 
+
+
 	trigger_special(UpdatedGame2, TableIndex, UpdatedGame3),
+	!,
 
   	check_majority(UpdatedGame3, Table, UpdatedGame),
-  	check_win(UpdatedGame).
+  	check_win(UpdatedGame). 
 
 bot_play_turn_easy(Game, UpdatedGame) :-
 	append(Game, [], UpdatedGame),
@@ -43,16 +44,13 @@ bot_play_turn_normal(Game, UpdatedGame) :-
 	place_piece(TempGame, SeatIndex, UpdatedGame2),
 	get_board(UpdatedGame2, Board),
 
-	%trigger_special(UpdatedGame2, _, UpdatedGame3),
-
-	get_waiter(Game, Waiter),
+	get_waiter(UpdatedGame2, Waiter),
 	nth0(1, Waiter, TableIndex),
 	nth1(TableIndex, Board, Table),
-	write('Esta e a table'), write(Table),
 
-  	check_majority(UpdatedGame2, Table, UpdatedGame),
-		get_tracker(UpdatedGame, Majority), write('Tracker pos check_majority'),
-		write(Majority), nl,
+	trigger_special(UpdatedGame2, TableIndex, UpdatedGame3),
+
+  	check_majority(UpdatedGame3, Table, UpdatedGame),
   	check_win(UpdatedGame).
 
  bot_play_turn_normal(Game, UpdatedGame) :-

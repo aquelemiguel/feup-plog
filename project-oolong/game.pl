@@ -67,8 +67,6 @@ place_piece(Game, SeatIndex, UpdatedGame) :-
 
   replace(WaiterFixed, 0, NewBoard, TempGame),
   get_tracker(Game, Tracker),
-  write('Este e o tracker do place_piece'),
-  write(Tracker),nl,
 
   switch_turn(TempGame, UpdatedGame).
 
@@ -80,8 +78,6 @@ check_majority(Game, Table, UpdatedGame) :-
   CountB = 5,
   get_waiter(Game, Waiter),
   nth0(1, Waiter, TableIndex),
-  write('Este e o tableindex do check_majority:'),
-  write(TableIndex),nl,
   add_to_tracker(Game, b, TableIndex, UpdatedGame).
 
 check_majority(Game, Table, UpdatedGame) :-
@@ -119,10 +115,8 @@ check_win(_).
 add_to_tracker(Game, Player, TableIndex, UpdatedGame) :-
   get_tracker(Game, Tracker),nl,
   TableTempIndex is TableIndex - 1,
-  write('Supostamente este e o tableindex que devia ser substituido no tracker:'), write(TableTempIndex),
   replace(Tracker, TableTempIndex, Player, UpdatedTracker),
   get_tracker(Game, Tracker2),nl,
-  write('Este e o tracker:'),write(Tracker2), nl,
   replace(Game, 1, UpdatedTracker, UpdatedGame).
 
 /**
