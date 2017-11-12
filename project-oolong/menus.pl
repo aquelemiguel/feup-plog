@@ -91,9 +91,9 @@ rules_menu_page1 :-
   write('    Oolong is a strategy game designed for two players and based on a japanese tea house, where each player represents
    a different tea maker (black and green) and try to serve as much tea of their brand as possible. Whenever a player serves 5 seats
    on a table, he claims that table. To win a game you need to claim 5 of the 9 tables available.
-      Starting the Game: The black player is always first and has to place a piece on the middle table. If playing multiple games, the loser
+    Starting the Game: The black player is always first and has to place a piece on the middle table. If playing multiple games, the loser
    of the previous game plays first
-      Placing tokens: The space on which a token is placed indicates the table on which the next player will place their next token.'),nl,
+    Placing tokens: The space on which a token is placed indicates the table on which the next player will place their next token.'),nl,
 
   read(Input), (
     Input == 1 -> rules_menu_page2;
@@ -114,7 +114,10 @@ rules_menu_page2 :-
 
   write('   [Page 2/3]'), nl,
   write('    The Waiter
-   The waiter i'), nl, nl,
+    The waiter helps you keep track more easily of where the next play will take place and where the previous play was taken.
+    Whenever a player chooses a seat on a table, the waiter will be moved to the table referenced by the play, and to the seat
+   indicating where the last player was. For example, if a player is on table 5 and chooses seat 3, the waiter will be moved
+   to table 3 and seat 5.'), nl, nl,
 
   read(Input), (
     Input == 1 -> rules_menu_page3;
@@ -135,7 +138,17 @@ rules_menu_page3 :-
   write('   `-=..________..--\'     '), nl, nl,
 
   write('   [Page 3/3]'), nl,
-  write('    Welcome to Oolong.'), nl, nl,
+  write('    Special Markers.
+      These are special actions that are triggered whenever a player meets the requirement for them on a specific table. There
+    are 8 spread throughout all the tables except the middle one. They are always put at random.
+      The MOVEBLACK and MOVEGREEN markers require you to switch a black or green piece(depending on who activates them) from one
+    table to another. Both have to be unclaimed. These are activated whenever a player has 3 of their tokens on the table associated.
+      WAITERBLACK and WAITERGREEN are markers that require either the black or green player to move the waiter to wherever they choose.
+    The next player will have to play where the waiter is located. Activated with 5 pieces.
+      SWAPMIXED allows the activating player to swap an unclaimed table with a claimed one. Activated with 5 pieces.
+      SWAPUNCLAIMED allows the activating player to swap two unclaimed tables. Activated with 4 pieces.
+      ROTATE allows the player to rotate a table clockwise or counterclockwise how many positions they wish. There are two of these
+    and each are activated with 4 matching pieces.'), nl, nl,
 
   read(Input), (
     Input == 2 -> rules_menu_page2;
