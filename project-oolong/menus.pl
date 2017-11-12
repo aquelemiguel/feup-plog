@@ -408,3 +408,20 @@ move_green_waiter(Game, TableIndex) :-
   ((Gamemode = 1, Player = g); Gamemode = 3), % Automatic input if it's Skynet Mode or the bot's turn on Single Player.
 
   random_between(1, 9, TableIndex).
+
+table_full_menu(Game, TableIndex, SeatIndex) :-
+  get_gamemode(Game, Gamemode),
+  Gamemode = 2, % Manual input if it's Multiplayer or the player's turn on Single Player.
+
+  write('Table is full! Select table where you want to play now.'), nl,
+  read(TableIndex), nl,
+
+  write('Select the seat.'),
+  read(SeatIndex), nl.
+
+table_full_menu_bot(Game, TableIndex, SeatIndex) :-
+  get_gamemode(Game, Gamemode),
+  Gamemode = 1, % Manual input if it's Multiplayer or the player's turn on Single Player.
+
+  random_between(1, 9, TableIndex),
+  random_between(1, 9, SeatIndex).

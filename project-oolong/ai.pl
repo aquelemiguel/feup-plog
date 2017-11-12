@@ -2,6 +2,30 @@
   @desc Bot performs its play on the EASY difficulty.
 		On EASY mode, the bot selects its piece positions randomly.
 */
+
+bot_play_turn_easy(Game, UpdatedGame) :-
+
+	get_waiter(Game, Waiter),
+  nth0(0, Waiter, CurrentTableIndex),
+
+  check_table_is_full(Game, CurrentTableIndex),
+
+	table_full_menu_bot(Game, TableIndex, SeatIndex),
+
+	validate_move(Game, SeatIndex),
+	place_piece(Game, SeatIndex, UpdatedGame2),
+
+	get_board(UpdatedGame2, Board),
+	get_waiter(UpdatedGame2, Waiter),
+
+	nth0(1, Waiter, TableIndex),
+	nth1(TableIndex, Board, Table),
+
+	trigger_special(UpdatedGame2, TableIndex, UpdatedGame3), !,
+
+  check_majority(UpdatedGame3, Table, UpdatedGame),
+  check_win(UpdatedGame).
+
 bot_play_turn_easy(Game, UpdatedGame) :-
 
 	random_between(1, 9, SeatIndex),
@@ -17,8 +41,8 @@ bot_play_turn_easy(Game, UpdatedGame) :-
 
 	trigger_special(UpdatedGame2, TableIndex, UpdatedGame3), !,
 
-  	check_majority(UpdatedGame3, Table, UpdatedGame),
-  	check_win(UpdatedGame).
+  check_majority(UpdatedGame3, Table, UpdatedGame),
+  check_win(UpdatedGame).
 
 bot_play_turn_easy(Game, UpdatedGame) :-
 	append(Game, [], UpdatedGame),
@@ -29,6 +53,7 @@ bot_play_turn_easy(Game, UpdatedGame) :-
 		On NORMAL mode, the bot (loosely) takes into account the various outcomes of his plays, but plays special markers randomly.
 		If two choices are equally good, it randomly picks one.
 */
+
 bot_play_turn_normal(Game, UpdatedGame) :-
 
 	return_play_ratings(Game, 0, [], Ratings),
@@ -48,8 +73,8 @@ bot_play_turn_normal(Game, UpdatedGame) :-
 
 	trigger_special(UpdatedGame2, TableIndex, UpdatedGame3),
 
-  	check_majority(UpdatedGame3, Table, UpdatedGame),
-  	check_win(UpdatedGame).
+  check_majority(UpdatedGame3, Table, UpdatedGame),
+  check_win(UpdatedGame).
 
  bot_play_turn_normal(Game, UpdatedGame) :-
  	append(Game, [], UpdatedGame),
@@ -73,7 +98,8 @@ select_when_full(Game, UpdatedGame) :- select_when_full(Game, UpdatedGame).
 */
 check_table_is_full(Game, TableIndex) :-
 
-	get_table(Game, TableIndex, Table),
+	TableIndex2 is TableIndex - 1,
+	get_table(Game, TableIndex2, Table),
 	count(x, Table, EmptyCount),
 	EmptyCount = 0.
 

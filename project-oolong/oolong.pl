@@ -118,6 +118,32 @@ game_loop(Game) :- game_loop(Game).
 */
 play_turn(Game, UpdatedGame) :-
 
+  get_waiter(Game, Waiter),
+  nth0(0, Waiter, CurrentTableIndex),
+
+  check_table_is_full(Game, CurrentTableIndex),
+
+  table_full_menu(Game, TableIndex, SeatIndex),
+
+  update_waiter_table(Game, TableIndex, NewGame),
+
+
+  validate_move(NewGame, SeatIndex),
+  place_piece(NewGame, SeatIndex, UpdatedGame2),
+
+  trigger_special(UpdatedGame2, TableIndex, UpdatedGame3),
+
+  get_board(UpdatedGame3, Board2),
+  nth1(TableIndex, Board2, Table2),
+
+  check_majority(UpdatedGame3, Table2, TempGame),
+
+  switch_turn(TempGame, UpdatedGame),
+  check_win(UpdatedGame).
+
+
+play_turn(Game, UpdatedGame) :-
+
   read(SeatIndex),
 
   validate_move(Game, SeatIndex),

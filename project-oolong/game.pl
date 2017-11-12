@@ -126,6 +126,16 @@ update_waiter(Game, SeatIndex, WaiterFixed) :-
 
   replace(Game, 4, [SeatIndex, ArraySeatIndex], WaiterFixed).
 
+update_waiter_table(Game, TableIndex, NewGame) :-
+  get_waiter(Game, Waiter),
+
+  nth0(1, Waiter, SeatIndex),
+
+  replace(Game, 4, [TableIndex, SeatIndex], NewGame).
+
+
+
+
 % Switches current turn.
 switch_turn(Game, UpdatedGame) :-
   get_turn(Game, Turn),
