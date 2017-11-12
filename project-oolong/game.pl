@@ -10,8 +10,6 @@ init_game(Game, GameMode, BotDifficulty) :-
   append(Head, ['Empty'], Shuffled1),
   append(Shuffled1, Tail, Shuffled),
 
-  write(Shuffled),
-
   majority_tracker(Tracker),
 
   Game = [Board, Tracker, Shuffled, b, [5,5], GameMode, BotDifficulty],
@@ -46,6 +44,9 @@ get_table(Game, Index, Table) :-
 get_opponent(b, g).
 get_opponent(g, b).
 
+get_full_name(b, 'BLACK').
+get_full_name(g, 'GREEN').
+
 /**
   @desc Places the current player's piece on the provided seat.
 */
@@ -66,7 +67,6 @@ place_piece(Game, SeatIndex, UpdatedGame) :-
   update_waiter(Game, SeatIndex, WaiterFixed),
 
   replace(WaiterFixed, 0, NewBoard, TempGame),
-  get_tracker(Game, Tracker),
 
   switch_turn(TempGame, UpdatedGame).
 
@@ -116,7 +116,6 @@ add_to_tracker(Game, Player, TableIndex, UpdatedGame) :-
   get_tracker(Game, Tracker),nl,
   TableTempIndex is TableIndex - 1,
   replace(Tracker, TableTempIndex, Player, UpdatedTracker),
-  get_tracker(Game, Tracker2),nl,
   replace(Game, 1, UpdatedTracker, UpdatedGame).
 
 /**

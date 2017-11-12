@@ -6,9 +6,9 @@
 :- include('outputs.pl').
 :- include('ai.pl').
 :- include('utilities.pl').
+:- include('settings.pl').
 
 oolong :- main_menu. % Entry function call.
-
 
 /**
   @desc Main game loop for the Player vs AI gamemode.
@@ -29,7 +29,8 @@ game_loop(Game) :-
   print_board(UpdatedGame, NewBoard, 0),
 
   write('Bot is thinking...'), nl,
-  sleep(1),
+
+  sleep_time(SleepTime), sleep(SleepTime),
   bot_play_turn_easy(UpdatedGame, UpdatedGame2),
 
   game_loop(UpdatedGame2).
@@ -50,11 +51,10 @@ game_loop(Game) :-
   print_board(UpdatedGame, NewBoard, 0),
 
   write('Bot is thinking...'), nl,
-  sleep(1),
+  sleep_time(SleepTime), sleep(SleepTime),
   bot_play_turn_normal(UpdatedGame, UpdatedGame2),
 
   game_loop(UpdatedGame2).
-
 
 /**
   @desc Main game loop for the Player vs Player gamemode.
@@ -80,7 +80,7 @@ game_loop(Game) :-
   Mode = 3,
   BotDifficulty = easy,
 
-  sleep(1),
+  sleep_time(SleepTime), sleep(SleepTime),
   clear_console,
   get_board(Game, Board),
   print_board(Game, Board, 0),
@@ -97,7 +97,7 @@ game_loop(Game) :-
   Mode = 3,
   BotDifficulty = normal,
 
-  sleep(2),
+  sleep_time(SleepTime), sleep(SleepTime),
   clear_console,
   get_board(Game, Board),
   print_board(Game, Board, 0),
@@ -113,7 +113,6 @@ game_loop(Game) :- game_loop(Game).
 */
 play_turn(Game, UpdatedGame) :-
 
-  print_next_turn_message(Game),
   read(SeatIndex),
 
   validate_move(Game, SeatIndex),
@@ -183,8 +182,6 @@ trigger_special(Game, TableIndex, UpdatedGame) :-
 
   get_special(Game, Special),
   nth1(TableIndex, Special, Marker),
-
-  write('The index '), write(TableIndex), write(' has the marker '), write(Marker), write('.'), nl,
   handle_specific_special(Game, TableIndex, Marker, UpdatedGame).
 
 trigger_special(Game, _, UpdatedGame) :- append(Game, [], UpdatedGame). % No special marker was triggered.

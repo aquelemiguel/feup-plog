@@ -150,9 +150,9 @@ about_menu :-
   write('  (( |            |     |__| |__| |__ |__| | \\| |__| '), nl,
   write('   `))            ;     Dominate the tea house.    '), nl,
   write('    ` \\          /     '), nl,
-  write('   .-\' `,.____.,\' \'-.         Made with love by'), nl,
-  write('  (     \'------\'     )        Jose Pedro Borges      '), nl,
-  write('   `-=..________..--\'       Miguel Mano Fernandes    (4) Back'), nl, nl,
+  write('   .-\' `,.____.,\' \'-.     Made with \u2764 by'), nl,
+  write('  (     \'------\'     )    Jose Pedro Borges      '), nl,
+  write('   `-=..________..--\'     Miguel Mano Fernandes    (4) Back'), nl, nl,
 
   read(Input), (
     Input == 4 -> main_menu

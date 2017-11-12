@@ -1,8 +1,77 @@
+:- dynamic current_marker/1.
+:- dynamic sidebar_index/1.
+
 /**
   @desc Prints the full game board.
 */
-print_board(_, [], _) :- print_formatted_line(top), nl, nl.
-print_board(Game, [H|T], TableIndex) :-
+print_board(Game, [H|T], Table) :-
+  print_current_player(Game),
+  print_scoreboard(Game),
+
+  retractall(sidebar_index(_)),
+  assertz(sidebar_index(0)),
+  assertz(current_marker(1)),
+
+  print_tabletop(Game, [H|T], Table),
+
+  retractall(sidebar_index(_)),
+  retractall(current_marker(_)).
+
+print_current_player(Game) :-
+  get_turn(Game, Player),
+  Player = b,
+  get_full_name(Player, FullPlayerName),
+
+  ansi_format([fg(black)], ' ~w', [FullPlayerName]).
+
+print_current_player(Game) :-
+  get_turn(Game, Player),
+  Player = g,
+  get_full_name(Player, FullPlayerName),
+
+  ansi_format([fg(green)], ' ~w', [FullPlayerName]).
+
+print_sidebar(Game) :-
+  
+  sidebar_index(SidebarIndex),
+  current_marker(MarkerIndex),
+
+  ite(SidebarIndex = 1, write('    This place feels'), true),
+  ite(SidebarIndex = 2, write('   kinda empty so here'), true),
+  ite(SidebarIndex = 3, write('     are some words.'), true),
+
+  ite(SidebarIndex = 6, ansi_format([fg(green)], '    SPECIAL MARKERS', []), true),
+  increment_sidebar_index(SidebarIndex),
+
+  SidebarIndex >= 8, MarkerIndex =< 9,
+  get_special(Game, Special),
+
+  nth1(MarkerIndex, Special, Marker),
+
+  ansi_format([fg(black)], '   [~w] ~w', [MarkerIndex, Marker]),
+  increment_marker_index(MarkerIndex).
+
+print_sidebar(_).
+
+increment_sidebar_index(Index) :-
+  retractall(sidebar_index(_)),
+  NewIndex is Index + 1,
+  assertz(sidebar_index(NewIndex)).
+
+increment_marker_index(Index) :-
+  retractall(current_marker(_)),
+  NewIndex is Index + 1,
+  assertz(current_marker(NewIndex)).
+
+print_scoreboard(Game) :-
+  get_tracker(Game, Tracker),
+  count(b, Tracker, CountB), count(g, Tracker, CountG),
+  ansi_format([fg(black)], '                       ~w:', [CountB]),
+  ansi_format([fg(green)], '~w\n', [CountG]).
+
+print_tabletop(_, [], _) :- print_formatted_line(top), nl, nl.
+
+print_tabletop(Game, [H|T], TableIndex) :-
 
   length([H|T], MatrixSize),
   TrimSize is MatrixSize - 3,
@@ -13,7 +82,7 @@ print_board(Game, [H|T], TableIndex) :-
   NewTableIndex is TableIndex + 3,
 
   trim_head([H|T], 3, Remain),
-  print_board(Game, Remain, NewTableIndex).
+  print_tabletop(Game, Remain, NewTableIndex).
 
 /**
   @desc Don't ask.
@@ -48,8 +117,8 @@ print_block(Game, [O_H|O_T], [H|T], Line0, OriginalTable, TableIndex, SeatIndex)
   NewTableIndex is TableIndex + 1,
 
   % TODO: Remove else-if statement.
-  (T = [] -> nl, print_formatted_line(medium), nl, Asdf is OriginalTable, print_block(Game, [O_H|O_T], [O_H|O_T], NewLine, OriginalTable, Asdf, NewSeatIndex3);
-             print_block(Game, [O_H|O_T], T, Line0, OriginalTable, NewTableIndex, SeatIndex)).
+  (T = [] -> print_sidebar(Game), nl, print_formatted_line(Game, medium), nl, Asdf is OriginalTable, print_block(Game, [O_H|O_T], [O_H|O_T], NewLine, OriginalTable, Asdf, NewSeatIndex3);
+            print_block(Game, [O_H|O_T], T, Line0, OriginalTable, NewTableIndex, SeatIndex)).
 
 /**
   @desc Prints a formatted pretty line.
@@ -57,8 +126,8 @@ print_block(Game, [O_H|O_T], [H|T], Line0, OriginalTable, TableIndex, SeatIndex)
 print_formatted_line(top) :-
   write(' ---------  ---------  --------- ').
 
-print_formatted_line(medium) :-
-  write('|         ||         ||         |').
+print_formatted_line(Game, medium) :-
+  write('|         ||         ||         |'), print_sidebar(Game).
 
 
 /**
@@ -103,15 +172,3 @@ check_waiter(Game, Table, Seat) :-
 
   Table + 1 =:= WaiterTable,
   Seat + 1 =:= WaiterSeat.
-
-print_next_turn_message(Game) :-
-  get_turn(Game, Player),
-  Player = 'b',
-
-  ansi_format([fg(black)], 'Make your move, BLACK!\n', []).
-
-print_next_turn_message(Game) :-
-  get_turn(Game, Player),
-  Player = 'g',
-
-  ansi_format([fg(green)], 'Make your move, GREEN!\n', []).
