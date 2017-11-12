@@ -276,7 +276,7 @@ menu_swap_mixed(Game, Table1, Table2) :-
 /**
   @desc Displays the MOVEBLACK special marker menu.
 */
-menu_move_black(Game, Table1, Table2) :-
+menu_move_black(Game, Table1, Seat1, Table2, Seat2) :-
 
   get_gamemode(Game, Gamemode),
   get_turn(Game, Player),
@@ -285,44 +285,49 @@ menu_move_black(Game, Table1, Table2) :-
   write('MOVEBLACK special marker has been triggered!'), nl,
   write('Select table #1.'), nl,
   read(Table1), nl,
+  write('Select piece #1.'), nl,
+  read(Seat1), nl,
   write('Select table #2.'), nl,
-  read(Table2).
+  read(Table2), nl,
+  write('Select piece #2.'), nl,
+  read(Seat2),
 
-menu_move_black(Game, Table1, Table2) :-
+  check_unclaimed_table(Game, Table1),
+  check_unclaimed_table(Game, Table2),
+
+  nth1(Table1, Board, TableName1),
+  nth1(Table2, Board, TableName2),
+
+  nth1(Seat1, TableName1, SeatName1), SeatName1 = b,
+  nth1(Seat2, TableName2, SeatName2), SeatName2 = x.
+
+menu_move_black(Game, Table1, Seat1, Table2, Seat2) :-
 
   get_gamemode(Game, Gamemode),
   get_turn(Game, Player),
   ((Gamemode = 1, Player = b); Gamemode = 3), % Automatic input if it's Skynet Mode or the bot's turn on Single Player.
 
   write('MOVEBLACK special marker has been triggered!'), nl,
-
   random_between(1, 9, Table1),
-  random_between(1, 9, Table2).
+  random_between(1, 9, Seat1),
+  random_between(1, 9, Table2),
+  random_between(1, 9, Seat2),
 
-menu_move_black_piece(Game, SeatIndex1, SeatIndex2) :-
+  check_unclaimed_table(Game, Table1),
+  check_unclaimed_table(Game, Table2),
 
-  get_gamemode(Game, Gamemode),
-  get_turn(Game, Player),
-  ((Gamemode = 1, Player = b); Gamemode = 2), % Manual input if it's Multiplayer or the player's turn on Single Player.
+  nth1(Table1, Board, TableName1),
+  nth1(Table2, Board, TableName2),
 
-  write('Select piece #1.'), nl,
-  read(SeatIndex1), nl,
-  write('Select piece #2.'), nl,
-  read(SeatIndex2).
+  nth1(Seat1, TableName1, SeatName1), SeatName1 = b,
+  nth1(Seat2, TableName2, SeatName2), SeatName2 = x.
 
-menu_move_black_piece(Game, SeatIndex1, SeatIndex2) :-
-
-  get_gamemode(Game, Gamemode),
-  get_turn(Game, Player),
-  ((Gamemode = 1, Player = b); Gamemode = 3), % Automatic input if it's Skynet Mode or the bot's turn on Single Player.
-
-  random_between(1, 9, SeatIndex1),
-  random_between(1, 9, SeatIndex2).
+menu_move_black(Game, Table1, Seat1, Table2, Seat2) :- menu_move_black(Game, Table1, Seat1, Table2, Seat2).
 
 /**
   @desc Displays the MOVEGREEN special marker menu.
 */
-menu_move_green(Game, Table1, Table2) :-
+menu_move_green(Game, Table1, Seat1, Table2, Seat2) :-
 
   get_gamemode(Game, Gamemode),
   get_turn(Game, Player),
@@ -331,39 +336,44 @@ menu_move_green(Game, Table1, Table2) :-
   write('MOVEGREEN special marker has been triggered!'), nl,
   write('Select table #1.'), nl,
   read(Table1), nl,
+  write('Select piece #1.'), nl,
+  read(Seat1), nl,
   write('Select table #2.'), nl,
-  read(Table2).
+  read(Table2), nl,
+  write('Select piece #2.'), nl,
+  read(Seat2),
 
-menu_move_green(Game, Table1, Table2) :-
+  check_unclaimed_table(Game, Table1),
+  check_unclaimed_table(Game, Table2),
+
+  nth1(Table1, Board, TableName1),
+  nth1(Table2, Board, TableName2),
+
+  nth1(Seat1, TableName1, SeatName1), SeatName1 = g,
+  nth1(Seat2, TableName2, SeatName2), SeatName2 = x.
+
+menu_move_green(Game, Table1, Seat1, Table2, Seat2) :-
 
   get_gamemode(Game, Gamemode),
   get_turn(Game, Player),
   ((Gamemode = 1, Player = g); Gamemode = 3), % Automatic input if it's Skynet Mode or the bot's turn on Single Player.
 
   write('MOVEGREEN special marker has been triggered!'), nl,
-
   random_between(1, 9, Table1),
-  random_between(1, 9, Table2).
+  random_between(1, 9, Seat1),
+  random_between(1, 9, Table2),
+  random_between(1, 9, Seat2),
 
-menu_move_green_piece(Game, SeatIndex1, SeatIndex2) :-
+  check_unclaimed_table(Game, Table1),
+  check_unclaimed_table(Game, Table2),
 
-  get_gamemode(Game, Gamemode),
-  get_turn(Game, Player),
-  ((Gamemode = 1, Player = g); Gamemode = 2), % Manual input if it's Multiplayer or the player's turn on Single Player.
+  nth1(Table1, Board, TableName1),
+  nth1(Table2, Board, TableName2),
 
-  write('Select piece #1.'), nl,
-  read(SeatIndex1), nl,
-  write('Select piece #2.'), nl,
-  read(SeatIndex2).
+  nth1(Seat1, TableName1, SeatName1), SeatName1 = g,
+  nth1(Seat2, TableName2, SeatName2), SeatName2 = x.
 
-menu_move_green_piece(Game, SeatIndex1, SeatIndex2) :-
-
-  get_gamemode(Game, Gamemode),
-  get_turn(Game, Player),
-  ((Gamemode = 1, Player = g); Gamemode = 3), % Automatic input if it's Skynet Mode or the bot's turn on Single Player.
-
-  random_between(1, 9, SeatIndex1),
-  random_between(1, 9, SeatIndex2).
+menu_move_green(Game, Table1, Seat1, Table2, Seat2) :- menu_move_green(Game, Table1, Seat1, Table2, Seat2).
 
 move_black_waiter(Game, TableIndex) :-
 

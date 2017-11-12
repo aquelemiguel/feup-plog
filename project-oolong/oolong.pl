@@ -208,7 +208,9 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
   LessTableIndex is TableIndex - 1,
 
   replace(Board, LessTableIndex, RotatedTable, UpdatedBoard),
-  replace(Game, 0, UpdatedBoard, UpdatedGame).
+  replace(Game, 0, UpdatedBoard, TempGame),
+
+  unbind_marker_from_table(TempGame, LessTableIndex, UpdatedGame).
 
 /**
   @desc SWAPUNCLAIMED special marker handler.
@@ -231,13 +233,16 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
   nth1(TableIndex1, Board, Table1),
   nth1(TableIndex2, Board, Table2),
 
+  LessTableIndex is TableIndex - 1,
   LessTableIndex1 is TableIndex1 - 1,
   LessTableIndex2 is TableIndex2 - 1,
 
   % Switches the provided tables.
   replace(Board, LessTableIndex1, Table2, TempBoard),
   replace(TempBoard, LessTableIndex2, Table1, FinalBoard),
-  replace(Game, 0, FinalBoard, UpdatedGame),
+  replace(Game, 0, FinalBoard, TempGame),
+
+  unbind_marker_from_table(TempGame, LessTableIndex, UpdatedGame),
 
   write('Tables switched!'), nl.
 
@@ -263,13 +268,16 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
   nth1(TableIndex1, Board, Table1),
   nth1(TableIndex2, Board, Table2),
 
+  LessTableIndex is TableIndex - 1,
   LessTableIndex1 is TableIndex1 - 1,
   LessTableIndex2 is TableIndex2 - 1,
 
   % Switches the provided tables.
   replace(Board, LessTableIndex1, Table2, TempBoard),
   replace(TempBoard, LessTableIndex2, Table1, FinalBoard),
-  replace(Game, 0, FinalBoard, UpdatedGame),
+  replace(Game, 0, FinalBoard, TempGame),
+
+  unbind_marker_from_table(TempGame, LessTableIndex, UpdatedGame),
 
   write('Tables switched!'), nl.
 
@@ -287,33 +295,19 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
   count(b, Table, CountB),
   CountB = 3,
 
-  menu_move_black(Game, TableIndex1, TableIndex2),
+  % Retrieves the tables where the pieces are going to be switched
+  menu_move_black(Game, TableIndex1, SeatIndex1, TableIndex2, SeatIndex2),
+
   nth1(TableIndex1, Board, Table1),
   nth1(TableIndex2, Board, Table2),
 
   LessTableIndex1 is TableIndex1 - 1,
   LessTableIndex2 is TableIndex2 - 1,
 
-  % Switches the provided tables.
-  get_tracker(Game, Tracker),
-  nth1(TableIndex1, Tracker, Majority),
-  Majority = x,
-
-  get_tracker(Game, AnotherTracker),
-  nth1(TableIndex1, AnotherTracker, Majority2),
-  Majority2 = x,
-
-  menu_move_black_piece(Game, SeatIndex1, SeatIndex2),
-
-  nth1(SeatIndex1, Table1, Seat),
-  Seat = b,
-
-  nth1(SeatIndex2, Table2, Seat2),
-  Seat2 = x,
+  %Updates the tables
 
   SeatReplace is SeatIndex1 - 1,
   SeatReplace2 is SeatIndex2 - 1,
-
 
   replace(Table1, SeatReplace, x, NewTable),
   replace(Board, LessTableIndex1, NewTable, NewBoard),
@@ -321,8 +315,10 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
   replace(Table2, SeatReplace2, b, NewTable2),
   replace(NewBoard, LessTableIndex2, NewTable2, FinalBoard),
 
-  replace(Game, 0, FinalBoard, UpdatedGame),
+  replace(Game, 0, FinalBoard, TempGame),
 
+  Asdf is TableIndex - 1,
+  unbind_marker_from_table(TempGame, Asdf, UpdatedGame),
 
   write('Piece switched!'), nl.
 
@@ -340,31 +336,14 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
   count(g, Table, CountG),
   CountG = 3,
 
-  %Retrieves the tables where the pieces are going to be switched
-  menu_move_green(Game, TableIndex1, TableIndex2),
+  % Retrieves the tables where the pieces are going to be switched
+  menu_move_green(Game, TableIndex1, SeatIndex1, TableIndex2, SeatIndex2),
+
   nth1(TableIndex1, Board, Table1),
   nth1(TableIndex2, Board, Table2),
 
   LessTableIndex1 is TableIndex1 - 1,
   LessTableIndex2 is TableIndex2 - 1,
-
-      % Checks whether the tables are unclaimed or not
-  get_tracker(Game, Tracker),
-  nth1(TableIndex1, Tracker, Majority),
-  Majority = x,
-
-  get_tracker(Game, AnotherTracker),
-  nth1(TableIndex1, AnotherTracker, Majority2),
-  Majority2 = x,
-
-  % Retrieves the seat indexes of the pieces
-
-  menu_move_green_piece(Game, SeatIndex1, SeatIndex2),
-  nth1(SeatIndex1, Table1, Seat),
-  Seat = g,
-
-  nth1(SeatIndex2, Table2, Seat2),
-  Seat2 = x,
 
   %Updates the tables
 
@@ -377,8 +356,10 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
   replace(Table2, SeatReplace2, g, NewTable2),
   replace(NewBoard, LessTableIndex2, NewTable2, FinalBoard),
 
+  replace(Game, 0, FinalBoard, TempGame),
 
-  replace(Game, 0, FinalBoard, UpdatedGame),
+  Asdf is TableIndex - 1,
+  unbind_marker_from_table(TempGame, Asdf, UpdatedGame),
 
   write('Piece switched!'), nl.
 
@@ -397,7 +378,8 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
   move_black_waiter(Game, TableIndex2),
 
   update_waiter(Game, TableIndex, TempGame),
-  update_waiter(TempGame, TableIndex2, UpdatedGame).
+  update_waiter(TempGame, TableIndex2, TempGame2),
+  unbind_marker_from_table(TempGame2, TableIndex, UpdatedGame).
 
 handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
   get_board(Game, Board),
@@ -410,13 +392,14 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
   move_green_waiter(Game, TableIndex2),
 
   update_waiter(Game, TableIndex, TempGame),
-  update_waiter(TempGame, TableIndex2, UpdatedGame).
+  update_waiter(TempGame, TableIndex2, TempGame2),
+  unbind_marker_from_table(TempGame2, TableIndex, UpdatedGame).
 
 handle_specific_special(Game, _, _, UpdatedGame) :-
   append(Game, [], UpdatedGame).
 
 /**
-  @desc If a marker triggers but cannot be executed, it's unbinded from the table.
+  @desc Used when a marker is used or if it triggers but cannot be executed.
         e.g. SWAPMIXED is triggered but there aren't any claimed tables.
 */
 unbind_marker_from_table(Game, TableIndex, UpdatedGame) :-

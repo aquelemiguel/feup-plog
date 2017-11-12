@@ -36,9 +36,9 @@ print_sidebar(Game) :-
   sidebar_index(SidebarIndex),
   current_marker(MarkerIndex),
 
-  ite(SidebarIndex = 1, write('    This place feels'), true),
-  ite(SidebarIndex = 2, write('   kinda empty so here'), true),
-  ite(SidebarIndex = 3, write('     are some words.'), true),
+  ite(SidebarIndex = 1, write('    I say let the world go to hell,'), true),
+  ite(SidebarIndex = 2, write('    but I should always have my tea.'), true),
+  ite(SidebarIndex = 3, write('    - Fyodor Dostoyevsky'), true),
 
   ite(SidebarIndex = 6, ansi_format([fg(green)], '    SPECIAL MARKERS', []), true),
   increment_sidebar_index(SidebarIndex),
