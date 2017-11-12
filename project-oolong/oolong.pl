@@ -126,7 +126,16 @@ play_turn(Game, UpdatedGame) :-
 
   trigger_special(UpdatedGame2, TableIndex, UpdatedGame3),
 
-  check_majority(UpdatedGame3, Table, UpdatedGame),
+  get_board(UpdatedGame3, Board2),
+  nth1(TableIndex, Board2, Table2),
+
+  check_majority(UpdatedGame3, Table2, TempGame),
+
+  get_tracker(TempGame, YayTracker),
+
+  write('Este e o tracker pos switch: '), write(YayTracker),nl,
+
+  switch_turn(TempGame, UpdatedGame),
   check_win(UpdatedGame).
 
 play_turn(Game, UpdatedGame) :- play_turn(Game, UpdatedGame).
@@ -269,7 +278,17 @@ handle_specific_special(Game, TableIndex, Marker, UpdatedGame) :-
   % Switches the provided tables.
   replace(Board, LessTableIndex1, Table2, TempBoard),
   replace(TempBoard, LessTableIndex2, Table1, FinalBoard),
-  replace(Game, 0, FinalBoard, UpdatedGame),
+  replace(Game, 0, FinalBoard, UpdatedGame2),
+
+  get_tracker(UpdatedGame2, Tracker),
+  get_turn(UpdatedGame2, Player),
+  replace(Tracker, LessTableIndex2, Player, TempTracker),
+  replace(TempTracker, LessTableIndex1, x, FinalTracker),
+  replace(UpdatedGame2, 1, FinalTracker, UpdatedGame),
+
+  get_tracker(UpdatedGame, YayTracker),
+
+  write('Este e o tracker pos switch: '), write(YayTracker),nl,
 
   write('Tables switched!'), nl.
 

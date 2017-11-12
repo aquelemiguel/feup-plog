@@ -66,9 +66,7 @@ place_piece(Game, SeatIndex, UpdatedGame) :-
 
   update_waiter(Game, SeatIndex, WaiterFixed),
 
-  replace(WaiterFixed, 0, NewBoard, TempGame),
-
-  switch_turn(TempGame, UpdatedGame).
+  replace(WaiterFixed, 0, NewBoard, UpdatedGame).
 
 /**
   @desc Determines whether a player has filled 5 out of 9 seats on a table, thus claiming majority on it.
