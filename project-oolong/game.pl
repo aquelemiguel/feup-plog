@@ -96,14 +96,13 @@ check_win(Game) :-
   count(b, Tracker, CountB),
   CountB >= 5,
   write('Black wins!'),
-  halt.
+  fail.
 
 check_win(Game) :-
   get_tracker(Game, Tracker),
   count(g, Tracker, CountG),
   CountG >= 5,
-  write('Green wins!'),
-  halt.
+  write('Green wins!'), fail.
 
 check_win(_).
 
