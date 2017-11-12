@@ -123,11 +123,8 @@ play_turn(Game, UpdatedGame) :-
   validate_move(Game, SeatIndex),
   place_piece(Game, SeatIndex, UpdatedGame2),
 
-  get_board(UpdatedGame2, Board),
   get_waiter(Game, Waiter),
   nth0(0, Waiter, TableIndex),
-
-  nth1(TableIndex, Board, Table),
 
   trigger_special(UpdatedGame2, TableIndex, UpdatedGame3),
 
@@ -135,10 +132,6 @@ play_turn(Game, UpdatedGame) :-
   nth1(TableIndex, Board2, Table2),
 
   check_majority(UpdatedGame3, Table2, TempGame),
-
-  get_tracker(TempGame, YayTracker),
-
-  write('Este e o tracker pos switch: '), write(YayTracker),nl,
 
   switch_turn(TempGame, UpdatedGame),
   check_win(UpdatedGame).
