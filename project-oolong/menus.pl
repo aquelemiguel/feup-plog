@@ -87,7 +87,13 @@ rules_menu_page1 :-
   write('   `-=..________..--\'     '), nl, nl,
 
   write('   [Page 1/3]'), nl,
-  write('    Welcome to Oolong.'), nl, nl,
+  write('    Welcome!'), nl,
+  write('    Oolong is a strategy game designed for two players and based on a japanese tea house, where each player represents
+   a different tea maker (black and green) and try to serve as much tea of their brand as possible. Whenever a player serves 5 seats
+   on a table, he claims that table. To win a game you need to claim 5 of the 9 tables available.
+      Starting the Game: The black player is always first and has to place a piece on the middle table. If playing multiple games, the loser
+   of the previous game plays first
+      Placing tokens: The space on which a token is placed indicates the table on which the next player will place their next token.'),nl,
 
   read(Input), (
     Input == 1 -> rules_menu_page2;
@@ -107,7 +113,8 @@ rules_menu_page2 :-
   write('   `-=..________..--\'     '), nl, nl,
 
   write('   [Page 2/3]'), nl,
-  write('    Welcome to Oolong.'), nl, nl,
+  write('    The Waiter
+   The waiter i'), nl, nl,
 
   read(Input), (
     Input == 1 -> rules_menu_page3;

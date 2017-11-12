@@ -16,9 +16,9 @@ bot_play_turn_easy(Game, UpdatedGame) :-
 	validate_move(Game, SeatIndex),
 	place_piece(Game, SeatIndex, UpdatedGame2),
 
-	trigger_special(UpdatedGame2, TableIndex, UpdatedGame3),
+	%trigger_special(UpdatedGame2, TableIndex, UpdatedGame3),
 
-  	check_majority(UpdatedGame3, Table, UpdatedGame),
+  	check_majority(UpdatedGame2, Table, UpdatedGame),
   	check_win(UpdatedGame).
 
 bot_play_turn_easy(Game, UpdatedGame) :-
