@@ -139,8 +139,7 @@ play_turn(Game, UpdatedGame) :-
   check_majority(UpdatedGame3, Table2, TempGame),
 
   switch_turn(TempGame, UpdatedGame),
-  check_win(UpdatedGame),
-  main_menu.
+  check_win(UpdatedGame).
 
 
 play_turn(Game, UpdatedGame) :-
@@ -161,8 +160,7 @@ play_turn(Game, UpdatedGame) :-
   check_majority(UpdatedGame3, Table2, TempGame),
 
   switch_turn(TempGame, UpdatedGame),
-  check_win(UpdatedGame),
-  main_menu.
+  check_win(UpdatedGame).
 
 play_turn(Game, UpdatedGame) :- play_turn(Game, UpdatedGame).
 

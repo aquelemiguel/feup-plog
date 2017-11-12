@@ -94,15 +94,12 @@ check_majority(Game, _, UpdatedGame) :-
 check_win(Game) :-
   get_tracker(Game, Tracker),
   count(b, Tracker, CountB),
-  CountB >= 5,
-  write('Black wins!'),
-  fail.
+  ite(CountB >= 5, (write('Black wins!'), sleep(3), main_menu), fail).
 
 check_win(Game) :-
   get_tracker(Game, Tracker),
   count(g, Tracker, CountG),
-  CountG >= 5,
-  write('Green wins!'), fail.
+  ite(CountG >= 5, (write('Green wins!'), sleep(3), main_menu), fail).
 
 check_win(_).
 

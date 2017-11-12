@@ -12,16 +12,18 @@ bot_play_turn_easy(Game, UpdatedGame) :-
 
 	table_full_menu_bot(Game, TableIndex, SeatIndex),
 
-	validate_move(Game, SeatIndex),
-	place_piece(Game, SeatIndex, UpdatedGame2),
+	update_waiter_table(Game, TableIndex, NewGame),
+
+	validate_move(NewGame, SeatIndex),
+	place_piece(NewGame, SeatIndex, UpdatedGame2),
 
 	get_board(UpdatedGame2, Board),
 	get_waiter(UpdatedGame2, Waiter),
 
-	nth0(1, Waiter, TableIndex),
-	nth1(TableIndex, Board, Table),
+	nth0(1, Waiter, TableIndex2),
+	nth1(TableIndex2, Board, Table),
 
-	trigger_special(UpdatedGame2, TableIndex, UpdatedGame3), !,
+	trigger_special(UpdatedGame2, TableIndex2, UpdatedGame3), !,
 
   check_majority(UpdatedGame3, Table, UpdatedGame),
   check_win(UpdatedGame).
@@ -53,6 +55,39 @@ bot_play_turn_easy(Game, UpdatedGame) :-
 		On NORMAL mode, the bot (loosely) takes into account the various outcomes of his plays, but plays special markers randomly.
 		If two choices are equally good, it randomly picks one.
 */
+
+bot_play_turn_normal(Game, UpdatedGame) :-
+
+	%return_play_ratings(Game, 0, [], Ratings),
+	%parse_invalid_moves(Game, Ratings, 1, FinalRatings),
+	%max_list(FinalRatings, Max),
+	%ite(Max = -1, (select_when_full(Game, NewGame), append(NewGame, [], TempGame)), append(Game, [], TempGame)),
+
+	get_waiter(Game, Waiter),
+  nth0(0, Waiter, CurrentTableIndex),
+
+	check_table_is_full(Game, CurrentTableIndex),
+
+	write(CurrentTableIndex),
+
+	table_full_menu_bot(Game, TableIndex, SeatIndex),
+
+	update_waiter_table(Game, TableIndex, NewGame),
+
+	%get_random_max_index(Max, FinalRatings, SeatIndex),
+	%nth1(SeatIndex, Ratings, Max),
+
+	place_piece(NewGame, SeatIndex, UpdatedGame2),
+	get_board(UpdatedGame2, Board),
+
+	get_waiter(UpdatedGame2, Waiter),
+	nth0(1, Waiter, TableIndex2),
+	nth1(TableIndex2, Board, Table),
+
+	trigger_special(UpdatedGame2, TableIndex2, UpdatedGame3),
+
+  check_majority(UpdatedGame3, Table, UpdatedGame),
+  check_win(UpdatedGame).
 
 bot_play_turn_normal(Game, UpdatedGame) :-
 
@@ -101,6 +136,7 @@ check_table_is_full(Game, TableIndex) :-
 	TableIndex2 is TableIndex - 1,
 	get_table(Game, TableIndex2, Table),
 	count(x, Table, EmptyCount),
+	write(EmptyCount), nl,
 	EmptyCount = 0.
 
 check_table_is_full(_, _) :- fail.
