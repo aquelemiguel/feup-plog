@@ -170,5 +170,103 @@ come(X, Y) :-
 	% ?- come(silvester, X).
 
 /**
-	RC7 - Tweety e Silvester
+	RC7 - Programação e Erros
 **/
+traduza(1, integer_overflow).
+traduza(2, divisao_por_zero).
+traduza(3, id_desconhecido).
+
+traduza(Codigo, Significado) :- % Alternatively...
+	Codigo = 1 -> Significado = integer_overflow;
+	Codigo = 2 -> Significado = divisao_por_zero;
+	Codigo = 3 -> Significado = id_desconhecido.
+
+/**
+	RC8 - Cargos e Chefes
+**/
+cargo(tecnico, rogerio).
+cargo(tecnico, ivone).
+
+cargo(engenheiro, daniel).
+cargo(engenheiro, isabel).
+cargo(engenheiro, oscar).
+cargo(engenheiro, tomas).
+
+cargo(supervisor, luis).
+cargo(supervisor_chefe, sonia).
+cargo(secretaria_exec, laura).
+cargo(diretor, santiago).
+
+chefiado_por(tecnico, engenheiro).
+chefiado_por(engenheiro, supervisor).
+chefiado_por(analista, supervisor).
+chefiado_por(supervisor, supervisor_chefe).
+chefiado_por(supervisor_chefe, diretor).
+chefiado_por(secretaria_exec, diretor).
+
+	% a) O cargo que chefia o técnico é chefiado por quem?
+	% b) Se a Ivone for chefiada por um técnico, imprimir todos os cargos.
+	% c) Imprime duas vezes os supervisores.
+	% d) Quem é chefiado por um supervisor ou supervisor chefe?
+	% e) Qual o cargo, exceto o da Carolina, chefiado por um diretor?
+
+/**
+	RC9 - Alunos e Professores
+**/
+aluno(joao, paradigmas).
+aluno(maria, paradigmas).
+aluno(joel, lab2).
+aluno(joel, estruturas).
+
+frequenta(joao, feup).
+frequenta(maria, feup).
+frequenta(joel, ist).
+
+professor(carlos, paradigmas).
+professor(ana_paula, paradigmas).
+professor(pedro, lab2).
+
+funcionario(pedro, ist).
+funcionario(ana_paula, feup).
+funcionario(carlos, feup).
+
+	% a)
+	alunos_de_professor(Professor, Aluno) :-
+		aluno(Aluno, Cadeira),
+		frequenta(Aluno, Faculdade),
+		professor(Professor, Cadeira),
+		funcionario(Professor, Faculdade).
+
+	% b)
+	frequenta_uni(Universidade, Pessoa) :-
+		frequenta(Pessoa, Universidade);
+		funcionario(Pessoa, Universidade).
+
+	% c)
+	colega_de(Pessoa_1, Pessoa_2) :-
+		((aluno(Pessoa_1, Cadeira), aluno(Pessoa_2, Cadeira));
+		(frequenta(Pessoa_1, Uni), frequenta(Pessoa_2, Uni));
+		(funcionario(Pessoa_1, Uni), funcionario(Pessoa_2, Uni))),
+		Pessoa_1 \= Pessoa_2.
+
+/**
+	RC10 - Carros e Valores
+**/
+comprou(joao, honda).
+comprou(joao, uno).
+
+ano(honda, 1997).
+ano(uno, 1998).
+
+valor(honda, 20000).
+valor(uno, 7000).
+
+	% a)
+	pode_vender(Pessoa, Carro, AnoAtual) :-
+		comprou(Pessoa, Carro),
+		ano(Carro, AnoCompra),
+		AnoIntervalo is AnoAtual - AnoCompra,
+		AnoIntervalo =< 10,
+
+		valor(Carro, Valor),
+		Valor < 10000. 
