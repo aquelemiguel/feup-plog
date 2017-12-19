@@ -13,10 +13,13 @@ skyscraper :-
 	
 	format('Generating a ~dx~d board...\n', [BoardSize, BoardSize]),
 	generate_board(BoardSize, Board), % Generate said board.
+
 	generate_clues(BoardSize, Clues), % Generate clues for the board.
 
-	write(Board),
-	solve_board(Board).
+	solve_board(Board),
+	append(Board, FlatBoard),
+	labeling([], FlatBoard),
+	display_board(Board).
 
 /**
  *	Generates a matrix with the provided size, thus it being sizeXsize.
@@ -28,33 +31,19 @@ generate_board(Size, Matrix) :-
  *	Solves board based on restrictions code.
 **/
 solve_board(Board) :-
-	test_board(Board),
 	length(Board, Size),
 
 	declare_board_domain(Board, Size),
 
-	unique_values_row(Board),
-	%unique_values_column(Board),
-
-	label_board(Board).
-
+	maplist(all_distinct, Board), % Ensures every row has an unique value.
+	transpose(Board, InvertedBoard),
+	maplist(all_distinct, InvertedBoard). % Ensures every column has an unique value.
 
 declare_board_domain([], _).
 
 declare_board_domain([H|T], Size) :-
 	domain(H, 1, Size),
 	declare_board_domain(T, Size).
-
-label_board([]).
-label_board([H|T]) :-
-	labeling([], H), label_board(T).
-
-unique_values_row([]).
-unique_values_column([]).
-
-unique_values_row([H|T]) :-
-	all_distinct(H),
-	unique_values_row(T).
 
 	
 

@@ -4,14 +4,6 @@ replace([H|T], Index, New, [H|R]) :-
 	I1 is Index - 1,
 	replace(T, I1, New, R).
 
-flatten([], []) :- !.
-
-flatten([L|Ls], FlatL) :-
-	!, flatten(L, NewL), flatten(Ls, NewLs),
-	append(NewL, NewLs, FlatL).
-
-flatten(L, [L]).
-
 clear_console :-
 	clear_console(40), !.
 
