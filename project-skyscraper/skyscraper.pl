@@ -6,6 +6,7 @@
 :- include('helpers.pl').
 
 :- dynamic clue/2.
+:- dynamic maximum/1.
 
 skyscraper :-
 	write('Insert a board size to generate: '),
@@ -66,28 +67,49 @@ apply_clues([], [], []).
 apply_clues([BH|BT], [CH1|CT1], [CH2|CT2]) :-
 	length(BH, Size),
 
-	format('~d : ~d\n', [CH1, CH2]),
+	%format('~d : ~d\n', [CH1, CH2]),
 
-	% If the clue's 1, then it must be close to a 4.
-	((CH1 = 1, nth0(0, BH, Elem), Elem #= 4);
-	(CH2 = 1, nth1(Size, BH, Elem2), Elem2 #= 4); true),
+	% If the clue's 1, then it must be next to a 4.
+	%((CH1 = 1, nth0(0, BH, Elem), Elem #= 4);
+	%(CH2 = 1, nth1(Size, BH, Elem2), Elem2 #= 4); true),
 
-	% If the clue's 4, then the numbers must be in ascending order.
-	sort(BH, BH_Sorted),
-	((CH1 = 4, assert_line_in_order(BH, BH_Sorted));
-	(CH2 = 4, reverse(BH, BH_Rev), assert_line_in_order(BH_Rev, BH_Sorted)); true),
+	% Calculate the no. of maximum switches.
+	asserta(maximum(0)), reverse(BH, BH_Rev),
+	calculate_max_switches(BH, 0, Switches),
+	calculate_max_switches(BH_Rev, 0, Switches2),
+	Switches #= CH1,
 
 	apply_clues(BT, CT1, CT2).
 
-/**
- *	Apply clues restrictions.
-**/
-assert_line_in_order([], []).
+calculate_max_switches([H|T], AuxSwitches, Switches) :-	
+	maximum(Maximum),
+	H > Maximum, retractall(maximum(_)), asserta(maximum(H)), 
+	NewAuxSwitches is AuxSwitches + 1,
+	calculate_max_switches(T, NewAuxSwitches, Switches).
 
-assert_line_in_order([H|T], [H_Sort|T_Sort]) :-
-	H #= H_Sort,
-	assert_line_in_order(T, T_Sort).
+calculate_max_switches([H|T], AuxSwitches, Switches) :-
+	calculate_max_switches(T, AuxSwitches, Switches).
+
+calculate_max_switches([], AuxSwitches, Switches) :-
+	retractall(maximum(_)), Switches is AuxSwitches.
+
+
+
+
+getLineReification([], 0).
+
+getLineReification([H|T], Value) :-
+  getLineReification(T, NewValue),
+  maximum(A, [H|T]),
+  H #= A #<=> S,
+  Value #= NewValue + S.
+
 	
+
+
+
+
+
 
 
 
