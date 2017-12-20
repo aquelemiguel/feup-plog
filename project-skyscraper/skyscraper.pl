@@ -6,7 +6,6 @@
 :- include('helpers.pl').
 
 :- dynamic clue/2.
-:- dynamic maximum/1.
 
 skyscraper :-
 	write('Insert a board size to generate: '),
@@ -33,9 +32,14 @@ skyscraper(Index) :-
 
 	solve_board(Board),
 	append(Board, FlatBoard),
-
 	start_timer, labeling([], FlatBoard),
 	display_board(Board), print_timer.
+
+/**
+ *	Solves the puzzle at http://logicmastersindia.com/lmitests/dl.asp?attachmentid=659&view=1.
+ *	Uses a 6x6 grid, missing some clues on every direction.
+**/
+
 
 /**
  *	Generates a matrix with the provided size, thus it being sizeXsize.
@@ -65,56 +69,20 @@ solve_board(Board) :-
 apply_clues([], [], []).
 
 apply_clues([BH|BT], [CH1|CT1], [CH2|CT2]) :-
-	length(BH, Size),
+	reverse(BH, BH_Rev),
 
-	%format('~d : ~d\n', [CH1, CH2]),
-
-	% If the clue's 1, then it must be next to a 4.
-	%((CH1 = 1, nth0(0, BH, Elem), Elem #= 4);
-	%(CH2 = 1, nth1(Size, BH, Elem2), Elem2 #= 4); true),
-
-	% Calculate the no. of maximum switches.
-	asserta(maximum(0)), reverse(BH, BH_Rev),
-	calculate_max_switches(BH, 0, Switches),
-	calculate_max_switches(BH_Rev, 0, Switches2),
-	Switches #= CH1,
+	get_seen_buildings(BH, Seen), Seen_Rev #= CH1,
+	get_seen_buildings(BH_Rev, Seen_Rev), Seen #= CH2,
 
 	apply_clues(BT, CT1, CT2).
 
-calculate_max_switches([H|T], AuxSwitches, Switches) :-	
-	maximum(Maximum),
-	H > Maximum, retractall(maximum(_)), asserta(maximum(H)), 
-	NewAuxSwitches is AuxSwitches + 1,
-	calculate_max_switches(T, NewAuxSwitches, Switches).
+get_seen_buildings([], 0).
 
-calculate_max_switches([H|T], AuxSwitches, Switches) :-
-	calculate_max_switches(T, AuxSwitches, Switches).
-
-calculate_max_switches([], AuxSwitches, Switches) :-
-	retractall(maximum(_)), Switches is AuxSwitches.
-
-
-
-
-getLineReification([], 0).
-
-getLineReification([H|T], Value) :-
-  getLineReification(T, NewValue),
+get_seen_buildings([H|T], Value) :-
+  get_seen_buildings(T, NewValue),
   maximum(A, [H|T]),
   H #= A #<=> S,
   Value #= NewValue + S.
-
-	
-
-
-
-
-
-
-
-
-
-
 
 /**
  *	Declarates domain on every cell.
@@ -124,11 +92,6 @@ declare_board_domain([], _).
 declare_board_domain([H|T], Size) :-
 	domain(H, 1, Size),
 	declare_board_domain(T, Size).
-
-	
-
-
-
 
 /**
  *	Generates clues.
@@ -141,8 +104,4 @@ generate_clues(BoardSize, Clues) :-
 	assertz(clue(left, [1,2,2,2])),
 	assertz(clue(right, [4,3,1,2])),
 	assertz(clue(bottom, [3,3,1,2])).
-
-/**
- *	Data structure declarations.
-**/
 
