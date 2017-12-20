@@ -1,6 +1,7 @@
 :- use_module(library(lists)).
 :- use_module(library(between)).
 :- use_module(library(clpfd)).
+:- use_module(library(random)).
 
 :- include('display.pl').
 :- include('helpers.pl').
@@ -100,8 +101,25 @@ declare_board_domain([H|T], Size) :-
 generate_clues(BoardSize, Clues) :-
 	retractall(clue),
 
-	assertz(clue(top, [1,2,3,3])),
-	assertz(clue(left, [1,2,2,2])),
-	assertz(clue(right, [4,3,1,2])),
-	assertz(clue(bottom, [3,3,1,2])).
+	%Clues geradas aleatoriamente, sem restrições
+	generate_clues_aux(BoardSize, BoardSize, Top_Clues),
+	generate_clues_aux(BoardSize, BoardSize, Bottom_Clues),
+	generate_clues_aux(BoardSize, BoardSize, Left_Clues),
+	generate_clues_aux(BoardSize, BoardSize, Right_Clues), 
+
+
+	assertz(clue(top, [3,5,1,2,3,2])),
+	assertz(clue(left, [2,2,2,3,2,1])),
+	assertz(clue(right, [3,1,2,3,4,6])),
+	assertz(clue(bottom, [1,2,3,3,3,5])).
+
+
+generate_clues_aux(0,_,[]).
+
+generate_clues_aux(N, Size, [H|T]) :-
+	N > 0,
+	Size2 is Size + 1,
+	random(1, Size2, H),
+	N2 is N-1,
+	generate_top_clues(N2, Size, T).
 
