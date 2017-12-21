@@ -5,48 +5,42 @@
 
 :- include('display.pl').
 :- include('helpers.pl').
+:- include('generator.pl').
 
 :- dynamic clue/2.
 
 skyscraper :-
-	write('Insert a board size to generate: '),
+	write('\nInsert a board size to generate: '),
 	read(BoardSize), % Ask user for a board size to generate.
 	
-	format('Generating a ~dx~d board...\n', [BoardSize, BoardSize]),
-	generate_board(BoardSize, Board), % Generate said board.
+	format('\nGenerating a ~dx~d board...\n', [BoardSize, BoardSize]),
+	generate_full_board(BoardSize, Board),
+	display_board(Board),
 
-	generate_clues(BoardSize, Clues), % Generate clues for the board.
+	format('\nGenerating clues...\n', []),
+	generate_clues(Board).
+
+	%solve_board(Board),
+	%append(Board, FlatBoard),
+	%start_timer, labeling([], FlatBoard),
+	%display_board(Board), print_timer.
+
+/**
+ *	Handles static puzzles.
+**/
+skyscraper(Puzzle) :-
+	atom_concat(generate_, Puzzle, Generator),
+	call(Generator, Board),
 
 	solve_board(Board),
 	append(Board, FlatBoard),
 	start_timer, labeling([], FlatBoard),
 	display_board(Board), print_timer.
 
-/**
- *	Solves the tutorial puzzle at https://www.brainbashers.com/skyscrapershelp.asp.
- *	Uses a 4x4 grid, clues on every direction.
-**/
-skyscraper(Index) :-
-	Index = 0,
-	generate_board(4, Board),
-	generate_clues(4, Clues),
-
-	solve_board(Board),
-	append(Board, FlatBoard),
-	start_timer, labeling([], FlatBoard),
-	display_board(Board), print_timer.
-
-/**
- *	Solves the puzzle at http://logicmastersindia.com/lmitests/dl.asp?attachmentid=659&view=1.
- *	Uses a 6x6 grid, missing some clues on every direction.
-**/
 
 
-/**
- *	Generates a matrix with the provided size, thus it being sizeXsize.
-**/
-generate_board(Size, Matrix) :-
-	bagof(R, Y^(between(1, Size, Y), length(R, Size)), Matrix).
+
+
 
 /**
  *	Solves board based on restrictions code.
@@ -56,12 +50,12 @@ solve_board(Board) :-
 	declare_board_domain(Board, Size),
 
 	maplist(all_distinct, Board), % Every row has unique values.
-	clue(left, LeftClues), clue(right, RightClues),
+	clue(left-LeftClues), clue(right-RightClues),
 	apply_clues(Board, LeftClues, RightClues),
 
 	transpose(Board, InvertedBoard),
 	maplist(all_distinct, InvertedBoard),
-	clue(top, TopClues), clue(bottom, BottomClues),
+	clue(top-TopClues), clue(bottom-BottomClues),
 	apply_clues(InvertedBoard, TopClues, BottomClues).
 
 /**
@@ -72,54 +66,23 @@ apply_clues([], [], []).
 apply_clues([BH|BT], [CH1|CT1], [CH2|CT2]) :-
 	reverse(BH, BH_Rev),
 
-	get_seen_buildings(BH, Seen), Seen_Rev #= CH1,
-	get_seen_buildings(BH_Rev, Seen_Rev), Seen #= CH2,
+	CH1 \= 0, get_seen_buildings(BH_Rev, Seen_Rev), Seen_Rev #= CH1,
+	CH2 \= 0, get_seen_buildings(BH, Seen), Seen #= CH2,
 
 	apply_clues(BT, CT1, CT2).
 
-get_seen_buildings([], 0).
+apply_clues([BH|BT], [CH1|CT1], [CH2|CT2]) :-
+	CH2 \= 0, get_seen_buildings(BH, Seen), Seen #= CH2,
+	apply_clues(BT, CT1, CT2).
 
-get_seen_buildings([H|T], Value) :-
-  get_seen_buildings(T, NewValue),
-  maximum(A, [H|T]),
-  H #= A #<=> S,
-  Value #= NewValue + S.
-
-/**
- *	Declarates domain on every cell.
-**/
-declare_board_domain([], _).
-
-declare_board_domain([H|T], Size) :-
-	domain(H, 1, Size),
-	declare_board_domain(T, Size).
-
-/**
- *	Generates clues.
- *	TODO: Doesn't actually generate anything so far.
-**/
-generate_clues(BoardSize, Clues) :-
-	retractall(clue),
-
-	%Clues geradas aleatoriamente, sem restrições
-	generate_clues_aux(BoardSize, BoardSize, Top_Clues),
-	generate_clues_aux(BoardSize, BoardSize, Bottom_Clues),
-	generate_clues_aux(BoardSize, BoardSize, Left_Clues),
-	generate_clues_aux(BoardSize, BoardSize, Right_Clues), 
+apply_clues([BH|BT], [CH1|CT1], [CH2|CT2]) :-
+	apply_clues(BT, CT1, CT2).
 
 
-	assertz(clue(top, [3,5,1,2,3,2])),
-	assertz(clue(left, [2,2,2,3,2,1])),
-	assertz(clue(right, [3,1,2,3,4,6])),
-	assertz(clue(bottom, [1,2,3,3,3,5])).
 
 
-generate_clues_aux(0,_,[]).
 
-generate_clues_aux(N, Size, [H|T]) :-
-	N > 0,
-	Size2 is Size + 1,
-	random(1, Size2, H),
-	N2 is N-1,
-	generate_top_clues(N2, Size, T).
+
+
+
 
