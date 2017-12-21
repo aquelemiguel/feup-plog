@@ -7,22 +7,28 @@
  *	Uses a 4x4 grid, clues on every direction.
 **/
 generate_brainbashers(Board) :-
+	write('\nGenerating Brainbashers puzzle... '),
 	retractall(clue(_)), % Clear memory first from previous generations.
 	generate_empty_board(4, Board),
 
 	assertz(clue(left-[1,2,2,2])), assertz(clue(right-[4,3,1,2])), 
-	assertz(clue(top-[1,2,3,3])), assertz(clue(bottom-[3,3,1,2])).
+	assertz(clue(top-[1,2,3,3])), assertz(clue(bottom-[3,3,1,2])),
+
+	write('Done!\n').
 
 /**
  *	Generates the puzzle at http://logicmastersindia.com/lmitests/dl.asp?attachmentid=659&view=1.
  *	Uses a 6x6 grid, missing clues on some directions (represented as zeros).
 **/
 generate_logicmasters(Board) :-
+	write('\nGenerating Logicmasters puzzle... '),
 	retractall(clue(_)), % Clear memory first from previous generations.
 	generate_empty_board(6, Board),
 
 	assertz(clue(left-[0,2,3,4,0,0])), assertz(clue(right-[0,0,4,3,2,0])),
-	assertz(clue(top-[5,0,0,2,2,0])), assertz(clue(bottom-[0,3,4,0,0,4])).
+	assertz(clue(top-[5,0,0,2,2,0])), assertz(clue(bottom-[0,3,4,0,0,4])),
+
+	write('Done!\n').
 
 /**
  *	Generates an uninitialized [Size]x[Size] matrix.
@@ -52,17 +58,28 @@ generate_full_board(Size, Matrix) :-
 **/
 generate_clues(Board) :-
 	retractall(clue(_)),
-	transpose(Board, BoardRev),
+	transpose(Board, BoardRev), length(Board, Length),
 
-	generate_left_top_clues(Board, Clues1), write(Clues1),
-	generate_right_bottom_clues(Board, Clues2), write(Clues2),
-	generate_left_top_clues(BoardRev, Clues3), write(Clues3),
-	generate_right_bottom_clues(BoardRev, Clues4), write(Clues4).
+	generate_left_top_clues(Board, CluesLeft),
+	length(CluesLeft, Length), % Removes the last uninitialized value of list.
+	assertz(clue(left-CluesLeft)),
+
+	generate_right_bottom_clues(Board, CluesRight),
+	length(CluesRight, Length), % Removes the last uninitialized value of list.
+	assertz(clue(right-CluesRight)), 
+
+	generate_left_top_clues(BoardRev, CluesTop),
+	length(CluesTop, Length), % Removes the last uninitialized value of list. 
+	assertz(clue(top-CluesTop)),
+
+	generate_right_bottom_clues(BoardRev, CluesBottom), 
+	length(CluesBottom, Length), % Removes the last uninitialized value of list.
+	assertz(clue(bottom-CluesBottom)).
 
 /**
  *	Extracts LEFT/TOP clues from the provided board.
 **/
-generate_left_top_clues([], Clues).
+generate_left_top_clues([], _).
 
 generate_left_top_clues([H|T], Clues) :-
 	generate_left_top_clues(T, NewClues),
@@ -75,7 +92,7 @@ generate_left_top_clues(_, []).
 /**
  *	Extracts RIGHT/BOTTOM clues from the provided board.
 **/
-generate_right_bottom_clues([], Clues).
+generate_right_bottom_clues([], _).
 
 generate_right_bottom_clues([H|T], Clues) :-
 	generate_right_bottom_clues(T, NewClues),
@@ -87,7 +104,7 @@ generate_right_bottom_clues(_, []).
 /**
  *
 **/
-get_random_label(Var, Rest, BB, BB1) :-
+get_random_label(Var, _, BB, BB1) :-
 	fd_set(Var, Set),
 	select_random_value(Set, Value),
 	(first_bound(BB, BB1), Var #= Value; later_bound(BB, BB1), Var #\= Value).
@@ -115,10 +132,10 @@ declare_board_domain([H|T], Size) :-
 get_seen_buildings([], 0).
 
 get_seen_buildings([H|T], Result) :-
-  get_seen_buildings(T, TokenResult),
-  maximum(Max, [H|T]),
-  H #= Max #<=> Seen,
-  Result #= TokenResult + Seen.
+  	get_seen_buildings(T, TokenResult),
+  	maximum(Max, [H|T]),
+  	H #= Max #<=> Seen,
+  	Result #= TokenResult + Seen.
 
 
 

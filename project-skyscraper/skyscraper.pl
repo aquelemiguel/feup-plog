@@ -7,40 +7,44 @@
 :- include('helpers.pl').
 :- include('generator.pl').
 
-:- dynamic clue/2.
+:- dynamic clue/1.
 
 skyscraper :-
-	write('\nInsert a board size to generate: '),
+	write('\nBoard size to generate: '),
 	read(BoardSize), % Ask user for a board size to generate.
 	
-	format('\nGenerating a ~dx~d board...\n', [BoardSize, BoardSize]),
-	generate_full_board(BoardSize, Board),
-	display_board(Board),
+	format('\nGenerating a ~dx~d board... ', [BoardSize, BoardSize]),
+	generate_full_board(BoardSize, CheatBoard),
+	write('Done!\n'),
 
-	format('\nGenerating clues...\n', []),
-	generate_clues(Board).
+	format('Generating clues... ', []),
+	generate_clues(CheatBoard),
+	write('Done!\n'),
 
-	%solve_board(Board),
-	%append(Board, FlatBoard),
-	%start_timer, labeling([], FlatBoard),
-	%display_board(Board), print_timer.
+	generate_empty_board(BoardSize, Board),
+
+	format('Solving... ', []),
+	solve_board(Board),
+	append(Board, FlatBoard),
+	start_timer, labeling([], FlatBoard),
+	
+	write('Done!\n\n'),
+	display_board(Board, BoardSize), print_timer.
 
 /**
  *	Handles static puzzles.
 **/
 skyscraper(Puzzle) :-
 	atom_concat(generate_, Puzzle, Generator),
-	call(Generator, Board),
+	call(Generator, Board), length(Board, BoardSize),
 
+	format('Solving... ', []),
 	solve_board(Board),
 	append(Board, FlatBoard),
 	start_timer, labeling([], FlatBoard),
-	display_board(Board), print_timer.
 
-
-
-
-
+	write('Done!\n\n'),
+	display_board(Board, BoardSize), print_timer.
 
 /**
  *	Solves board based on restrictions code.
@@ -71,11 +75,11 @@ apply_clues([BH|BT], [CH1|CT1], [CH2|CT2]) :-
 
 	apply_clues(BT, CT1, CT2).
 
-apply_clues([BH|BT], [CH1|CT1], [CH2|CT2]) :-
+apply_clues([BH|BT], [_|CT1], [CH2|CT2]) :-
 	CH2 \= 0, get_seen_buildings(BH, Seen), Seen #= CH2,
 	apply_clues(BT, CT1, CT2).
 
-apply_clues([BH|BT], [CH1|CT1], [CH2|CT2]) :-
+apply_clues([_|BT], [_|CT1], [_|CT2]) :-
 	apply_clues(BT, CT1, CT2).
 
 
