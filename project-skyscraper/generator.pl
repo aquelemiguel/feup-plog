@@ -62,25 +62,25 @@ generate_clues(Board) :-
 /**
  *	Extracts LEFT/TOP clues from the provided board.
 **/
-generate_left_top_clues([], Clues).
+generate_left_top_clues([], []).
 
-generate_left_top_clues([H|T], Clues) :-
-	generate_left_top_clues(T, NewClues),
+generate_left_top_clues([H|T], [HC|TC]) :-
+	generate_left_top_clues(T, TC),
 	reverse(H, HRev),
 	get_seen_buildings(HRev, Result),
-	append([Result], NewClues, Clues).
+	HC = Result.
 
 generate_left_top_clues(_, []).
 
 /**
  *	Extracts RIGHT/BOTTOM clues from the provided board.
 **/
-generate_right_bottom_clues([], Clues).
+generate_right_bottom_clues([], []).
 
-generate_right_bottom_clues([H|T], Clues) :-
-	generate_right_bottom_clues(T, NewClues),
+generate_right_bottom_clues([H|T], [HC|TC]) :-
+	generate_right_bottom_clues(T, TC),
 	get_seen_buildings(H, Result),
-	append([Result], NewClues, Clues).
+	HC = Result.
 
 generate_right_bottom_clues(_, []).
 
