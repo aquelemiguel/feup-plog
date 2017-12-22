@@ -1,12 +1,12 @@
 display_board(Board, BoardSize) :-
-	write('  '), clue(top-TopClues), display_horizontal_clues(BoardSize, TopClues),
+	write('  '), clue(top-TopClues), display_horizontal_clues(BoardSize, TopClues), nl,
 
 	display_top_line(BoardSize),
 	start_iteration(Board, 1, BoardSize).
 
 start_iteration([], _, BoardSize) :-
 	write(' '), display_bottom_line(BoardSize),
-	write('  '), clue(bottom-BottomClues), display_horizontal_clues(BoardSize, BottomClues).
+	write('  '), clue(bottom-BottomClues), display_horizontal_clues(BoardSize, BottomClues), nl.
 
 start_iteration([H|T], Index, BoardSize) :-
 	clue(left-LeftClues), nth1(Index, LeftClues, LeftClue),
@@ -23,7 +23,7 @@ display_horizontal_clues(_, []).
 
 display_horizontal_clues(BoardSize, [H|T]) :-
 	format('~d  ', [H]),
-	display_top_clues(BoardSize, T).
+	display_horizontal_clues(BoardSize, T).
 
 /**
  *	Displays a single line from the board.
