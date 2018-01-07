@@ -46,23 +46,16 @@ p3(L1, L2) :-
 	domain(Is, 1, N),
 
 	all_distinct(Is), % Primeiro restringir, depois gerar, para eficiência máxima.
-	(ensure_ascending(L1, L2, Is); ensure_descending(L1, L2, Is)),
-
+	ensure(L1, L2, Is),
 	labeling([], L2).
 
-ensure_ascending(_, [_,_], [_,_]).
-ensure_ascending(L1, [X1,X2,X3|Xs], [I1,I2,I3|Is]) :-
-	X1 #< X2 #/\ X2 #< X3, % Ordem crescente.
+ensure(_, [_,_], [_,_]).
+ensure(L1, [X1,X2,X3|Xs], [I1,I2,I3|Is]) :-
+	X1 #< X2 #/\ X2 #< X3 % Ordem crescente.
+	#\/
+	X1 #> X2 #/\ X2 #> X3,
 	element(I1, L1, X1), element(I2, L1, X2), element(I3, L1, X3),
-
-	ensure_ascending(L1, [X2,X3|Xs], [I2,I3|Is]).
-
-ensure_descending(_, [_,_], [_,_]).
-ensure_descending(L1, [X1,X2,X3|Xs], [I1,I2,I3|Is]) :-
-	X1 #> X2 #/\ X2 #> X3, % Ordem decrescente.
-	element(I1, L1, X1), element(I2, L1, X2), element(I3, L1, X3),
-
-	ensure_descending(L1, [X2,X3|Xs], [I2,I3|Is]).
+	ensure(L1, [X2,X3|Xs], [I2,I3|Is]).
 
 % Pergunta #4 - Versão Receitas
 sweet_recipes(MaxTime, NEggs, RecipeTimes, RecipeEggs, Cookings, Eggs) :-
