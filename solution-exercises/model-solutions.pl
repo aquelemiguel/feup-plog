@@ -37,8 +37,8 @@ pos([X|Xs], L2, [I|Is]) :-
 	nth1(I, L2, X),
 	pos(Xs, L2, Is).
 
-	%	R:	"Não é possível etiquetar Is, pois estas variáveis não têm domínio definido, 
-	%	e nem todas as restrições foram colocadas antes da fase da pesquisa."
+	%	R: "As variáveis de domínio estão a ser instanciadas antes da fase de pesquisa e nem
+	%	todas as restrições foram colocadas antes da fase da pesquisa."
 
 % Pergunta #3
 p3(L1, L2) :-
