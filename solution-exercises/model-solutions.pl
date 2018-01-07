@@ -51,10 +51,10 @@ p3(L1, L2) :-
 
 ensure(_, [_,_], [_,_]).
 ensure(L1, [X1,X2,X3|Xs], [I1,I2,I3|Is]) :-
-	X1 #< X2 #/\ X2 #< X3 % Ordem crescente.
-	#\/
-	X1 #> X2 #/\ X2 #> X3,
+	X1 #< X2 #/\ X2 #< X3 #\/ % Ordem crescente.
+	X1 #> X2 #/\ X2 #> X3, % Ordem decrescente.
 	element(I1, L1, X1), element(I2, L1, X2), element(I3, L1, X3),
+	
 	ensure(L1, [X2,X3|Xs], [I2,I3|Is]).
 
 % Pergunta #4 - Versão Receitas
