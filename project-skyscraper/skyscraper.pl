@@ -81,12 +81,3 @@ apply_clues([BH|BT], [_|CT1], [CH2|CT2]) :-
 
 apply_clues([_|BT], [_|CT1], [_|CT2]) :-
 	apply_clues(BT, CT1, CT2).
-
-
-
-
-
-
-
-
-

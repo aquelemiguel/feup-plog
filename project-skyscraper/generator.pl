@@ -54,7 +54,6 @@ generate_full_board(Size, Matrix) :-
 
 /**
  *	Generates clues.
- *	TODO: Doesn't actually generate anything so far.
 **/
 generate_clues(Board) :-
 	retractall(clue(_)),
@@ -102,7 +101,7 @@ generate_right_bottom_clues([H|T], Clues) :-
 generate_right_bottom_clues(_, []).
 
 /**
- *
+ *	Generates a random label for the labeling option on generate.
 **/
 get_random_label(Var, _, BB, BB1) :-
 	fd_set(Var, Set),
@@ -115,7 +114,6 @@ select_random_value(Set, RandomValue) :-
 	random(0, Len, RandomIndex),
 	nth0(RandomIndex, List, RandomValue).
 
-
 /**
  *	Declarates domain on every cell.
 **/
@@ -127,7 +125,6 @@ declare_board_domain([H|T], Size) :-
 
 /**
  *	Assigns [Result] to the no. of buildings seen from the left-most position on a list.
- *	
 **/
 get_seen_buildings([], 0).
 
@@ -136,6 +133,3 @@ get_seen_buildings([H|T], Result) :-
   	maximum(Max, [H|T]),
   	H #= Max #<=> Seen,
   	Result #= TokenResult + Seen.
-
-
-
