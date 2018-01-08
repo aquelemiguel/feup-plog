@@ -64,27 +64,20 @@ sweet_recipes(MaxTime, NEggs, RecipeTimes, RecipeEggs, Cookings, Eggs) :-
 	domain(Cookings, 1, NRecipes),
 
 	all_distinct(Cookings), % Não há receitas repetidas.
-	ensure_no_exceed_time(Cookings, RecipeTimes, RequiredTime),
+	ensure_no_exceed_parameter(Cookings, RecipeTimes, RequiredTime),
 	RequiredTime #=< MaxTime, % O tempo de todas as receitas somado =< tempo disponível.
 
-	ensure_no_exceed_eggs(Cookings, RecipeEggs, Eggs),
+	ensure_no_exceed_parameter(Cookings, RecipeEggs, Eggs),
 	Eggs #=< NEggs, % Os ovos de todas as receitas somadas =< inventário de ovos.
 
 	labeling(maximize(Eggs), Cookings).
 
-ensure_no_exceed_time([], _, 0).
-ensure_no_exceed_time([H|T], RecipeTimes, RequiredTime) :-
-	ensure_no_exceed_time(T, RecipeTimes, TempRequiredTime),
+ensure_no_exceed_parameter([], _, 0).
+ensure_no_exceed_parameter([H|T], ParameterList, ParameterSum) :-
+	ensure_no_exceed_parameter(T, ParameterList, TempParameterSum),
 
-	element(H, RecipeTimes, Time), % Extrai quantidade de tempo desta receita.
-	RequiredTime #= TempRequiredTime + Time.
-
-ensure_no_exceed_eggs([], _, 0).
-ensure_no_exceed_eggs([H|T], RecipeEggs, RequiredEggs) :-
-	ensure_no_exceed_eggs(T, RecipeEggs, TempRequiredEggs),
-
-	element(H, RecipeEggs, Eggs), % Extrai quantidade de ovos desta receita.
-	RequiredEggs #= TempRequiredEggs + Eggs.
+	element(H, ParameterList, Param),
+	ParameterSum #= TempParameterSum + Param.
 
 % Pergunta #4 - Versão Constrói
 constroi(NEmb, Orcamento, EmbPorObjeto, CustoPorObjeto, EmbUsadas, Objetos) :-
@@ -93,27 +86,20 @@ constroi(NEmb, Orcamento, EmbPorObjeto, CustoPorObjeto, EmbUsadas, Objetos) :-
 	domain(Objetos, 1, NObjetos),
 
 	all_distinct(Objetos), % Não há projetos repetidos.
-	restringir_embalagens(Objetos, EmbPorObjeto, EmbUsadas),
+	restringir_parametro(Objetos, EmbPorObjeto, EmbUsadas),
 	EmbUsadas #=< NEmb, % As embalagens de todos os projetos somadas =< embalagens disponíveis.
 
-	restringir_orcamento(Objetos, CustoPorObjeto, CustoNecessario),
+	restringir_parametro(Objetos, CustoPorObjeto, CustoNecessario),
 	CustoNecessario #=< Orcamento, % Custo de todos os projetos =< orçamento.
 
 	labeling([maximize(EmbUsadas)], Objetos).
 
-restringir_embalagens([], _, 0).
-restringir_embalagens([H|T], EmbPorObjeto, EmbUsadas) :-
-	restringir_embalagens(T, EmbPorObjeto, TempEmbUsadas),
+restringir_parametro([], _, 0).
+restringir_parametro([H|T], ListaParametros, SomaParametro) :-
+	restringir_parametro(T, ListaParametros, TempSomaParametro),
 
-	element(H, EmbPorObjeto, Embalagens),
-	EmbUsadas #= TempEmbUsadas + Embalagens.
-
-restringir_orcamento([], _, 0).
-restringir_orcamento([H|T], CustoPorObjeto, CustoNecessario) :-
-	restringir_orcamento(T, CustoPorObjeto, TempCustoNecessario),
-
-	element(H, CustoPorObjeto, Custo),
-	CustoNecessario #= TempCustoNecessario + Custo.
+	element(H, ListaParametros, Param),
+	SomaParametro #= TempSomaParametro + Param.
 
 % Pergunta #5 - Versão Presentes
 embrulha(Rolos, Presentes, RolosSelecionados) :-
